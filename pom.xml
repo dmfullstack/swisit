@@ -53,6 +53,7 @@
 		<module>SearcherService</module>
 		<module>apigateway</module>
 		<module>eurekaserver</module>
+		<module>corecrawlerservice</module>
 	</modules>
 
 </project>
