@@ -103,8 +103,11 @@ public class KeywordScannerServiceImpl implements KeywordScannerService{
 	        	cb.setSnippet(searcherResult.getSnippet());
 	        	cb.setTerms(contentSchema);
 	        	cb.setLastindexedof(new Date());
+	        	System.out.println("");
+	        	//publisher.publishingMessage("tointent", cb);
 	        	crawlerResult.add(cb);
-	        	System.out.println();
+	        	
+	        	//System.out.println();
 	        	//System.out.println(crawlerResult.size());
 			}
 			

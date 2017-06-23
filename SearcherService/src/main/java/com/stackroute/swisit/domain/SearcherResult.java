@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class SwisitBean extends ResourceSupport implements Serializer<SwisitBean>{
+public class SearcherResult extends ResourceSupport implements Serializer<SearcherResult>{
 	
 	@JsonProperty("query")
 	String query;
@@ -54,7 +54,7 @@ public class SwisitBean extends ResourceSupport implements Serializer<SwisitBean
 		this.description = description;
 	}
 	@Override
-	public byte[] serialize(String arg0, SwisitBean arg1) {
+	public byte[] serialize(String arg0, SearcherResult arg1) {
 		// TODO Auto-generated method stub
 		byte[] retVal = null;
 	    ObjectMapper objectMapper = new ObjectMapper();

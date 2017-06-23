@@ -17,9 +17,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stackroute.swisit.domain.QueryBean;
+import com.stackroute.swisit.domain.SearcherJob;
 import com.stackroute.swisit.domain.ResponsiveBean;
-import com.stackroute.swisit.domain.SwisitBean;
+import com.stackroute.swisit.domain.SearcherResult;
 import com.stackroute.swisit.exception.SearcherServiceException;
 import com.stackroute.swisit.messageservice.MessageService;
 import com.stackroute.swisit.repository.QueryRepository;
@@ -43,7 +43,7 @@ public class SearchService implements SearchServiceInterface {
 
 	ResponsiveBean responsiveBean = new ResponsiveBean();
 
-	QueryBean q = new QueryBean();
+	SearcherJob q = new SearcherJob();
 	String domain="";
 	List<String> concept;
 	List<LinkedHashMap<String,String>> engineid = new ArrayList<LinkedHashMap<String,String>>();
@@ -51,7 +51,7 @@ public class SearchService implements SearchServiceInterface {
 	String key = "engineid";
 	
 	/* Insert Search result for the query into swisitBean collection */
-	public Iterable<SwisitBean> save() throws SearcherServiceException, JsonProcessingException{
+	public Iterable<SearcherResult> save() throws SearcherServiceException, JsonProcessingException{
 		/* Get the data from the queryBean collection */
 		try
 		{
@@ -62,7 +62,7 @@ public class SearchService implements SearchServiceInterface {
 			else
 			{
 		
-				for(QueryBean qb: queryRepository.findAll())
+				for(SearcherJob qb: queryRepository.findAll())
 				{
 					domain = qb.getExactTerm();
 					System.out.println(domain);
@@ -90,10 +90,10 @@ public class SearchService implements SearchServiceInterface {
 			throw new SearcherServiceException("Incorrect Url");
 			} 
 		
-		List<SwisitBean> l=new ArrayList<SwisitBean>();
-		for(SwisitBean b:responsiveBean.getS())
+		List<SearcherResult> l=new ArrayList<SearcherResult>();
+		for(SearcherResult b:responsiveBean.getS())
 			{
-			SwisitBean a=new SwisitBean();
+			SearcherResult a=new SearcherResult();
 			a.setQuery(responsiveBean.getQueries());
 			a.setUrl(b.getUrl());
 			a.setTitle(b.getTitle());
@@ -121,12 +121,15 @@ public class SearchService implements SearchServiceInterface {
 
 
 /* get all datas from the swisitBean database */
-	public Iterable<SwisitBean> getAll() throws SearcherServiceException{
+	public Iterable<SearcherResult> getAll() throws SearcherServiceException{
 	try
 	{
 		if(searchRepository.findAll()==null)
 		{
-		throw new SearcherServiceException("No Data is Found");
+		throw new SearcherServiceException("No data available");
+		}
+		else if(domain==null) {
+			throw new SearcherServiceException("Domain was not Found");
 		}
 		else
 		{
@@ -141,7 +144,7 @@ public class SearchService implements SearchServiceInterface {
 	}
 
 /* Created Search Job in the database */
-	public Iterable<QueryBean> saveQuery(QueryBean queryBean) throws SearcherServiceException {
+	public Iterable<SearcherJob> saveQuery(SearcherJob queryBean) throws SearcherServiceException {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -181,7 +184,7 @@ public class SearchService implements SearchServiceInterface {
 	}
 	
 	/* Get All data from QueryBean Collection */
-	public Iterable<QueryBean> getQuery() {
+	public Iterable<SearcherJob> getQuery() {
 		
 		try
 		{

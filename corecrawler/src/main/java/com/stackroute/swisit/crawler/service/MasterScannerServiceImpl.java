@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.stackroute.swisit.crawler.domain.CrawlerBean;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
+import com.stackroute.swisit.crawler.domain.Term;
+import com.stackroute.swisit.crawler.neo4jrepository.Neo4jRepository;
 
 @Service
 public class MasterScannerServiceImpl implements MasterScannerService{
@@ -41,8 +43,13 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	public void setStructureScannerService(StructureScannerService structureScannerService) {
 		this.structureScannerService = structureScannerService;
 	}
-		
+	@Autowired	
+	private Neo4jRepository neo4jRepository;
 	
+	public void setNeo4jRepository(Neo4jRepository neo4jRepository) {
+		this.neo4jRepository = neo4jRepository;
+	}
+
 	@Override
 	public String scanDocument(SearcherResult[] searcherResult) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("inside master scandocs");
@@ -50,9 +57,15 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 		{
 			String link=sr.getLink();
 			Document document=domCreatorService.constructDOM(link);
+			List<Term> l=getTerms();
+			List<String> result=new ArrayList<String>();
+			for(Term t:l){
+				result.add(t.getName());
+			System.out.println(t.getName());
+			}
 			
 			/* Iterating terms.json for terms */
-			ObjectMapper objectMapper = new ObjectMapper();
+			/*ObjectMapper objectMapper = new ObjectMapper();
 	        File file = new File("./src/main/resources/common/Terms.json");
 	        List<LinkedHashMap<String,String>> list= (List<LinkedHashMap<String,String>>) objectMapper.readValue(file, ArrayList.class);
 	        List<String> result = new ArrayList<String>();
@@ -62,12 +75,18 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	            //System.out.println(hashMap.get("name"));
 	            result.add(hashMap.get("name"));
 	            
-	        }
+	        }*/
 			keywordScannerService.scanDocument(document, result , sr);
 		}
 		return "sucess";
 	}
+	
+	public List<Term> getTerms() {
+		return neo4jRepository.findTerms();
+		
+	}
 
+	
 
 
 	

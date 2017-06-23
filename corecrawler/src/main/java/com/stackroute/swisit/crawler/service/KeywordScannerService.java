@@ -15,4 +15,6 @@ public interface KeywordScannerService {
 	
 	public void publishingMessage() throws JsonProcessingException;
 
+	//float scanDocument(Document document, List<String> term, SearcherResult searcherResult);
+
 }

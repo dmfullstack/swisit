@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document
 @JsonSerialize
-public class QueryBean extends ResourceSupport{
+public class SearcherJob extends ResourceSupport{
 	
 	
 	@JsonProperty("domain")

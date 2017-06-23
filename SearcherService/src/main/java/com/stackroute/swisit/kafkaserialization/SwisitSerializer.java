@@ -5,9 +5,9 @@ import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stackroute.swisit.domain.SwisitBean;
+import com.stackroute.swisit.domain.SearcherResult;
 
-public class SwisitSerializer implements Serializer<SwisitBean> {
+public class SwisitSerializer implements Serializer<SearcherResult> {
 
 	@Override
 	public void close() {
@@ -22,7 +22,7 @@ public class SwisitSerializer implements Serializer<SwisitBean> {
 	}
 
 	@Override
-	public byte[] serialize(String arg0, SwisitBean arg1) {
+	public byte[] serialize(String arg0, SearcherResult arg1) {
 		// TODO Auto-generated method stub
 		byte[] retVal = null;
 	    ObjectMapper objectMapper = new ObjectMapper();

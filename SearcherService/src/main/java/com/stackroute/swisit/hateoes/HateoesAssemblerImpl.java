@@ -8,16 +8,16 @@ import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
 import com.stackroute.swisit.controller.SearchController;
-import com.stackroute.swisit.domain.QueryBean;
-import com.stackroute.swisit.domain.SwisitBean;
+import com.stackroute.swisit.domain.SearcherJob;
+import com.stackroute.swisit.domain.SearcherResult;
 
 
 @Service
-public class LinkHateoesImpl implements LinkHateoes{
+public class HateoesAssemblerImpl implements HateoesAssembler{
 	@Override
-	public List<SwisitBean> getalllinks(List<SwisitBean> all) {
+	public List<SearcherResult> getalllinks(List<SearcherResult> all) {
 		// TODO Auto-generated method stub
-		 for ( SwisitBean sb : all) {
+		 for ( SearcherResult sb : all) {
 		        Link postQuery = linkTo(SearchController.class).slash("/urlpostquery").withRel("PostJob");
 		        sb.add(postQuery);
 		        Link getQuery = linkTo(SearchController.class).slash("/urlgetquery").withRel("GetJob");
@@ -29,9 +29,9 @@ public class LinkHateoesImpl implements LinkHateoes{
 		}
 	
 	@Override
-	public List<QueryBean> getallquery(List<QueryBean> all) {
+	public List<SearcherJob> getallquery(List<SearcherJob> all) {
 		// TODO Auto-generated method stub
-		 for ( QueryBean sb : all) {
+		 for ( SearcherJob sb : all) {
 		        Link postQuery = linkTo(SearchController.class).slash("/urlpostquery").withRel("PostJob");
 		        sb.add(postQuery);
 		        Link getQuery = linkTo(SearchController.class).slash("/urlgetquery").withRel("GetJob");

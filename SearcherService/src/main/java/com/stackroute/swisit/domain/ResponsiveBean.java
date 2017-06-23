@@ -35,13 +35,13 @@ public class ResponsiveBean {
     }
 
 	@JsonProperty("items")
-	SwisitBean[] s;
+	SearcherResult[] s;
 
-	public SwisitBean[] getS() {
+	public SearcherResult[] getS() {
 		return s;
 	}
 
-	public void setS(SwisitBean[] s) {
+	public void setS(SearcherResult[] s) {
 		this.s = s;
 	}
 	
