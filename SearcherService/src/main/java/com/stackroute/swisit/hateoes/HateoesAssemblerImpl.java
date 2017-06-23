@@ -2,6 +2,7 @@ package com.stackroute.swisit.hateoes;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.hateoas.Link;
@@ -14,6 +15,21 @@ import com.stackroute.swisit.domain.SearcherResult;
 
 @Service
 public class HateoesAssemblerImpl implements HateoesAssembler{
+	
+	@Override
+	public List getlinkspost() {
+		// TODO Auto-generated method stub
+		List sb=new ArrayList();
+		        Link postQuery = linkTo(SearchController.class).slash("/urlpostquery").withSelfRel();
+		        sb.add(postQuery);
+		        
+		        Link getAll = linkTo(SearchController.class).slash("/urlget").withRel("PostJob");
+		        sb.add(getAll);
+		    
+		 return sb;
+		}
+	
+	
 	@Override
 	public List<SearcherResult> getalllinks(List<SearcherResult> all) {
 		// TODO Auto-generated method stub

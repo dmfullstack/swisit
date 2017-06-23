@@ -5,14 +5,16 @@ package com.stackroute.swisit.apigateway;
 import org.apache.catalina.connector.Response;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 
-import com.stackroute.swisit.filters.pre.PreFilter;
+
 
 
 @SpringBootApplication
 @EnableZuulProxy
+@EnableDiscoveryClient
 public class ApigatewayApplication {
 	
 
@@ -20,11 +22,6 @@ public class ApigatewayApplication {
 		SpringApplication.run(ApigatewayApplication.class, args);
 	}
 	
-	 @Bean
-	  public PreFilter preFilter() {
-	    return new PreFilter();
-	  }
-
-
+	
 	
 }

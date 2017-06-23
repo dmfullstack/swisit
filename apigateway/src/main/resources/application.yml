@@ -1,19 +1,6 @@
-logging:
- level:
-   org:
-     springframework:
-       web: INFO
-   com:
-    stackroute:
-     demo: DEBUG
- file: logs/spring-boot-logging.log
-zuul:
- routes:
-  search:
-   url: http://localhost:8080        
-ribbon:
- eureka:
-  enabled: false          
-server:
- port: 9000  
-
+spring:
+  application:
+     name: apigate
+  cloud:
+    config:
+      uri: http://localhost:8888

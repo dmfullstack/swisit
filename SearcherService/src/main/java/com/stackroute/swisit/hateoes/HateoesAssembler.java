@@ -10,4 +10,5 @@ public interface HateoesAssembler {
 
 	public List<SearcherResult> getalllinks(List<SearcherResult> all);
 	public List<SearcherJob> getallquery(List<SearcherJob> all);
+	public List getlinkspost();
 }

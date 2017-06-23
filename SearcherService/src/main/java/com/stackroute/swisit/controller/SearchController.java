@@ -1,5 +1,6 @@
 package com.stackroute.swisit.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +23,8 @@ import com.stackroute.swisit.domain.SearcherJob;
 import com.stackroute.swisit.domain.SearcherResult;
 import com.stackroute.swisit.exception.SearcherServiceException;
 import com.stackroute.swisit.hateoes.HateoesAssembler;
+import com.stackroute.swisit.intialconsumer.IntialConsumer;
+import com.stackroute.swisit.intialproducer.IntialProducer;
 import com.stackroute.swisit.messageservice.MessageService;
 import com.stackroute.swisit.repository.QueryRepository;
 import com.stackroute.swisit.searchservice.SearchService;
@@ -46,7 +49,10 @@ public class SearchController {
 	
 	@Autowired
 	private SearchService searchService;
-	
+	@Autowired
+    private  IntialProducer intialproducer;
+    @Autowired
+    private  IntialConsumer intialConsumer;
 	
 	@Autowired
 	private HateoesAssembler hateoesAssembler;
@@ -62,20 +68,20 @@ public class SearchController {
 	
 	/*------------------------To get data from Google API----------------------------------------------*/
 	
-	@RequestMapping(value="urlget", method=RequestMethod.GET)
+	@RequestMapping(value="", method=RequestMethod.GET)
 	public ResponseEntity<List<SearcherResult>> get()
 	{
 		
 		List<SearcherResult> all = null;
         QueryRepository queryrepo=null;
         try{
-        	if(searchService.getAll()==null) {
-        		return new ResponseEntity(HttpStatus.NO_CONTENT);
-        	}
-        	else {
+        	//if(searchService.getAll()==null) {
+        		//return new ResponseEntity(HttpStatus.NO_CONTENT);
+        	///}
+        	///se {
         		List<SearcherResult> alldata = (List<SearcherResult>) searchService.getAll();
         		all=hateoesAssembler.getalllinks(alldata);
-        	}
+        	//}
         }
         catch(SearcherServiceException searching) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -86,21 +92,28 @@ public class SearchController {
 	/*------------------------posting the data to mongo DB----------------------------------------------*/
 	
 	@ApiOperation(value = "Posting the Domain and Concept")
-	@RequestMapping(value="urlpostquery", method=RequestMethod.POST)
-    public ResponseEntity saveQuery(@RequestBody SearcherJob queryBean) throws SearcherServiceException, Exception
+	@RequestMapping(value="", method=RequestMethod.POST)
+    public ResponseEntity saveQuery() throws SearcherServiceException, Exception
     {
+		List all = null;
 		Locale locale = LocaleContextHolder.getLocale();
-        
+		SearcherJob querybean=AssignQuerybean();
+        intialproducer.publishmessage("tosearcher", querybean);
+        System.out.println("hi");
+        SearcherJob queryBean = intialConsumer.listenmessage("tosearcher");
+        //intialConsumer.listenmessage(topic)
+        //QueryBean queryBean = new QueryBean();
+        //queryBean=(QueryBean) query;
+       System.out.println(queryBean.getSitesearch()+" "+querybean.getResults());
+       // System.out.println("my queryBean is "+queryBean);
         try {
-            if(searchService.saveQuery(queryBean)==null) {
+            
             	  String message = messageSource.getMessage ("user.excep.nodata", null, locale );
-                return new ResponseEntity(message,HttpStatus.NOT_FOUND);
-            }
-            else
-            {
-                searchService.saveQuery(queryBean);
+            
+            	searchService.saveQuery(queryBean);
                 searchService.save();
-            }
+                
+                all=hateoesAssembler.getlinkspost();
         
         } catch (SearcherServiceException e) {
             // TODO Auto-generated catch block
@@ -108,7 +121,7 @@ public class SearchController {
         }
         String message = messageSource.getMessage ("user.msg.receive", null, locale );
         System.out.println(message);
-        return new ResponseEntity(message,HttpStatus.OK);
+        return new ResponseEntity(all,HttpStatus.OK);
         
     }
 	
@@ -122,20 +135,31 @@ public class SearchController {
 		List<SearcherJob> all = null;
         QueryRepository queryrepo=null;
         try{
-        	if(searchService.getQuery()==null) {
-        		return new ResponseEntity(HttpStatus.NO_CONTENT);
-        	}
-        	else {  
+        	//if(searchService`.getQuery()==null) {
+        		//return new ResponseEntity(HttpStatus.NO_CONTENT);
+        	//}
+        	//else {  
         		List<SearcherJob> alldata = (List<SearcherJob>) searchService.getQuery();
         		all=hateoesAssembler.getallquery(alldata);
-        	}
+        	//}
         }
         catch(SearcherServiceException searching) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         return  new ResponseEntity(all,HttpStatus.OK);
 	}
-	
+	public SearcherJob AssignQuerybean(){
+        SearcherJob q=new SearcherJob();
+        List<String> l=new ArrayList<String>();
+        l.add("class");
+        l.add("interface");
+       
+        q.setDomain("java");
+        q.setConcept(l);
+        q.setSitesearch("none");
+        q.setResults("10");
+        return q;
+    }
 	
 }
 	

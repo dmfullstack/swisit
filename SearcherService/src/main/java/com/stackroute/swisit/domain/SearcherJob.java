@@ -24,12 +24,24 @@ public class SearcherJob extends ResourceSupport{
 	
 	
 	@JsonProperty("domain")
-	private String exactTerm;
+	private String domain;
 	
 	
 	@JsonProperty("concept")
-	private List<String> query;
+	private List<String> concept;
 	
+	public String getDomain() {
+		return domain;
+	}
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+	public List<String> getConcept() {
+		return concept;
+	}
+	public void setConcept(List<String> concept) {
+		this.concept = concept;
+	}
 	@JsonProperty("engineid")
 	private List<LinkedHashMap<String,String>> engineId;
 	
@@ -38,18 +50,7 @@ public class SearcherJob extends ResourceSupport{
 	
 	@JsonProperty("sitesearch")
 	private String sitesearch;
-	public String getExactTerm() {
-		return exactTerm;
-	}
-	public void setExactTerm(String exactTerm) {
-		this.exactTerm = exactTerm;
-	}
-	public List<String> getQuery() {
-		return query;
-	}
-	public void setQuery(List<String> query) {
-		this.query = query;
-	}
+	
 	public List<LinkedHashMap<String, String>> getEngineId() {
 		return engineId;
 	}

@@ -55,7 +55,7 @@ public class SearchService implements SearchServiceInterface {
 		/* Get the data from the queryBean collection */
 		try
 		{
-			if(q.getExactTerm()==null || q.getQuery()==null) {
+			if(q.getDomain()==null || q.getConcept()==null) {
 				throw new SearcherServiceException("Enter the data orelse go to hell");
 				
 			}
@@ -64,9 +64,9 @@ public class SearchService implements SearchServiceInterface {
 		
 				for(SearcherJob qb: queryRepository.findAll())
 				{
-					domain = qb.getExactTerm();
+					domain = qb.getDomain();
 					System.out.println(domain);
-					concept = qb.getQuery();
+					concept = qb.getConcept();
 					System.out.println(concept);
 					String query = domain+" "+concept.get(0);	
 					engineid = qb.getEngineId();
@@ -99,7 +99,7 @@ public class SearchService implements SearchServiceInterface {
 			a.setTitle(b.getTitle());
 			a.setDescription(b.getDescription());
 			searchRepository.save(a);
-			//System.out.println("hi this my "+a.getTitle());
+			System.out.println("sending "+a.getTitle());
 			kafkaconfig.publishmessage("testcontrol", a);
 			l.add(a);
 			//kafkaconfig.publishmessage("testcontrol", a);
@@ -148,9 +148,9 @@ public class SearchService implements SearchServiceInterface {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			q.setQuery(queryBean.getQuery());
-			q.setExactTerm(queryBean.getExactTerm());
-			if(q.getExactTerm()==null) {
+			q.setDomain(queryBean.getDomain());
+			q.setConcept(queryBean.getConcept());
+			if(q.getConcept()==null) {
 				throw new SearcherServiceException("No domain name");
 			}
 			else
