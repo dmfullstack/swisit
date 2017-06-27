@@ -10,7 +10,6 @@ import java.util.Set;
 public interface IntentParserService {
     List<Intent> getAllIntents();
     List<Term> getAllTerms();
-
     Iterable<Map<String,Object>> getAllIndicator();
     Iterable<Map<String,Object>> getBothRelationships();
     Iterable<Map<String,Object>> getAllRelationships();

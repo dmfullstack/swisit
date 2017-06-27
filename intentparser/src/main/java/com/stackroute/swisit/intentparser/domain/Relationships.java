@@ -1,11 +1,13 @@
 package com.stackroute.swisit.intentparser.domain;
-
+/*--------Importing Liberaries--------*/
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
+/*----------Relationship Domain Class----------*/
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Relationships {
+    /*-------Relationship Class Properties------*/
     @NotEmpty
     @JsonProperty("termName")
     String termName;
@@ -19,8 +21,10 @@ public class Relationships {
     @JsonProperty("weight")
     float weight;
 
+    /*-------Default Constructor Of Relationships Class------*/
     public Relationships() {}
 
+    /*---------Parameterized Constructor of Relationships Class--------*/
     public Relationships(String termName, String intentName, String relName, float weight) {
         this.termName = termName;
         this.intentName = intentName;
@@ -28,6 +32,7 @@ public class Relationships {
         this.weight = weight;
     }
 
+    /*------------Setter and Getter methods for Properties-----------*/
     public String getTermName() {
         return termName;
     }

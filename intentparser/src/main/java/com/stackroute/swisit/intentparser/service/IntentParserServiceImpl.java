@@ -55,7 +55,6 @@ public class IntentParserServiceImpl implements IntentParserService {
 
     @Override
     public Iterable<Map<String,String>> getAllTermsRelationOfIntent(String intentName) {
-       // System.out.println(relationshipRepository.getAllTermsRelationOfIntent(intentName).toString());
         return relationshipRepository.getAllTermsRelationOfIntent(intentName);
     }
 
