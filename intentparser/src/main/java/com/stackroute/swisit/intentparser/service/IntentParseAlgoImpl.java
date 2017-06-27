@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.service;
-
+/*-------Importing Liberaries------*/
 import com.stackroute.swisit.intentparser.domain.*;
 import com.stackroute.swisit.intentparser.exception.IntentParserExceptions;
 import com.stackroute.swisit.intentparser.repository.IntentRepository;
@@ -8,16 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
+/*-------Implementation of IntentParseAlgo Interface class------*/
 @Service
 public class IntentParseAlgoImpl implements IntentParseAlgo {
 
+    /*-------Autowired Repository-------*/
     @Autowired
     IntentRepository intentRepository;
-
     @Autowired
     RelationshipRepository relationshipRepository;
 
+    /*------------CalculateConfidence method for getting List of IntentParserResult-----------*/
     @Override
     public ArrayList<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput){
         List<Intent> intentsList = intentRepository.findIntents();
