@@ -54,6 +54,7 @@
 		<module>apigateway</module>
 		<module>eurekaserver</module>
 		<module>corecrawler</module>
+		<module>intentparser</module>
 	</modules>
 
 </project>
