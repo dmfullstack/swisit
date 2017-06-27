@@ -16,7 +16,7 @@ public class CounterIndicatorOf {
     Term term;
     @EndNode @NotEmpty
     Intent intent;
-    @NotNull 
+    @NotNull
     float weight;
 
     public CounterIndicatorOf() { }

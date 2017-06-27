@@ -8,28 +8,35 @@
     <packaging>jar</packaging>
     <name>Spring Cloud Eureka Server</name>
     <description>Spring Cloud Eureka Server Demo</description>
-	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.8</java.version>
-	</properties>
-	
-  	<parent>
+
+	<parent>
 		<groupId>com.stackroute</groupId>
 		<artifactId>swisit</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
-	 <dependencies>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka-server</artifactId>
-        </dependency>
-        <!--#################### ConfigServer ############## -->
-   <dependency>
+		
+		<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -44,7 +51,7 @@
 		</dependencies>
 	</dependencyManagement>
 
-    <build>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -52,5 +59,6 @@
 			</plugin>
 		</plugins>
 	</build>
+
 
 </project>

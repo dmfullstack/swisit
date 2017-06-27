@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.crawler.domain.IntensityBean;
 //import com.stackroute.swisit.crawler.domain.CrawlerBean;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
+import com.stackroute.swisit.crawler.loadbalancing.LoadBal;
 import com.stackroute.swisit.crawler.service.KeywordScannerServiceImpl;
 import com.stackroute.swisit.crawler.service.MasterScannerService;
 import com.stackroute.swisit.crawler.subscriber.KafkaSubscriber;
@@ -64,6 +65,9 @@ public class CrawlerRestController {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	LoadBal loadBal;
 	
 	
 	@ApiOperation(value="SearcherValue",response = SearcherResult.class)
@@ -113,7 +117,7 @@ public class CrawlerRestController {
 	    
 	    Locale locale = LocaleContextHolder.getLocale();
     	String message = messageSource.getMessage ("user.success.receive", null, locale );
-    	return new ResponseEntity(message,HttpStatus.OK);
+    	return new ResponseEntity("succes",HttpStatus.OK);
 	
 	}
 	
@@ -136,7 +140,23 @@ public class CrawlerRestController {
 	    map.put("message","Data sent successfully");
 	    return new ResponseEntity<Map<String,String>>(map,HttpStatus.OK);*/
 	}
-	
+
+	@RequestMapping(value="producer",method=RequestMethod.GET)
+    public ResponseEntity producer()
+    {
+        System.out.println("load balancer");
+        loadBal.LoadProducer();
+        return new ResponseEntity("success",HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="consumer",method=RequestMethod.GET)
+    public ResponseEntity consumer()
+    {
+        System.out.println("load consumer");
+        loadBal.LoadConsumer();
+        return new ResponseEntity("success",HttpStatus.OK);
+        
+    }
 	
 	/*================================INTERNATIONALIZATION============================================*/
 	

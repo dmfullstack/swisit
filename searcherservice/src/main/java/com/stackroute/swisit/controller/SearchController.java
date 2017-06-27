@@ -25,6 +25,7 @@ import com.stackroute.swisit.exception.SearcherServiceException;
 import com.stackroute.swisit.hateoes.HateoesAssembler;
 import com.stackroute.swisit.intialconsumer.IntialConsumer;
 import com.stackroute.swisit.intialproducer.IntialProducer;
+import com.stackroute.swisit.loadbalancing.LoadBal;
 import com.stackroute.swisit.messageservice.MessageService;
 import com.stackroute.swisit.repository.QueryRepository;
 import com.stackroute.swisit.searchservice.SearchService;
@@ -34,10 +35,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
 
-
-@Api(value="SWIS-IT", description="Operations pertaining to the SWIS-IT App")
 @RestController
 @RequestMapping(value="v1/api/swisit/searcher")
+@Api(value="SWIS-IT", description="Operations pertaining to the SearcherService")
 public class SearchController {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -53,9 +53,10 @@ public class SearchController {
     private  IntialProducer intialproducer;
     @Autowired
     private  IntialConsumer intialConsumer;
-	
 	@Autowired
 	private HateoesAssembler hateoesAssembler;
+	@Autowired
+	LoadBal loadBal;
 	
 	@ApiOperation(value = "View a list of URLs from Google")
     @ApiResponses(value = {
@@ -159,6 +160,23 @@ public class SearchController {
         q.setSitesearch("none");
         q.setResults("10");
         return q;
+    }
+	
+	@RequestMapping(value="producer",method=RequestMethod.GET)
+    public ResponseEntity producer()
+    {
+        System.out.println("load balancer");
+        loadBal.LoadProducer();
+        return new ResponseEntity("success",HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="consumer",method=RequestMethod.GET)
+    public ResponseEntity consumer()
+    {
+        System.out.println("load consumer");
+        loadBal.LoadConsumer();
+        return new ResponseEntity("success",HttpStatus.OK);
+        
     }
 	
 }
