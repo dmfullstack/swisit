@@ -35,11 +35,6 @@ public class IntentParserServiceImpl implements IntentParserService {
     }
 
     @Override
-    public Set<Term> getIndicatorTerms() {
-        return intentRepository.getIndicatorTerms();
-    }
-
-    @Override
     public Iterable<Map<String,Object>> getAllIndicator() {
         return relationshipRepository.getAllIndicator();
     }
