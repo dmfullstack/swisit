@@ -47,9 +47,9 @@ public class SearchController {
 	@Autowired
 	private SearchServiceImpl searchServiceImpl;
 	@Autowired
-    private  IntialProducer intialproducer;
-    @Autowired
-    private  IntialConsumer intialConsumer;
+    	private  IntialProducer intialproducer;
+    	@Autowired
+    	private  IntialConsumer intialConsumer;
 	@Autowired
 	private HateoesAssembler hateoesAssembler;
 	@Autowired
