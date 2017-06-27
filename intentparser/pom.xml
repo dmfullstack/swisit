@@ -29,6 +29,7 @@
         </dependency>
 
         <!--#############################Log4j dependencies########################################## -->
+        <!--
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -54,7 +55,7 @@
             <artifactId>log4j-jcl</artifactId>
             <version>2.5</version>
         </dependency>
-
+        -->
         <!--#############################Swagger Documentation for REST API########################################## -->
         <dependency>
             <groupId>io.springfox</groupId>

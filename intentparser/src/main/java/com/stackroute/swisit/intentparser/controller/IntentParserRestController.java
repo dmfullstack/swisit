@@ -1,3 +1,6 @@
+/*******This Class is used for Testing the Service only,
+ * will finally be removed from the Final product******/
+
 package com.stackroute.swisit.intentparser.controller;
 
 /*--------- Importing Libraries---------------*/
@@ -37,7 +40,7 @@ import java.util.*;
 @Api(value="SWIS-it", description="Operations pertaining to the IntentParserService")
 public class IntentParserRestController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+	/*----------Autowired Instances of Classes----------*/
 	@Autowired
 	IntentParserService intentParserService;
 

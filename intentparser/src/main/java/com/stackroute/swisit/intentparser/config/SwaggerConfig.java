@@ -1,3 +1,6 @@
+/*******This Class is used for Testing the Service only,
+ * will finally be removed from the Final product******/
+
 package com.stackroute.swisit.intentparser.config;
 /*-----Importing Liberaries-----*/
 import org.springframework.context.annotation.Bean;
@@ -14,7 +17,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-	/*------------*/
+
 	@Bean
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2)

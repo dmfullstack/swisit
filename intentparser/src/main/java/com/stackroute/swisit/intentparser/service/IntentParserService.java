@@ -10,7 +10,7 @@ import java.util.Map;
 /*---------IntentParserService Interface Class---------*/
 public interface IntentParserService {
 
-    /*-------Methods to Interact with Neo4j Database------*/
+    /*-------Methods to Interact with  Database------*/
     List<Intent> getAllIntents();
     List<Term> getAllTerms();
     Iterable<Map<String,Object>> getAllIndicator();
