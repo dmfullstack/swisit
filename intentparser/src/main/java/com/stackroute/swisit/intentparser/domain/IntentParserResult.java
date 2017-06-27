@@ -1,23 +1,26 @@
 package com.stackroute.swisit.intentparser.domain;
-
+/*-------Importing Liberaries-------*/
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.hateoas.ResourceSupport;
-
+/*---------Intent Parser Result Class -------*/
 public class IntentParserResult extends ResourceSupport {
+    /*--------Intent Parser Result Properties-------*/
 	@NotEmpty 
     String url;
 	@NotEmpty
     String intent;
 	@NotNull
     float confidenceScore;
-        @NotNull
+    @NotNull
     String concept;
 
+    /*-------Default Constructor of Intent Parser Result Class------*/
     public IntentParserResult() { }
 
+    /*--------Parameterized Constructor of Intent Parser Result Class---------*/
     public IntentParserResult(String url, String intent, float confidenceScore,String concept) {
         this.url = url;
         this.intent = intent;
@@ -25,6 +28,7 @@ public class IntentParserResult extends ResourceSupport {
         this.concept = concept;
     }
 
+    /*------------Setter and Getter methods for Properties-----------*/
     public String getUrl() {
         return url;
     }
@@ -48,7 +52,8 @@ public class IntentParserResult extends ResourceSupport {
     public void setConfidenceScore(float confidenceScore) {
         this.confidenceScore = confidenceScore;
     }
- public String getConcept() { return concept; }
+
+    public String getConcept() { return concept; }
 
     public void setConcept(String concept) { this.concept = concept; }
 }

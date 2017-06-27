@@ -1,16 +1,36 @@
 package com.stackroute.swisit.intentparser.domain;
-
+/*--------Importing Liberaries-------*/
 import javax.validation.constraints.NotNull;
 
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
-
+/*--------Term node Domain Class--------*/
 @NodeEntity
 public class Term {
     @GraphId @NotNull
     private Long id;
     @NotNull
     private String nodeid;
+    @NotNull
+    private String name;
+
+    /*-------Default Constructor of Term Domain Class-------*/
+    public Term() {}
+
+    /*-------Parameterized Constructor of Term Domain Class-------*/
+    public Term(String nodeid, String name) {
+        this.name = name;
+        this.nodeid = nodeid;
+    }
+
+    /*------------Setter and Getter methods for Properties-----------*/
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getNodeid() {
         return nodeid;
@@ -20,19 +40,4 @@ public class Term {
         this.nodeid = nodeid;
     }
 
-    private String name;
-    public Term() {}
-
-    public Term(String nodeid, String name) {
-        this.name = name;
-        this.nodeid = nodeid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

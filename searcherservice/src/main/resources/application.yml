@@ -1,0 +1,7 @@
+url: https://www.googleapis.com/customsearch/v1?q=
+spring:
+  application:
+    name: searcherservice
+  cloud:
+    config:
+      uri: http://localhost:8878

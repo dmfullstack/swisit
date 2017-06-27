@@ -96,7 +96,6 @@ public class IntentParserRestController {
 
 		List<Intent> intentsList = intentParserService.getAllIntents();
 		List<Term> termsList = intentParserService.getAllTerms();
-		Set<Term> indicatorTerms = intentParserService.getIndicatorTerms();
 		Iterable<Map<String,Object>> indicatorOfs = intentParserService.getAllIndicator();
 		// System.out.println(indicatorOfs);
 		Iterable<Map<String,Object>> bothRelationships = intentParserService.getBothRelationships();

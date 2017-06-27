@@ -50,7 +50,7 @@
 
 	<modules>
 		<module>config</module>
-		<module>SearcherService</module>
+		<module>searcherservice</module>
 		<module>apigateway</module>
 		<module>eurekaserver</module>
 		<module>corecrawler</module>
