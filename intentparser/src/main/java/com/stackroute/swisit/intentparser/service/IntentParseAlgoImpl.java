@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.service;
-
+/*-------Importing Liberaries------*/
 import com.stackroute.swisit.intentparser.domain.*;
 import com.stackroute.swisit.intentparser.exception.ConfidenceScoreNotCalculatedException;
 import com.stackroute.swisit.intentparser.repository.IntentRepository;
@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
+/*-------Implementation of IntentParseAlgo Interface class------*/
 @Service
 public class IntentParseAlgoImpl implements IntentParseAlgo {
 
+<<<<<<< HEAD
 	@Autowired
 	IntentRepository intentRepository;
 
@@ -20,6 +21,35 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 
 	@Override
 	public ArrayList<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput){
+=======
+    /*-------Autowired Repository-------*/
+    @Autowired
+    IntentRepository intentRepository;
+    @Autowired
+    RelationshipRepository relationshipRepository;
+
+    /*------------CalculateConfidence method for getting List of IntentParserResult-----------*/
+    @Override
+    public ArrayList<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput){
+        List<Intent> intentsList = intentRepository.findIntents();
+        ArrayList<IntentParserResult> intentParserResultList = new ArrayList<IntentParserResult>();
+        /*exception handling*/
+        if(intentInput==null){
+            throw new IntentParserExceptions("Invalid Input");
+        }
+        /*exception handling*/
+        for(CrawlerResult intentParserInput : intentInput){
+            intentParserResultList.addAll(calculateConfidenceScore(intentParserInput,intentsList));
+        }
+        Collections.sort(intentParserResultList, new Comparator<IntentParserResult>() {
+            @Override
+            public int compare(IntentParserResult o1, IntentParserResult o2) {
+                return (int)(o2.getConfidenceScore()-o1.getConfidenceScore());
+            }
+        });
+        return intentParserResultList;
+    }
+>>>>>>> 65652f158c45664d778b23a6a661f2bb09524818
 
 		try {
 			if(intentInput==null)

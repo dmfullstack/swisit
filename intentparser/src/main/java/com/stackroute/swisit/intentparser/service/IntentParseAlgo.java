@@ -1,12 +1,12 @@
 package com.stackroute.swisit.intentparser.service;
-
+/*-------Importing Liberaris-------*/
 import com.stackroute.swisit.intentparser.domain.Intent;
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 import com.stackroute.swisit.intentparser.domain.IntentParserResult;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*-------Intent Parser Algorithms Interface Class--------*/
 public interface IntentParseAlgo {
 
     public List<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput);

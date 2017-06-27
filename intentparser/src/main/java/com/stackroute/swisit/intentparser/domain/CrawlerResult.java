@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.domain;
-
+/*--------Importing Liberaries-------*/
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
-
+/*--------Crawler Result Domain Class which is Input for Intent Parser Service--------*/
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CrawlerResult {
 
@@ -31,11 +31,11 @@ public class CrawlerResult {
     @NotNull
     @JsonProperty("lastindexedof")
     private Date lastindexedof;
-    
-    
 
+    /*-----------Default Constructor of Crawler Result Class------------*/
     public CrawlerResult() { }
 
+    /*----------Parameterized Constructor of Crawler Result Class---------*/
     public CrawlerResult(String query, String link, ContentSchema[] terms, String title, String snippet,Date lastindexof) {
         this.query = query;
         this.link = link;
@@ -45,15 +45,8 @@ public class CrawlerResult {
         this.lastindexedof=lastindexof;
     }
 
-    public Date getLastindexedof() {
-		return lastindexedof;
-	}
-
-	public void setLastindexedof(Date lastindexedof) {
-		this.lastindexedof = lastindexedof;
-	}
-
-	@Override
+    /*---------Overridden ToString Method of Crawler Result Class--------*/
+    @Override
     public String toString() {
         return "IntentParserInput{" +
                 "query='" + query + '\'' +
@@ -63,6 +56,15 @@ public class CrawlerResult {
                 ", snippet='" + snippet + '\'' +
                 '}';
     }
+
+    /*-------------Getter and Setter Methods Of Properties------------*/
+    public Date getLastindexedof() {
+		return lastindexedof;
+	}
+
+	public void setLastindexedof(Date lastindexedof) {
+		this.lastindexedof = lastindexedof;
+	}
 
     public String getQuery() {
         return query;

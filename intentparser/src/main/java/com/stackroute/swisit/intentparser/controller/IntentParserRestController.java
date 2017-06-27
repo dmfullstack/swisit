@@ -97,11 +97,10 @@ public class IntentParserRestController {
 		List<Intent> intentsList = intentParserService.getAllIntents();
 		List<Term> termsList = intentParserService.getAllTerms();
 		Iterable<Map<String,Object>> indicatorOfs = intentParserService.getAllIndicator();
-		// System.out.println(indicatorOfs);
+
 		Iterable<Map<String,Object>> bothRelationships = intentParserService.getBothRelationships();
 		Iterable<Map<String,Object>> allRelationships = intentParserService.getAllRelationships();
-		List<Map<String,String>> fetchallRelationships = intentParserService.fetchAllRelationships();
-		//System.out.println(fetchallRelationships);
+
 		Iterable<Map<String,String>> getAllIntentRelationships = intentParserService.getAllTermsRelationOfIntent("example");
 		return new ResponseEntity<Iterable>(getAllIntentRelationships, HttpStatus.OK);
 	}
