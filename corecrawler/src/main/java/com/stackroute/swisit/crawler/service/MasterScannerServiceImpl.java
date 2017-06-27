@@ -6,9 +6,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.neo4j.template.Neo4jOperations;
+import org.springframework.data.neo4j.template.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -22,6 +28,7 @@ import com.stackroute.swisit.crawler.repository.Neo4jRepository;
 @Service
 public class MasterScannerServiceImpl implements MasterScannerService{
 	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private DOMCreatorService domCreatorService;
 	
@@ -30,14 +37,14 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 		this.domCreatorService = domCreatorService;
 	}
 	
-	 private KeywordScannerService keywordScannerService;
+	private KeywordScannerService keywordScannerService;
 	 
 	@Autowired
 	public void setKeywordScannerService(KeywordScannerService keywordScannerService) {
 		this.keywordScannerService = keywordScannerService;
 	}
 	@Autowired
-	private Neo4jRepository neo4jRepository;
+	Neo4jRepository neo4jRepository;
 	private StructureScannerService structureScannerService;
 		
 	@Autowired
@@ -48,13 +55,20 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	
 	@Override
 	public String scanDocument(SearcherResult[] searcherResult) throws JsonParseException, JsonMappingException, IOException {
-		System.out.println("inside master scandocs");
+		System.out.println("inside master scandocs"+searcherResult.length);
 		for(SearcherResult sr : searcherResult)
 		{
-			String link=sr.getLink();
-			Document document=domCreatorService.constructDOM(link);
-			
-			List<Term> l=getTerms();
+			System.out.println(sr.getLink());
+			//String link=sr.getLink();
+			DOMCreatorServiceImpl domCreatorService = new DOMCreatorServiceImpl();
+			Document document=domCreatorService.constructDOM(sr.getLink());
+			//System.out.println(document);
+			//MasterScannerServiceImpl ms=new MasterScannerServiceImpl();
+			//if(neo4jRepository.fetchTerms()==null)
+				
+			//neo4j implemntation
+			System.out.println("gogogogogogogog");
+			List<Term> l=neo4jRepository.fetchTerms();
 			List<String> result=new ArrayList<String>();
 			
 			for(Term t:l){
@@ -62,7 +76,7 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 			//System.out.println(t.getName());
 			}
 			
-			/* Iterating terms.json for terms 
+			/* //Iterating terms.json for terms 
 			ObjectMapper objectMapper = new ObjectMapper();
 	        File file = new File("./src/main/resources/common/Terms.json");
 	        List<LinkedHashMap<String,String>> list= (List<LinkedHashMap<String,String>>) objectMapper.readValue(file, ArrayList.class);
@@ -74,6 +88,8 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	            result.add(hashMap.get("name"));
 	            
 	        }*/
+			
+			KeywordScannerServiceImpl keywordScannerService=new KeywordScannerServiceImpl();
 			keywordScannerService.scanDocument(document, result , sr);
 		}
 		return "sucess";
@@ -81,8 +97,9 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 
 
 	public List<Term> getTerms() {
-	return neo4jRepository.findTerms();
-	
+		System.out.println("hi neo");
+		System.out.println(neo4jRepository.fetchTerms());
+	return neo4jRepository.fetchTerms();
 }	
 
 }

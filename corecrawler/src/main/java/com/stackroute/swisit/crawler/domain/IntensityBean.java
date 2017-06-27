@@ -2,12 +2,13 @@ package com.stackroute.swisit.crawler.domain;
 
 import javax.validation.constraints.NotNull;
 
-import org.springframework.stereotype.Component;
-
 import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class IntensityBean {
+	
+	/*-------------private variables of bean class------------*/
 	
 	@JsonProperty("title")
 	@NotNull
@@ -17,11 +18,13 @@ public class IntensityBean {
 	@NotNull
 	private String intensity;
 	
-
+	/*--------------- No args constructor-------------*/
+	
 	public IntensityBean() {
 		super();
 	}
 
+	/*-------------- Constructor with fields ------------*/
 	
 	public IntensityBean(String title, String intensity) {
 		super();
@@ -29,7 +32,8 @@ public class IntensityBean {
 		this.intensity = intensity;
 	}
 
-
+	/*------------- Getters and setters for fields -----------*/
+	
 	public String getTitle() {
 		return title;
 	}

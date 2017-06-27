@@ -1,29 +1,31 @@
 package com.stackroute.swisit.crawler.domain;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.*;
-import java.util.stream.Collectors;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
 public class Term {
 
+	/*-------------private variables of bean class------------*/
+	
 	@GraphId 
 	private Long id;
+	
 	private String name;
+	
+	/*--------------- No args constructor-------------*/
+	
 	public Term() {
-
+		super();
 	}
 
+	/*-------------- Constructor with fields ------------*/
 
 	public Term(String name) {
 		this.name = name;
 	}
 
-
+	/*------------- Getters and setters for fields -----------*/
 
 	public String getName() {
 		return name;

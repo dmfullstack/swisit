@@ -2,32 +2,46 @@ package com.stackroute.swisit.crawler.domain;
 
 import org.neo4j.ogm.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 
 @NodeEntity
 public class Intent {
+	
+	/*-------------private variables of bean class------------*/
+	
     @GraphId
     private Long id;
-    String name;
-    public Intent(){}
-
+    
+    private String name;
+    
+    /*---------- variable that maps the relationship from neo4j-----------------*/
+    
     @Relationship(type = "indicatorOf", direction = Relationship.UNDIRECTED)
     private Set<Term> terms;
 
+    /*--------------- No args constructor-------------*/
+    
+    public Intent(){
+    	
+    }
+    
+    /*-------------- Constructor with fields ------------*/
+    
+    public Intent(String name){
+        this.name=name;
+    }
+
+    /*----------method that adds the terms from neo4j into terms set-----------*/
+    
     public void indicatorOf(Term term) {
         if (terms == null) {
             terms = new HashSet<>();
         }
         terms.add(term);
     }
-    public Intent(String name){
-        this.name=name;
-    }
-
+    
+    /*------------- Getters and setters for fields -----------*/
+    
     public String getName() {
         return name;
     }

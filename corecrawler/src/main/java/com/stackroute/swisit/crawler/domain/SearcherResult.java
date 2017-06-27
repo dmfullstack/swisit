@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class SearcherResult extends ResourceSupport implements Deserializer<SearcherResult> {
 	
+	/*-------------private variables of bean class------------*/
+	
     @JsonProperty("query")
     @NotNull
 	private String query;
@@ -32,15 +34,15 @@ public class SearcherResult extends ResourceSupport implements Deserializer<Sear
 	@NotNull
     @JsonProperty("snippet")
 	private String snippet;
-	
-	
-    
+
+	/*--------------- No args constructor-------------*/
 	
 	public SearcherResult() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
+	/*-------------- Constructor with fields ------------*/
+	
 	public SearcherResult(String query, String link, String title, String snippet) {
 		super();
 		this.query = query;
@@ -49,7 +51,7 @@ public class SearcherResult extends ResourceSupport implements Deserializer<Sear
 		this.snippet = snippet;
 	}
 
-	
+	/*------------- Getters and setters for fields -----------*/
 	
 	public String getQuery() {
 		return query;
@@ -83,6 +85,8 @@ public class SearcherResult extends ResourceSupport implements Deserializer<Sear
 		this.snippet = snippet;
 	}
 
+	/*----------Overriding methods of Deserializer----------*/
+	
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
@@ -95,6 +99,8 @@ public class SearcherResult extends ResourceSupport implements Deserializer<Sear
 		
 	}
 
+	/*-------Deserializing the data received from searcher service------*/
+	
 	@Override
 	public SearcherResult deserialize(String arg0, byte[] arg1) {
 		//return (CrawlerBean) SerializationUtils.deserialize(arg1);

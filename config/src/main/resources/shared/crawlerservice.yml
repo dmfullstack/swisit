@@ -4,3 +4,6 @@ spring:
    uri: http://172.23.239.174:7474
    username: neo4j
    password: root123
+broker-id: 172.23.239.165:9092
+#topic-toproducer: tointent
+topic-fromconsumer: testcontrol

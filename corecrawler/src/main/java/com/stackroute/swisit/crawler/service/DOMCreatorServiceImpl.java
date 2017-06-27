@@ -1,30 +1,38 @@
 package com.stackroute.swisit.crawler.service;
 
 import java.io.IOException;
+
 import java.net.URL;
 import java.util.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DOMCreatorServiceImpl implements DOMCreatorService{
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
    
 	HashSet<String> links=new HashSet<>();
 	
 	@Override
 	public Document constructDOM(String link) {
+		//System.out.println(link);
 		Document doc = null;
-		if(!links.contains(link)){
-			try{
+		//if(!links.contains(link)){
+			
+		try{
+				
 				doc=Jsoup.connect(link).get();
 				
 			}catch(Exception e){
 				System.out.println(e);
 			}
-		}		
+		//}		
 		
 		/*try{
 		System.out.println("inside constructDom "+link);

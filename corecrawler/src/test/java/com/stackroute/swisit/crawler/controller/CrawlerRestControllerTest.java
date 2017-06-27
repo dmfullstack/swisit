@@ -20,7 +20,7 @@ import com.stackroute.swisit.crawler.domain.IntensityBean;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.service.KeywordScannerServiceImpl;
 import com.stackroute.swisit.crawler.service.MasterScannerService;
-import com.stackroute.swisit.crawler.subscriber.KafkaSubscriber;
+import com.stackroute.swisit.crawler.subscriber.KafkaSubscriberImpl;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -62,7 +62,7 @@ public class CrawlerRestControllerTest
    @MockBean
    private MasterScannerService masterScannerService;
    @MockBean
-    private KafkaSubscriber subscriber;
+    private KafkaSubscriberImpl subscriber;
    @MockBean
    private Validator validator;
    
