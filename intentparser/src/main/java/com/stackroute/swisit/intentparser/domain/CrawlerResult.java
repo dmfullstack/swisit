@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -16,7 +17,7 @@ public class CrawlerResult {
     @NotEmpty
     @JsonProperty("query")
     private String query;
-    @NotEmpty
+    @NotEmpty @URL
     @JsonProperty("link")
     private String link;
     @NotEmpty

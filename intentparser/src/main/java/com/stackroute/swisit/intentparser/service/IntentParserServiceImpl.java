@@ -35,11 +35,6 @@ public class IntentParserServiceImpl implements IntentParserService {
     }
 
     @Override
-    public Set<Term> getIndicatorTerms() {
-        return intentRepository.getIndicatorTerms();
-    }
-
-    @Override
     public Iterable<Map<String,Object>> getAllIndicator() {
         return relationshipRepository.getAllIndicator();
     }
@@ -63,5 +58,11 @@ public class IntentParserServiceImpl implements IntentParserService {
        // System.out.println(relationshipRepository.getAllTermsRelationOfIntent(intentName).toString());
         return relationshipRepository.getAllTermsRelationOfIntent(intentName);
     }
+
+	@Override
+	public Set<Term> getIndicatorTerms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

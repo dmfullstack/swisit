@@ -1,14 +1,15 @@
 package com.stackroute.swisit.intentparser.domain;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ContentSchema {
 	@NotEmpty
     @JsonProperty("word")
 	private String word;
-	@NotEmpty
+	@NotNull
     @JsonProperty("intensity")
     private float intensity;
 
