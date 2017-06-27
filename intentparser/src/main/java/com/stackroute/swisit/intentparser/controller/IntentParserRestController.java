@@ -1,13 +1,13 @@
 package com.stackroute.swisit.intentparser.controller;
 
-/*--------- Imprting Liberaries---------------*/
+/*--------- Importing Libraries---------------*/
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.stackroute.swisit.intentparser.assembler.HeteoasLinkAssembler;
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 import com.stackroute.swisit.intentparser.domain.Intent;
 import com.stackroute.swisit.intentparser.domain.Term;
-import com.stackroute.swisit.intentparser.exception.IntentParserExceptions;
+import com.stackroute.swisit.intentparser.exception.ConfidenceScoreNotCalculatedException;
 import com.stackroute.swisit.intentparser.domain.IntentParserResult;
 import com.stackroute.swisit.intentparser.service.IntentParseAlgo;
 import com.stackroute.swisit.intentparser.service.IntentParserService;
@@ -120,18 +120,18 @@ public class IntentParserRestController {
 
 		List<IntentParserResult> result=null;
 
-		/*------Locale for Internationalization-----*/
+		/*------Locale which identify a specific language and geographic region, used for Internationalization-----*/
 		Locale locale = LocaleContextHolder.getLocale();
 
 		/*------Try Catch block for Handling Exceptions-----*/
 		try{
-//			ArrayList<CrawlerResult> intentInput = new ArrayList<CrawlerResult>();
-//			ObjectMapper mapper = new ObjectMapper();
-//			File file = new ClassPathResource("input.json").getFile();
-//			CrawlerResult[] intentInputarr=mapper.readValue(file,CrawlerResult[].class);
-//			for(CrawlerResult c:intentInputarr){
-//	        	intentInput.add(c);
-//	        }
+			//			ArrayList<CrawlerResult> intentInput = new ArrayList<CrawlerResult>();
+			//			ObjectMapper mapper = new ObjectMapper();
+			//			File file = new ClassPathResource("input.json").getFile();
+			//			CrawlerResult[] intentInputarr=mapper.readValue(file,CrawlerResult[].class);
+			//			for(CrawlerResult c:intentInputarr){
+			//	        	intentInput.add(c);
+			//	        }
 			/*-------getting input from Kafka subscriber------*/
 			Iterable<CrawlerResult> intentInput=subscriberImpl.receivingMessage("tointent");
 			if(intentInput==null){
@@ -154,8 +154,8 @@ public class IntentParserRestController {
 			List<IntentParserResult> intentParserResult=heteoasLinkAssembler.calculateConfidence(result);
 			return new ResponseEntity<List>(intentParserResult, HttpStatus.OK);
 		}
-		catch (IntentParserExceptions e){
-			System.out.println(e);
+		catch(Exception e){
+			e.printStackTrace();
 		}
 		return new ResponseEntity<List>(result, HttpStatus.OK);
 	}
