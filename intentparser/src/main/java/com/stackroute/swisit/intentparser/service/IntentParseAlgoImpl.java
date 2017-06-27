@@ -12,7 +12,7 @@ import java.util.*;
 @Service
 public class IntentParseAlgoImpl implements IntentParseAlgo {
 
-    /*-------Autowired Repository-------*/
+    /*-------Autowired Repositories-------*/
     @Autowired
     IntentRepository intentRepository;
     @Autowired
@@ -23,11 +23,6 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
     public ArrayList<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput){
         List<Intent> intentsList = intentRepository.findIntents();
         ArrayList<IntentParserResult> intentParserResultList = new ArrayList<IntentParserResult>();
-        /*exception handling*/
-//        if(intentInput==null){
-//            throw new ConfidenceScoreNotCalculatedException("Invalid Input");
-//        }
-        /*exception handling*/
         for(CrawlerResult intentParserInput : intentInput){
             intentParserResultList.addAll(calculateConfidenceScore(intentParserInput,intentsList));
         }
