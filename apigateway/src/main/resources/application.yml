@@ -1,6 +1,6 @@
 spring:
   application:
-     name: apigate
+     name: apigateway
   cloud:
     config:
-      uri: http://localhost:8888
+      uri: http://localhost:8878

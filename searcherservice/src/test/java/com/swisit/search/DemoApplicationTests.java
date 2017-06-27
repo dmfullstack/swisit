@@ -1,4 +1,4 @@
-package com.swisit.search;
+/*package com.swisit.search;
 
 import static org.junit.Assert.assertTrue;
 
@@ -28,3 +28,4 @@ public class DemoApplicationTests {
 		assertTrue("discoveryClient is wrong type: " + discoveryClient, discoveryClient instanceof EurekaDiscoveryClient);
 	}
 }
+*/
