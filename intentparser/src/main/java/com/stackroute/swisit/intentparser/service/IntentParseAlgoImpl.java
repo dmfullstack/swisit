@@ -40,6 +40,10 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
         return intentParserResultList;
     }
 
+    /*-----------CalculateConfidenceScore Method to calculate confidence score for each
+                 IntentParserResult bean and Creting an Object of IntentParserResult and
+                 also saves the result in Neo4jDatabse. It returns the arraylist of
+                 IntentParseResult for Each Intent-----------*/
     @Override
     public ArrayList<IntentParserResult> calculateConfidenceScore(CrawlerResult intentParserInput,List<Intent> intentList){
         ArrayList<IntentParserResult> results=new ArrayList<IntentParserResult>();
