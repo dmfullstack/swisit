@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.swisit.search</groupId>
-	<artifactId>searcherService</artifactId>
+	<artifactId>searcherservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -59,6 +59,34 @@
               <version>1.4.2.RELEASE</version>
 		</dependency>
 		
+		<!--#############################Log4j dependencies########################################## -->
+        <dependency>
+           <groupId>org.slf4j</groupId>
+           <artifactId>slf4j-api</artifactId>
+           <version>1.7.19</version>
+       </dependency>
+       <dependency>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-slf4j-impl</artifactId>
+           <version>2.5</version>
+       </dependency>
+       <dependency>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-api</artifactId>
+             <version>2.5</version>
+       </dependency>
+       <dependency>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-core</artifactId>
+           <version>2.5</version>
+       </dependency>
+       <dependency>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-jcl</artifactId>
+           <version>2.5</version>
+       </dependency>
+		
+		<!-- ##############Kafka Dependency############### -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka-clients</artifactId>
@@ -97,6 +125,7 @@
 
 			</exclusions>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
@@ -104,8 +133,6 @@
 		</dependency>
 
 		<!-- #######JSON DEPENDENCY################## -->
-
-
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -119,12 +146,12 @@
 		</dependency>
 
 		<!-- ###################JACKSON DEPENDENCY########## -->
-
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<version>2.6.3</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -132,7 +159,6 @@
 		</dependency>
 
 		<!-- AspectJ dependencies -->
-
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
@@ -175,11 +201,9 @@
 			<version>2.6.1</version>
 			<scope>compile</scope>
 		</dependency>
-
 		
-
 	</dependencies>
-	<!--################### EurekaServer ########################## -->
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
