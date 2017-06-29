@@ -1,5 +1,6 @@
 package com.stackroute.swisit.crawler.subscriber;
 
+/*-------Importing Libraries------*/
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class KafkaSubscriberImpl implements Subscriber{
 		//props.put("bootstrap.servers", "172.23.239.180:9095");
 		//props.put("bootstrap.servers", "localhost:9092");
 		properties.put("group.id", "group-1");
-
+		System.out.println("inside main");
 		properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG , brokerid);
 		properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		properties.put("value.deserializer", "com.stackroute.swisit.crawler.domain.SearcherResult");

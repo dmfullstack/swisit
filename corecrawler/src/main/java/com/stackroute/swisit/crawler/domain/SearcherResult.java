@@ -1,6 +1,6 @@
 package com.stackroute.swisit.crawler.domain;
 
-
+/*---------------Importing Libraries--------------*/
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
@@ -8,15 +8,18 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.kafka.common.serialization.Deserializer;
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.stereotype.Component;
 
 import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/*------- SearcherResult domain class which is the input for crawler service-----*/
+@Component
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class SearcherResult extends ResourceSupport implements Deserializer<SearcherResult> {
+public class SearcherResult  implements Deserializer<SearcherResult> {
 	
-	/*-------------private variables of bean class------------*/
+	/*-------------Private variables of domain class------------*/
 	
     @JsonProperty("query")
     @NotNull
@@ -35,14 +38,12 @@ public class SearcherResult extends ResourceSupport implements Deserializer<Sear
     @JsonProperty("snippet")
 	private String snippet;
 
-	/*--------------- No args constructor-------------*/
-	
+	/*-----------Default Constructor of Crawler Result Class------------*/
 	public SearcherResult() {
 		super();
 	}
 
-	/*-------------- Constructor with fields ------------*/
-	
+	/*----------Parameterized Constructor of Crawler Result Class---------*/
 	public SearcherResult(String query, String link, String title, String snippet) {
 		super();
 		this.query = query;
@@ -86,21 +87,13 @@ public class SearcherResult extends ResourceSupport implements Deserializer<Sear
 	}
 
 	/*----------Overriding methods of Deserializer----------*/
-	
-	@Override
-	public void close() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void configure(Map<String, ?> arg0, boolean arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	/*-------Deserializing the data received from searcher service------*/
-	
 	@Override
 	public SearcherResult deserialize(String arg0, byte[] arg1) {
 		//return (CrawlerBean) SerializationUtils.deserialize(arg1);
@@ -116,7 +109,10 @@ public class SearcherResult extends ResourceSupport implements Deserializer<Sear
 		return c;
 	}
 
-	
+	@Override
+	public void close() {
+		
+	}
 	
 	
 }

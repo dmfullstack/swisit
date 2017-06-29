@@ -1,6 +1,8 @@
 package com.stackroute.swisit.crawler.domain;
 
+/*---------------Importing Libraries--------------*/
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,11 +11,13 @@ import org.springframework.stereotype.Component;
 
 import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+/*--------Crawler Result Domain Class which is output to Intent Parser Service--------*/
 @Component
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class CrawlerResult extends ResourceSupport {
 
-	/*-------------private variables of bean class------------*/
+	/*-------------Private variables of domain class------------*/
 
 	@JsonProperty("query")
 	@NotNull
@@ -25,7 +29,7 @@ public class CrawlerResult extends ResourceSupport {
 
 	@JsonProperty("terms")
 	@NotNull
-	private ContentSchema[] terms;
+	private List<ContentSchema> terms;
 
 	@JsonProperty("title")
 	@NotNull
@@ -35,18 +39,24 @@ public class CrawlerResult extends ResourceSupport {
 	@NotNull
 	private String snippet;
 
+	public List<ContentSchema> getTerms() {
+		return terms;
+	}
+
+	public void setTerms(List<ContentSchema> terms) {
+		this.terms = terms;
+	}
+
 	@JsonProperty("lastindexedof")
 	private Date lastindexedof;
 
-	/*--------------- No args constructor-------------*/
-
+	/*-----------Default Constructor of Crawler Result Class------------*/
 	public CrawlerResult() {
 		super();
 	}
 
-	/*-------------- Constructor with fields ------------*/
-
-	public CrawlerResult(String query, String link, ContentSchema[] terms, String title, String snippet,
+	/*----------Parameterized Constructor of Crawler Result Class---------*/
+	public CrawlerResult(String query, String link, List<ContentSchema> terms, String title, String snippet,
 			Date lastindexedof) {
 		super();
 		this.query = query;
@@ -99,12 +109,8 @@ public class CrawlerResult extends ResourceSupport {
 		this.snippet = snippet;
 	}
 	
-	public ContentSchema[] getTerms() {
-		return terms;
-	}
 	
-	public void setTerms(ContentSchema[] terms) {
-		this.terms = terms;
-	}
+	
+	
 
 }

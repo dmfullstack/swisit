@@ -13,6 +13,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +32,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
+@Component
 @RestController
 @RequestMapping(value="/v1/api/swisit/crawler")
 @Api(value="onlinestore", description="Operations pertaining to CrawlerService")
@@ -74,10 +75,10 @@ public class CrawlerRestController {
 	}
 			)
 	@RequestMapping(value="/receiver", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,String>> receiveMessage() throws JsonParseException, JsonMappingException, IOException{
+	public ResponseEntity<Map<String,String>> receiveMessage(SearcherResult[] sr) throws JsonParseException, JsonMappingException, IOException{
 
 		/*testcontrol is my topic name*/
-		List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrol");
+		/*List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrol");
 		SearcherResult searcherResult[]= new SearcherResult[list.size()];
 		list.toArray(searcherResult);
 
@@ -86,16 +87,16 @@ public class CrawlerRestController {
 			logger.info(sr.getQuery());
 			logger.info(sr.getSnippet());
 			logger.info(sr.getTitle());
-		}
+		}*/
 		/*ObjectMapper mapper = new ObjectMapper();
 		File file = new File("./src/main/resources/common/sample.json");
 	    SearcherResult[] searcherResult=mapper.readValue(file, SearcherResult[].class);*/
-		if(searcherResult.equals(null)){
+		/*if(searcherResult.equals(null)){
 			Locale locale = LocaleContextHolder.getLocale();
 			String message = messageSource.getMessage ("user.excep.null", null, locale );
 			return new ResponseEntity(message,HttpStatus.NOT_FOUND);  
-		}
-		masterScannerService.scanDocument(searcherResult);
+		}*/
+		masterScannerService.scanDocument(sr);
 		Locale locale = LocaleContextHolder.getLocale();
 		String message = messageSource.getMessage ("user.success.receive", null, locale );
 		return new ResponseEntity("succes",HttpStatus.OK);
@@ -114,7 +115,7 @@ public class CrawlerRestController {
 			)
 	@RequestMapping(value="/publisher" , method=RequestMethod.GET)
 	public ResponseEntity<Map<String,String>> finalmethod() throws JsonProcessingException {
-		keywordScannerServiceImpl.publishingMessage();
+		keywordScannerServiceImpl.publishMessage();
 		Locale locale = LocaleContextHolder.getLocale();
 		String message = messageSource.getMessage ("user.success.publish", null, locale );
 		return new ResponseEntity(message,HttpStatus.OK);

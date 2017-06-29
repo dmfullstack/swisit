@@ -16,7 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.google.common.net.MediaType;
 import com.stackroute.swisit.crawler.controller.CrawlerRestController;
-import com.stackroute.swisit.crawler.domain.IntensityBean;
+import com.stackroute.swisit.crawler.domain.Intensity;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.service.KeywordScannerServiceImpl;
 import com.stackroute.swisit.crawler.service.MasterScannerService;

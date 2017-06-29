@@ -1,5 +1,6 @@
 package com.stackroute.swisit.crawler.repository;
 
+/*--------------- Importing Libraries --------------*/
 import java.util.List;
 
 import org.springframework.data.neo4j.annotation.Query;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.stackroute.swisit.crawler.domain.Term;
 
+/*------------Repository for Terms of Neo4j DB-----------*/
 @Repository
 public interface Neo4jRepository extends GraphRepository<Term>{
 	

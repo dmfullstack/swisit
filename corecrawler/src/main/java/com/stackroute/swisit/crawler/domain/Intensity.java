@@ -1,14 +1,16 @@
 package com.stackroute.swisit.crawler.domain;
 
+/*---------------Importing Libraries----------------*/
 import javax.validation.constraints.NotNull;
 
 import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/*-----------Intensity domain class to generate and set the intensity for terms-------------*/
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class IntensityBean {
+public class Intensity {
 	
-	/*-------------private variables of bean class------------*/
+	/*-------------Private variables of domain class------------*/
 	
 	@JsonProperty("title")
 	@NotNull
@@ -18,22 +20,19 @@ public class IntensityBean {
 	@NotNull
 	private String intensity;
 	
-	/*--------------- No args constructor-------------*/
-	
-	public IntensityBean() {
+	/*-----------Default Constructor of Intensity Class------------*/
+	public Intensity() {
 		super();
 	}
 
-	/*-------------- Constructor with fields ------------*/
-	
-	public IntensityBean(String title, String intensity) {
+	/*----------Parameterized Constructor of Intensity Class---------*/
+	public Intensity(String title, String intensity) {
 		super();
 		this.title = title;
 		this.intensity = intensity;
 	}
 
 	/*------------- Getters and setters for fields -----------*/
-	
 	public String getTitle() {
 		return title;
 	}

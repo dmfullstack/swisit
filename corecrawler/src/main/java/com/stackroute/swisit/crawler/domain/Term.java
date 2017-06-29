@@ -1,26 +1,30 @@
 package com.stackroute.swisit.crawler.domain;
 
+import javax.validation.constraints.NotNull;
+
+/*---------------Importing Libraries--------------*/
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
+/*------------Term node Domain Class------------*/
 @NodeEntity
 public class Term {
 
-	/*-------------private variables of bean class------------*/
+	/*-------------Private variables of domain class------------*/
 	
 	@GraphId 
+	@NotNull
 	private Long id;
 	
+	@NotNull
 	private String name;
 	
-	/*--------------- No args constructor-------------*/
-	
+	/*-----------Default Constructor of Crawler Result Class------------*/
 	public Term() {
 		super();
 	}
 
-	/*-------------- Constructor with fields ------------*/
-
+	/*----------Parameterized Constructor of Crawler Result Class---------*/
 	public Term(String name) {
 		this.name = name;
 	}

@@ -1,5 +1,6 @@
 package com.stackroute.swisit.crawler.serialization;
 
+/*------------- Importing Libraries -----------*/
 import java.util.Map;
 
 import org.apache.kafka.common.serialization.Serializer;
@@ -7,8 +8,11 @@ import org.apache.kafka.common.serialization.Serializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.crawler.domain.CrawlerResult;
 
-
-
+/*
+ * CrawlerSerializer class implements Serializer to
+ * serialize object before sending result to
+ * publisher
+ * */
 public class CrawlerSerializer implements Serializer<CrawlerResult>{
 
 	/*-------------Overriding methods of serializer for kafka------------*/
@@ -20,7 +24,6 @@ public class CrawlerSerializer implements Serializer<CrawlerResult>{
 	/*-------- Serializing object to be published into kafka---------*/
 	@Override
 	public byte[] serialize(String topic, CrawlerResult data) {
-		// TODO Auto-generated method stub
 		byte[] retVal = null;
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {

@@ -1,16 +1,17 @@
 package com.stackroute.swisit.crawler.domain;
-
+/*------------Importing Libraries-------------*/
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
 import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@Component
+
+/*---------ContententSchema Domain Class--------*/
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class ContentSchema {
 
-	/*-------------private variables of bean class------------*/
+	/*-------------Private variables of domain class------------*/
 	
 	@JsonProperty("word")
 	@NotNull
@@ -21,14 +22,14 @@ public class ContentSchema {
 	private String intensity;
 
 
-	/*--------------- No args constructor-------------*/
+	/*-------ContentSchema Default Constructor-------*/
 
 	public ContentSchema() {
 		super();
 	}
 
 
-	/*-------------- Constructor with fields ------------*/
+	/*-------ContentSchema Parameterized Constructor ------*/
 
 	public ContentSchema(String word, String intensity) {
 		super();

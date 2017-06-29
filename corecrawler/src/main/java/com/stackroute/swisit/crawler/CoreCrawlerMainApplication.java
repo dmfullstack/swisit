@@ -1,11 +1,11 @@
 package com.stackroute.swisit.crawler;
 
+/*--------------- Importing Libraries --------------*/
 import java.io.IOException;
+
 import java.util.List;
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +14,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -27,36 +26,34 @@ import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.service.MasterScannerServiceImpl;
 import com.stackroute.swisit.crawler.subscriber.KafkaSubscriberImpl;
 
+/*-------------Spring Boot Application Main Class--------------*/
 @SpringBootApplication
 //@EnableEurekaClient
 public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	/*-----------------Main method where execution starts ------------------*/
 	@Value("${topic-fromconsumer}")
 	static String consumerTopic;
+
+	/*-----------------Main method where execution starts ------------------*/
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
-		System.out.println(consumerTopic);
 		
 		ConfigurableApplicationContext applicationContext =SpringApplication.run(CoreCrawlerMainApplication.class, args);
 		KafkaSubscriberImpl kafkaSubscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
 		List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrol");
 		SearcherResult searcherResult[]= new SearcherResult[list.size()];
 		list.toArray(searcherResult);
-
-		for(SearcherResult sr:list){
-			System.out.println(sr.getLink());
-			//System.out.println(sr.getQuery());
-			//System.out.println(sr.getSnippet());
-			//System.out.println(sr.getTitle());
-		}
-		MasterScannerServiceImpl masterScannerServiceImpl = new MasterScannerServiceImpl();
+		
+		/*ObjectMapper mapper = new ObjectMapper();
+		File file = new File("./src/main/resources/common/sample.json");
+	    SearcherResult[] searcherResult=mapper.readValue(file, SearcherResult[].class);*/
+		
+		MasterScannerServiceImpl masterScannerServiceImpl = applicationContext.getBean(MasterScannerServiceImpl.class);
 		masterScannerServiceImpl.scanDocument(searcherResult);
 	}
 
 	/*-------------- Methods to implement internationalization --------------*/
 
+	/*----------------------Resolving Locale-------------------------*/
 	@Bean
 	public LocaleResolver localeResolver() {
 		SessionLocaleResolver slr = new SessionLocaleResolver();
@@ -64,6 +61,7 @@ public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 		return slr;
 	}
 	
+	/*------------------Loading Message Bundles--------------------*/
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -71,6 +69,7 @@ public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 		return messageSource;
 	}
 
+	/*----Interceptor that allows for changing the current locale on every request---*/
 	@Bean
 	public LocaleChangeInterceptor localeChangeInterceptor() {
 		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
@@ -78,6 +77,7 @@ public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 		return lci;
 	}
 
+	/*-------------Changing Language with User Preference------------*/
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor());

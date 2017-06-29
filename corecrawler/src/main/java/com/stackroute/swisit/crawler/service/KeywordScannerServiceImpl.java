@@ -1,7 +1,8 @@
 package com.stackroute.swisit.crawler.service;
 
+/*-------Importing Libraries------*/
 import java.io.File;
-import java.io.IOException;
+
 import java.util.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,47 +11,54 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.couchbase.client.deps.com.fasterxml.jackson.core.JsonParseException;
-import com.couchbase.client.deps.com.fasterxml.jackson.databind.JsonMappingException;
 import com.couchbase.client.deps.com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.stackroute.swisit.crawler.controller.CrawlerRestController;
 import com.stackroute.swisit.crawler.domain.ContentSchema;
 import com.stackroute.swisit.crawler.domain.CrawlerResult;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
+import com.stackroute.swisit.crawler.exception.TitleIntensityCalculationException;
 import com.stackroute.swisit.crawler.publisher.KafkaPublisherImpl;
 
-//import scala.annotation.meta.setter;
-
-
+/* KeywordScannerServiceImpl implements KeywordScannerService to scan for keywords and 
+ * generate the intensity for terms and produce the result to kafka as crawler result
+ * */
 @Service
 public class KeywordScannerServiceImpl implements KeywordScannerService{
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	/*--- topic name for producing the result to kafka --*/
 	@Value("${topic-toproducer}")
 	String producerTopic;
+	
 	float count=0;
 
 	List<CrawlerResult> crawlerResult = new ArrayList<CrawlerResult>(); 
 
-	private DOMCreatorService domCreatorService;
+	private KafkaPublisherImpl kafkaPublisherImpl; 
 
 	@Autowired
-	public void setDOMCreatorService(DOMCreatorService domCreatorService) {
-		this.domCreatorService=domCreatorService;
+	public void setKafkaPublisherImpl(KafkaPublisherImpl kafkaPublisherImpl) {
+		this.kafkaPublisherImpl=kafkaPublisherImpl;
 
 	}
-	@Autowired
-	private KafkaPublisherImpl publisher; 
-	@Autowired
-	private ContentSchema contentSchema[];	
+	
+//	@Autowired
+//	private ContentSchema contentSchema[];	
+	
+	
+	/* Overriding method for scanning the document 
+	 * and calculating intensity
+	 * arguments- link, crawler list, searcherResult bean
+	 * returns- float
+	 * */
 	@Override
-	public float scanDocument(Document document, List<String> term,SearcherResult searcherResult) {
+	public float scanDocument(Document document, List<String> term,SearcherResult searcherResult) throws JsonProcessingException {
 
 		float  intensity;
+		//KeywordScannerServiceImpl keywordScannerServiceImpl=new KeywordScannerServiceImpl();
 		intensity= calculateIntensity(document, term, searcherResult);
 		List<Float> l=new ArrayList<Float>();
 
@@ -64,52 +72,68 @@ public class KeywordScannerServiceImpl implements KeywordScannerService{
 		return intensity;
 	}
 
+	/* Overriding method for getting terms from 
+	 * wordnet if terms do not match neo4j terms 
+	 * arguments- term
+	 * returns- string
+	 * */
 	@Override
 	public String[] getFromWordNet(String term) {
 		//Call WorkNet Service
 		return null;
 	}
 
-
-
-	public float calculateIntensity(Document document, List<String> term, SearcherResult searcherResult) {
+	/* Local method of KeywordScannerService class to calculate the 
+	 * intensity of words scanned in the document retrieved from DOMCreatorService
+	 * Intensity is calculated based on an algorithm by comparing the intensity fixed 
+	 * for the appearance of the words in a particular tag
+	 * arguments- document, term, searcher result
+	 * returns- float
+	 * */
+	public float calculateIntensity(Document document, List<String> term, SearcherResult searcherResult) throws JsonProcessingException {
 		String text = null;
+		List<ContentSchema> contentSchema = new ArrayList<>();
 		try{
+			if(document==null || term== null || searcherResult== null){
+				throw new TitleIntensityCalculationException("Intensity not calculated");
+
+			}
 			count=0;
 			int k=0;
+			
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File("./src/main/resources/common/intensity.json");
 			List<LinkedHashMap<String,String>> list= (List<LinkedHashMap<String,String>>) mapper.readValue(file,ArrayList.class);
 			List<String> titleList = new ArrayList<String>();
 			List<String> intensityList = new ArrayList<String>();
-
+			//logger.debug("hi this is main");
 			for(int i=0;i<list.size();i++){
 				LinkedHashMap<String, String> hashMap = list.get(i);
 				titleList.add(hashMap.get("title"));
 				intensityList.add(hashMap.get("intensity"));
 			} 
-
+			
+			
+			//logger.info("hi man "+contentSchema);
+			// = null;
 			for(int i=0;i<term.size();i++){
 				for(int j=0;j<titleList.size();j++){
-					//System.out.println(term.get(i)+" "+titleList.get(i)+"  "+intensityList.get(i));
 					Elements tag=document.select(titleList.get(j));
 					for(Element element:tag){
 						text=term.get(i);
 						if(element.text().matches(term.get(i))){
 							count=count+Integer.parseInt(intensityList.get(j));
-							System.out.println(count+"  "+term.get(i));
-							contentSchema[k].setIntensity(count+"");
-							contentSchema[k].setWord(term.get(i));
+							ContentSchema c=new ContentSchema();
+							c.setIntensity(count+"");
+							c.setWord(text);
+							contentSchema.add(c);
+							logger.info("Term is: "+term.get(i)+" and Intensity is: "+count);
 							k++;
 						}
 					}
 				}
 			}
-			//System.out.println("hi");
-			//ContentSchema contentSchema[]  = new ContentSchema()[];
-			//contentSchema[0].setWord(text);
-			//contentSchema[0].setIntensity(count+"");
-			//System.out.println("hi "+contentSchema[0].getIntensity()+" "+contentSchema[0].getWord());
+			
 			CrawlerResult cb=new CrawlerResult();
 			cb.setQuery(searcherResult.getQuery());
 			cb.setLink(searcherResult.getLink());
@@ -117,43 +141,32 @@ public class KeywordScannerServiceImpl implements KeywordScannerService{
 			cb.setSnippet(searcherResult.getSnippet());
 			cb.setTerms(contentSchema);
 			cb.setLastindexedof(new Date());
-			//System.out.println("hi1");
-			for(ContentSchema c:contentSchema){
-				System.out.println(c.getIntensity()+"  "+c.getWord());
-			}
 			crawlerResult.add(cb);
-			publisher.publishMessage(producerTopic, cb);
-			//k=0;
-			//System.out.println();
-			//System.out.println(crawlerResult.size());
-		}
-
-		catch(Exception e){
-			System.out.println("ghost "+e);
-		}
-		System.out.println(searcherResult.getLink());
-		System.out.println("intensity is "+count);
-
+			KafkaPublisherImpl kafkaPublisherImpl = new KafkaPublisherImpl();
+			
+			kafkaPublisherImpl.publishMessage("tointent", cb);
+	}
+	catch(Exception e){
+		count=0;
+		e.printStackTrace();
+	}
 		return count;
 	}
 
+	/*-- Method implementation to publish message into kafka --*/
 	@Override
-	public void publishingMessage() throws JsonProcessingException {
-		// TODO Auto-generated method stub
-		System.out.println("inside the list"+crawlerResult);
-		System.out.println("size is "+crawlerResult.size());
+	public void publishMessage() throws JsonProcessingException {
+		logger.info("inside the list"+crawlerResult);
+		logger.info("size is "+crawlerResult.size());
 		for(CrawlerResult cr : crawlerResult){
-			System.out.println("link is "+cr.getLink());
-			System.out.println("query is "+cr.getQuery());
-			System.out.println("snippet is "+cr.getSnippet());
-			System.out.println("title is "+cr.getTitle());
-			System.out.println("terms is "+cr.getTerms());
-			System.out.println("last indexed of is "+cr.getLastindexedof());
-			publisher.publishMessage(producerTopic, cr);
+			logger.info("link is "+cr.getLink());
+			logger.info("query is "+cr.getQuery());
+			logger.info("snippet is "+cr.getSnippet());
+			logger.info("title is "+cr.getTitle());
+			logger.info("terms is "+cr.getTerms());
+			logger.info("last indexed of is "+cr.getLastindexedof());
+			kafkaPublisherImpl.publishMessage("tointent", cr);
 		}
 		crawlerResult=null;
 	}
-
-
-
 }
