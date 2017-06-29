@@ -26,7 +26,7 @@ public class CrawlerDeserializer implements Deserializer<CrawlerResult>{
             c=o.readValue(data,CrawlerResult.class);
         }
         catch(Exception e){
-            System.out.println("hi this "+e);
+            e.printStackTrace();
         }
         return c;
     }

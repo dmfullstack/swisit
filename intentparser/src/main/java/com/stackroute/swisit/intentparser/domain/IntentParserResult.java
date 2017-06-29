@@ -27,6 +27,16 @@ public class IntentParserResult extends ResourceSupport {
         this.confidenceScore = confidenceScore;
         this.concept = concept;
     }
+    /*----------Overriding toString method to print IntentParserResult----------*/
+    @Override
+    public String toString() {
+        return "IntentParserResult{" +
+                "url='" + url + '\'' +
+                ", intent='" + intent + '\'' +
+                ", confidenceScore=" + confidenceScore +
+                ", concept='" + concept + '\'' +
+                '}';
+    }
 
     /*------------Setter and Getter methods for Properties-----------*/
     public String getUrl() {

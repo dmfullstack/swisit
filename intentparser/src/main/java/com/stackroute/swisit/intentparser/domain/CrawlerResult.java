@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -21,7 +22,7 @@ public class CrawlerResult {
     private String link;
     @NotEmpty
     @JsonProperty("terms")
-    private ContentSchema[] terms;
+    private ArrayList<ContentSchema> terms;
     @NotEmpty
     @JsonProperty("title")
     private String title;
@@ -36,7 +37,7 @@ public class CrawlerResult {
     public CrawlerResult() { }
 
     /*----------Parameterized Constructor of Crawler Result Class---------*/
-    public CrawlerResult(String query, String link, ContentSchema[] terms, String title, String snippet,Date lastindexof) {
+    public CrawlerResult(String query, String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof) {
         this.query = query;
         this.link = link;
         this.terms = terms;
@@ -51,7 +52,7 @@ public class CrawlerResult {
         return "IntentParserInput{" +
                 "query='" + query + '\'' +
                 ", link='" + link + '\'' +
-                ", contentSchema=" + Arrays.toString(terms) +
+                ", contentSchema=" + terms.toString() +
                 ", title='" + title + '\'' +
                 ", snippet='" + snippet + '\'' +
                 '}';
@@ -83,11 +84,11 @@ public class CrawlerResult {
     }
 
     
-    public ContentSchema[] getTerms() {
+    public ArrayList<ContentSchema> getTerms() {
 		return terms;
 	}
 
-	public void setTerms(ContentSchema[] terms) {
+	public void setTerms(ArrayList<ContentSchema> terms) {
 		this.terms = terms;
 	}
 

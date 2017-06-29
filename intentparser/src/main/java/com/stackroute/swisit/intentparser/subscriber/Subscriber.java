@@ -1,12 +1,9 @@
 package com.stackroute.swisit.intentparser.subscriber;
-
+/*-------Importing Liberaries-------*/
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 
 import java.util.List;
-
-/**
- * Created by user on 21/6/17.
- */
+/*--------Interface class for Kafka subscriber-------*/
 public interface Subscriber {
     public List<CrawlerResult> receivingMessage(String string);
 }

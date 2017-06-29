@@ -2,8 +2,10 @@ package com.stackroute.swisit.intentparser.service;
 /*-------Importing Liberaries------*/
 import com.stackroute.swisit.intentparser.domain.*;
 import com.stackroute.swisit.intentparser.exception.ConfidenceScoreNotCalculatedException;
+import com.stackroute.swisit.intentparser.repository.DocToConcept;
 import com.stackroute.swisit.intentparser.repository.IntentRepository;
 import com.stackroute.swisit.intentparser.repository.RelationshipRepository;
+import com.stackroute.swisit.intentparser.repository.TermRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +15,18 @@ import java.util.*;
 public class IntentParseAlgoImpl implements IntentParseAlgo {
 
     /*-------Autowired Repositories-------*/
-    @Autowired
+	@Autowired
     IntentRepository intentRepository;
-    @Autowired
+	@Autowired
     RelationshipRepository relationshipRepository;
-
+	@Autowired
+	TermRepository termRepository ;
+	@Autowired
+	DocToConcept docToConcept;
     /*------------CalculateConfidence method for getting List of IntentParserResult-----------*/
     @Override
     public ArrayList<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput){
-        List<Intent> intentsList = intentRepository.findIntents();
+    	List<Intent> intentsList = intentRepository.findIntents();
         ArrayList<IntentParserResult> intentParserResultList = new ArrayList<IntentParserResult>();
         for(CrawlerResult intentParserInput : intentInput){
             intentParserResultList.addAll(calculateConfidenceScore(intentParserInput,intentsList));
@@ -50,12 +55,11 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 					throw new ConfidenceScoreNotCalculatedException("Empty data in database");
 					}
 				} catch (ConfidenceScoreNotCalculatedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			
 			/*exception handling*/
-			ContentSchema[] contentSchemas = intentParserInput.getTerms();
+			ArrayList<ContentSchema> contentSchemas = intentParserInput.getTerms();
 			ArrayList<Relationships> relationsList = new ArrayList<Relationships>();
 			for (Map<String, String> map : relList) {
 				Relationships r = new Relationships();
@@ -82,8 +86,7 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 			confidenceScore = in - ci;
 			IntentParserResult intentParserResult = new IntentParserResult(intentParserInput.getLink(), intent.getName(), confidenceScore, intentParserInput.getQuery());
 			intentRepository.createDocumentNode(intentParserResult.getUrl());
-			Map<String,String> map=relationshipRepository.createDocToConceptRels(intentParserResult.getUrl(),intentParserResult.getIntent(),intentParserResult.getConfidenceScore(),intentParserResult.getConcept());
-			System.out.println(map.get("url")+"-----"+map.get("intent")+"---"+map.get("name"));
+			Map<String,String> map = docToConcept.createDocToConceptRels(intentParserResult.getUrl(),intentParserResult.getIntent(),intentParserResult.getConfidenceScore(),intentParserResult.getConcept());
 			results.add(intentParserResult);
 		}
 		return results;

@@ -1,3 +1,5 @@
+/*******This Class is used for Testing the Service only,
+ * will finally be removed from the Final product******/
 package com.stackroute.swisit.intentparser.service;
 
 /*------Importing Liberaries-------*/

@@ -41,10 +41,10 @@ public interface RelationshipRepository extends GraphRepository<IndicatorOf> {
     @Query("Match (t:Term)-[r]->(i:Intent {name: {intentName}}) return t.name AS termName,i.name AS intentName,type(r) AS relName,r.weight AS weight")
     List<Map<String,String>> getAllTermsRelationOfIntent(@Param("intentName") String intentName);
 
-    /*----------Query to create Resulted Relations between URLs and Concepts----------*/
-    // @Query("MATCH (w:Document {url:{url}}) MATCH (c:Concept {name:{concept}}) call apoc.create.relationship(w,{intentName},{confidenceScore:{confScore}},c) YIELD rel AS r Return w,r,c")
-    @Query("Match (d:Document),(c:Concept) where d.url={url} and c.name={concept} create (d)-[:${intentName}{confidenceScore:{confScore}}]->(c) return d,c ")
-    //@Query("MATCH (d:Document {url:{url}}),(c:Concept{name:{concept}}) CREATE (d)-[r:relates{intent:{intentName},confidenceScore:{confScore}}]->(c) RETURN r,c,d")
-    Map<String,String> createDocToConceptRels(@Param("url") String url,@Param("intentName") String intentName,@Param("confScore") float confidenceScore,@Param("concept") String conceptName);
+//    /*----------Query to create Resulted Relations between URLs and Concepts----------*/
+//    // @Query("MATCH (w:Document {url:{url}}) MATCH (c:Concept {name:{concept}}) call apoc.create.relationship(w,{intentName},{confidenceScore:{confScore}},c) YIELD rel AS r Return w,r,c")
+//    @Query("Match (d:Document),(c:Concept) where d.url={url} and c.name={concept} create (d)-[r:Relates{intent:{intentName},confidenceScore:{confScore}}]->(c) return d.url AS url, c.name AS concept, r.intent AS intentName, r.confidenceScore AS confidenceScore")
+//    //@Query("MATCH (d:Document {url:{url}}),(c:Concept{name:{concept}}) CREATE (d)-[r:relates{intent:{intentName},confidenceScore:{confScore}}]->(c) RETURN r,c,d")
+//    Map<String,String> createDocToConceptRels(@Param("url") String url,@Param("intentName") String intentName,@Param("confScore") float confidenceScore,@Param("concept") String conceptName);
 }
 

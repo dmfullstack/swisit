@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.subscriber;
-
+/*-------Importing Liberaries------*/
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 
 import java.util.List;
@@ -12,9 +12,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.stereotype.Service;
-/**
- * Created by user on 21/6/17.
- */
+/*-------Implementation Class for Kafka Subscriber------*/
 @Service
 public class SubscriberImpl implements Subscriber{
     @Override
@@ -23,15 +21,15 @@ public class SubscriberImpl implements Subscriber{
         props.put("group.id", "group-1");
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer","CrawlerDeserializer");
+        props.put("value.deserializer","com.stackroute.swisit.intentparser.serialization.CrawlerDeserializer");
         List<CrawlerResult> final_kafka=new ArrayList<CrawlerResult>();
         KafkaConsumer<String, CrawlerResult> kafkaConsumer = new KafkaConsumer<String, CrawlerResult>(props);
         kafkaConsumer.subscribe(Arrays.asList(string));
-        System.out.println("hi i am getting");
+        //System.out.println("hi i am getting");
         while (true) {
-            ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(100000);
+            ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(1000);
             for (ConsumerRecord<String, CrawlerResult> record : records) {
-                System.out.println("inside consumer i am getting"+record.value());
+                //System.out.println("inside consumer i am getting"+record.value());
                 final_kafka.add(record.value());
             }
             

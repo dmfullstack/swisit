@@ -6,6 +6,7 @@ package com.stackroute.swisit.intentparser.controller;
 /*--------- Importing Libraries---------------*/
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.intentparser.assembler.HeteoasLinkAssembler;
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 import com.stackroute.swisit.intentparser.domain.Intent;
@@ -24,6 +25,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,33 +33,30 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 /*----------------------Rest API Controller Class------------------------*/
 @RestController
 @RequestMapping(value="/v1/api/parse/")
-@Api(value="SWIS-it", description="Operations pertaining to the IntentParserService")
+@Api(value="IntentParserRestController", description="Operations pertaining to the IntentParserService")
 public class IntentParserRestController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	/*----------Autowired Instances of Classes----------*/
 	@Autowired
 	IntentParserService intentParserService;
-
 	@Autowired
 	IntentParseAlgo intentParseAlgo;
-
 	@Autowired
 	HeteoasLinkAssembler heteoasLinkAssembler;
-
 	@Autowired
 	SubscriberImpl subscriberImpl;
-
 	@Autowired
 	private MessageSource messageSource;
 
 	/*----------------Swagger API Operations-----------------*/
-	@ApiOperation(value="CrawlerValue",response = CrawlerResult.class)
+	@ApiOperation(value="subscribe",response = CrawlerResult.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successfully retrieved Crawler"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -66,8 +65,8 @@ public class IntentParserRestController {
 	}
 			)
 	/*---------------REST Controller get Input from Kafka-----------------*/
-	@RequestMapping(value="subscriber" , method=RequestMethod.GET)
-	public ResponseEntity<Iterable> demo(){
+	@RequestMapping(value="subscribe" , method=RequestMethod.GET)
+	public ResponseEntity<Iterable> subscribe(){
 		Iterable<CrawlerResult> l=subscriberImpl.receivingMessage("tointent");
 		// CrawlerResult cr[]=new CrawlerResult[l.size()];
 		//l.toArray(cr);
@@ -85,7 +84,7 @@ public class IntentParserRestController {
 	}
 
 	/*----------------Swagger API Operations-----------------*/
-	@ApiOperation(value="CrawlerValue",response = CrawlerResult.class)
+	@ApiOperation(value="fetchNeoData",response = CrawlerResult.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successfully retrieved Crawler"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -128,26 +127,27 @@ public class IntentParserRestController {
 
 		/*------Try Catch block for Handling Exceptions-----*/
 		try{
-			//			ArrayList<CrawlerResult> intentInput = new ArrayList<CrawlerResult>();
-			//			ObjectMapper mapper = new ObjectMapper();
-			//			File file = new ClassPathResource("input.json").getFile();
-			//			CrawlerResult[] intentInputarr=mapper.readValue(file,CrawlerResult[].class);
-			//			for(CrawlerResult c:intentInputarr){
-			//	        	intentInput.add(c);
-			//	        }
+//						ArrayList<CrawlerResult> intentInput = new ArrayList<CrawlerResult>();
+//						ObjectMapper mapper = new ObjectMapper();
+//						File file = new ClassPathResource("input.json").getFile();
+//						CrawlerResult[] intentInputarr=mapper.readValue(file,CrawlerResult[].class);
+//						for(CrawlerResult c:intentInputarr){
+//				        	intentInput.add(c);
+//				        }
 			/*-------getting input from Kafka subscriber------*/
 			Iterable<CrawlerResult> intentInput=subscriberImpl.receivingMessage("tointent");
 			if(intentInput==null){
 				String message = messageSource.getMessage ("user.excep.data", null, locale );
 				return new ResponseEntity(message,HttpStatus.OK);
 			}
+
 			for(CrawlerResult lr:intentInput){
-				System.out.println("link is "+lr.getLink());
-				System.out.println("query is "+lr.getQuery());
-				System.out.println("content schema is "+lr.getTerms()[0].getWord()+"---"+lr.getTerms()[0].getIntensity());
-				System.out.println("snippet is "+lr.getSnippet());
-				System.out.println("title is  "+lr.getTitle());
-				System.out.println("date is "+lr.getLastindexedof());
+				logger.info("link is "+lr.getLink());
+				logger.info("query is "+lr.getQuery());
+				logger.info("content schema is "+lr.getTerms().get(0).getWord()+"---"+lr.getTerms().get(0).getIntensity());
+				logger.info("snippet is "+lr.getSnippet());
+				logger.info("title is  "+lr.getTitle());
+				logger.info("date is "+lr.getLastindexedof());
 			}
 
 			/*-------Resulted List from Intent Parser Algo-------*/

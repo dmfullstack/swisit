@@ -22,6 +22,15 @@ public class Term {
         this.name = name;
         this.nodeid = nodeid;
     }
+    /*--------Overriding toString method for Term Bean class-------*/
+    @Override
+    public String toString() {
+        return "Term{" +
+                "id=" + id +
+                ", nodeid='" + nodeid + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 
     /*------------Setter and Getter methods for Properties-----------*/
     public String getName() {
