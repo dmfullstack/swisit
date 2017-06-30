@@ -26,27 +26,21 @@ public class KafkaSubscriberImpl implements Subscriber{
 	String brokerid;
 	public List<SearcherResult> receivingMessage(String string) {
 
-
-		System.out.println("inside receiving mesage");
-		// TODO Auto-generated method stub
 		Properties properties = new Properties();
 		/* configure properties for kafka */
 		properties.put("group.id", "group-1");
-		System.out.println("inside main");
 		properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG , brokerid);
 		properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		properties.put("value.deserializer", "com.stackroute.swisit.crawler.domain.SearcherResult");
 		List<SearcherResult> searcherResultKafka=new ArrayList<SearcherResult>();
+		
 		/* consume message from the kafka topic */
 		KafkaConsumer<String, SearcherResult> kafkaConsumer = new KafkaConsumer(properties);
 		kafkaConsumer.subscribe(Arrays.asList(string));
-		System.out.println(kafkaConsumer.toString());
 
 		while (true) {
 			ConsumerRecords<String, SearcherResult> records = kafkaConsumer.poll(10000);
-			System.out.println("records  "+records);
 			for (ConsumerRecord<String, SearcherResult> record : records) {
-				System.out.println("record  "+record);
 				searcherResultKafka.add(record.value());
 
 			}

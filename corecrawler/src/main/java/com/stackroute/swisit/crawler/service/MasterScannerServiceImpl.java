@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.domain.Term;
+import com.stackroute.swisit.crawler.exception.DOMNotCreatedException;
 import com.stackroute.swisit.crawler.exception.DocumentNotScannedException;
 import com.stackroute.swisit.crawler.repository.Neo4jRepository;
 
@@ -66,7 +67,13 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 		}
 		for(SearcherResult searcherResultRef : searcherResult) {
 			DOMCreatorServiceImpl domCreatorService = new DOMCreatorServiceImpl();
-			Document document=domCreatorService.constructDOM(searcherResultRef.getLink());
+			Document document = null;
+			try {
+				document = domCreatorService.constructDOM(searcherResultRef.getLink());
+			} catch (DOMNotCreatedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			/* Fetching terms from neo4j */
 

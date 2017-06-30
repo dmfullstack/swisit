@@ -38,16 +38,6 @@ public class KafkaPublisherImpl implements Publisher {
 		configProperties.put("value.serializer","com.stackroute.swisit.crawler.serialization.CrawlerSerializer");
 		Producer<String, CrawlerResult> producer = new KafkaProducer<String, CrawlerResult>(configProperties);
 		logger.info("getting published");
-		/* for (int i = 0; i < 100; i++) {
-	        String msg = "Message " + i;
-	        producer.send(new ProducerRecord<String, String>(topicName, msg));
-	        System.out.println("Sent:" + msg);
-        }
-        TODO: Make sure to use the ProducerRecord constructor that does not take parition Id
-        Movie m=new Movie();
-        byte b[]=m.serialize("hi", message);
-        ObjectMapper om=new ObjectMapper();
-        String s=om.writeValueAsString(message);*/
 		ProducerRecord<String, CrawlerResult> producerRecord = new ProducerRecord<String, CrawlerResult>(topicName,message);
 		logger.info("Sending........");
 		producer.send(producerRecord);
