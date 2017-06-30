@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.service;
-/*-------Importing Liberaries------*/
+/*-------Importing Libraries------*/
 import com.stackroute.swisit.intentparser.domain.*;
 import com.stackroute.swisit.intentparser.exception.ConfidenceScoreNotCalculatedException;
 import com.stackroute.swisit.intentparser.repository.DocToConcept;
@@ -33,8 +33,8 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
         }
         Collections.sort(intentParserResultList, new Comparator<IntentParserResult>() {
             @Override
-            public int compare(IntentParserResult o1, IntentParserResult o2) {
-                return (int)(o2.getConfidenceScore()-o1.getConfidenceScore());
+            public int compare(IntentParserResult intentParserResult1, IntentParserResult intentParserResult2) {
+                return (int)(intentParserResult1.getConfidenceScore()-intentParserResult2.getConfidenceScore());
             }
         });
         return intentParserResultList;
@@ -48,10 +48,10 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 	public ArrayList<IntentParserResult> calculateConfidenceScore(CrawlerResult intentParserInput,List<Intent> intentList){
 		ArrayList<IntentParserResult> results=new ArrayList<IntentParserResult>();
 		for (Intent intent : intentList) {
-			List<Map<String, String>> relList = relationshipRepository.getAllTermsRelationOfIntent(intent.getName());
+			List<Map<String, String>> relationshipList = relationshipRepository.getAllTermsRelationOfIntent(intent.getName());
 			/*exception handling*/
 				try {
-					if (relList == null) {
+					if (relationshipList == null) {
 					throw new ConfidenceScoreNotCalculatedException("Empty data in database");
 					}
 				} catch (ConfidenceScoreNotCalculatedException e) {
@@ -61,29 +61,29 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 			/*exception handling*/
 			ArrayList<ContentSchema> contentSchemas = intentParserInput.getTerms();
 			ArrayList<Relationships> relationsList = new ArrayList<Relationships>();
-			for (Map<String, String> map : relList) {
-				Relationships r = new Relationships();
-				r.setIntentName(map.get("intentName"));
-				r.setTermName(map.get("termName"));
-				r.setRelName(map.get("relName"));
-				r.setWeight(Float.parseFloat(map.get("weight")));
-				relationsList.add(r);
+			for (Map<String, String> map : relationshipList) {
+				Relationships relationships = new Relationships();
+				relationships.setIntentName(map.get("intentName"));
+				relationships.setTermName(map.get("termName"));
+				relationships.setRelName(map.get("relName"));
+				relationships.setWeight(Float.parseFloat(map.get("weight")));
+				relationsList.add(relationships);
 			}
-			float in = 0f, ci = 0f, confidenceScore;
+			float indicator = 0f, counterIndicator = 0f, confidenceScore;
 			for (ContentSchema contentSchema : contentSchemas) {
 				for (Relationships relationships : relationsList) {
 					if (contentSchema.getWord() == null) { continue; }
 					if (contentSchema.getWord().equalsIgnoreCase(relationships.getTermName())) {
 						if (relationships.getRelName().equalsIgnoreCase("indicatorOf")) {
-							in += (contentSchema.getIntensity() * relationships.getWeight());
+							indicator += (contentSchema.getIntensity() * relationships.getWeight());
 						}
 						if (relationships.getRelName().equalsIgnoreCase("counterIndicatorOf")) {
-							ci += (contentSchema.getIntensity() * relationships.getWeight());
+							counterIndicator += (contentSchema.getIntensity() * relationships.getWeight());
 						}
 					}
 				}
 			}
-			confidenceScore = in - ci;
+			confidenceScore = indicator - counterIndicator;
 			IntentParserResult intentParserResult = new IntentParserResult(intentParserInput.getLink(), intent.getName(), confidenceScore, intentParserInput.getQuery());
 			intentRepository.createDocumentNode(intentParserResult.getUrl());
 			Map<String,String> map = docToConcept.createDocToConceptRels(intentParserResult.getUrl(),intentParserResult.getIntent(),intentParserResult.getConfidenceScore(),intentParserResult.getConcept());

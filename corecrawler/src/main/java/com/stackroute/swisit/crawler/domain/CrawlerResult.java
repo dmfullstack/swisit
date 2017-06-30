@@ -38,7 +38,18 @@ public class CrawlerResult extends ResourceSupport {
 	@JsonProperty("snippet")
 	@NotNull
 	private String snippet;
+	
+	public String getConcept() {
+		return concept;
+	}
 
+	public void setConcept(String concept) {
+		this.concept = concept;
+	}
+
+	@JsonProperty("concept")
+	private String concept;
+	
 	public List<ContentSchema> getTerms() {
 		return terms;
 	}

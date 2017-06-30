@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.repository;
-/*-----------Importing Liberaries------------*/
+/*-----------Importing Libraries------------*/
 import com.stackroute.swisit.intentparser.domain.IndicatorOf;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;

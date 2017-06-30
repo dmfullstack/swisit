@@ -12,21 +12,27 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/* Producing and consuming messages for loadbalancing */
 @Service
-public class LoadBalancingProducer implements LoadBal{
+public class LoadBalancingProducer implements LoadBalancing{
+	
+	@Value("${brokerid}")
+	String brokerid;
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	/* Kafka producer for load balancing*/
 	@Override
     public void LoadProducer() {
-        
+    
          Properties configProperties = new Properties();
-            configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                    "172.23.239.165:9092");
-            configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
-            configProperties.put("value.serializer","org.apache.kafka.common.serialization.StringSerializer");
+         /* configuring the properties for kafka */
+         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
+         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
+         configProperties.put("value.serializer","org.apache.kafka.common.serialization.StringSerializer");
             Producer producer = new KafkaProducer(configProperties);   
             for (int i = 0; i < 100; i++) {
                 String msg = "Message " + i;
@@ -35,10 +41,12 @@ public class LoadBalancingProducer implements LoadBal{
             }
     }
 
+	/* kafka consumer for load balancing */
     @Override
     public void LoadConsumer() {
         // TODO Auto-generated method stub
         Properties properties = new Properties();
+        /* configuring the properties for kafka */
         properties.put("group.id", "group-1");
         
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");

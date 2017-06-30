@@ -11,10 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document
-public class ResponsiveBean {
-	
-	
-	
+/* Handling the response from Google Api */
+public class SearchResponse {
 	
 	String queries;
 	
@@ -25,9 +23,6 @@ public class ResponsiveBean {
 	public void setQueries(String queries) {
 		this.queries = queries;
 	}
-
-	
-	
 	/* set array of values from google api json */ 
 	@JsonProperty("queries")
     public String getNestedObject(Map<String, Object> queries)
@@ -38,8 +33,6 @@ public class ResponsiveBean {
         setQueries((String) map.get("searchTerms"));
         return (String) map.get("searchTerms");
     }
-
-	
 	/* set array of values from google api json */
 	@JsonProperty("items")
 	SearcherResult[] s;
@@ -52,11 +45,8 @@ public class ResponsiveBean {
 		this.s = s;
 	}
 	
-
 	@Override
 	public String toString() {
 		return "Responsive [s=" + Arrays.toString(s) + "]";
 	}
-	
-
 }

@@ -11,45 +11,46 @@ import org.springframework.stereotype.Service;
 import com.stackroute.swisit.searcher.controller.SearchController;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 import com.stackroute.swisit.searcher.domain.SearcherResult;
-
-
 @Service
 public class HateoesAssemblerImpl implements HateoesAssembler{
 	/* link used in post method */
 	@Override
-	public List getlinkspost() {
+	public List getLinksPost() {
 		List sb=new ArrayList();
-		Link postQuery = linkTo(SearchController.class).slash("/urlpostquery").withSelfRel();
+		Link postQuery = linkTo(SearchController.class).slash("").withSelfRel();
 		sb.add(postQuery);
 		        
-		Link getAll = linkTo(SearchController.class).slash("/urlget").withRel("PostJob");
+		Link getAll = linkTo(SearchController.class).slash("").withRel("GetSearcherResult");
 		sb.add(getAll);
+		
+		Link getQuery = linkTo(SearchController.class).slash("/getsearcherjob").withRel("GetJob");
+        sb.add(getQuery);
 		    
 		 return sb;
 		}
 	
 	/* Hateoas link used in get method */
 	@Override
-	public List<SearcherResult> getalllinks(List<SearcherResult> all) {
+	public List<SearcherResult> getAllLinks(List<SearcherResult> all) {
 		 for ( SearcherResult sb : all) {
-		        Link postQuery = linkTo(SearchController.class).slash("/urlpostquery").withRel("PostJob");
+		        Link postQuery = linkTo(SearchController.class).slash("").withRel("PostJob");
 		        sb.add(postQuery);
-		        Link getQuery = linkTo(SearchController.class).slash("/urlgetquery").withRel("GetJob");
+		        Link getQuery = linkTo(SearchController.class).slash("/getsearcherjob").withRel("GetJob");
 		        sb.add(getQuery);
-		        Link getAll = linkTo(SearchController.class).slash("/urlget").withSelfRel();
+		        Link getAll = linkTo(SearchController.class).slash("").withSelfRel();
 		        sb.add(getAll);
 		    }
 		 return all;
 		}
 	/* Hateoas link used in urlgetquery */
 	@Override
-	public List<SearcherJob> getallquery(List<SearcherJob> all) {
+	public List<SearcherJob> getAllQuery(List<SearcherJob> all) {
 		 for ( SearcherJob sb : all) {
-		        Link postQuery = linkTo(SearchController.class).slash("/urlpostquery").withRel("PostJob");
+		        Link postQuery = linkTo(SearchController.class).slash("").withRel("PostJob");
 		        sb.add(postQuery);
-		        Link getQuery = linkTo(SearchController.class).slash("/urlgetquery").withRel("GetJob");
+		        Link getQuery = linkTo(SearchController.class).slash("/getsearcherjob").withRel("GetJob");
 		        sb.add(getQuery);
-		        Link getAll = linkTo(SearchController.class).slash("/urlget").withRel("GetAll");
+		        Link getAll = linkTo(SearchController.class).slash("").withRel("GetSearcherResult");
 		        sb.add(getAll);
 		    }
 		 return all;

@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.service;
-/*-------Importing Liberaris-------*/
+/*-------Importing Libraries-------*/
 import com.stackroute.swisit.intentparser.domain.Intent;
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 import com.stackroute.swisit.intentparser.domain.IntentParserResult;

@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.domain;
-/*--------Importing Liberaries-------*/
+/*--------Importing Libraries-------*/
 import javax.validation.constraints.NotNull;
 
 import org.neo4j.ogm.annotation.GraphId;

@@ -1,4 +1,4 @@
-/*package com.swisit.search;
+package com.stackroute.swisit.searchertest;
 
 import static org.junit.Assert.assertTrue;
 
@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @DirtiesContext
-public class DemoApplicationTests {
+public class SwisitApplicationTests {
 
 	@Autowired
 	DiscoveryClient discoveryClient;
@@ -28,4 +28,3 @@ public class DemoApplicationTests {
 		assertTrue("discoveryClient is wrong type: " + discoveryClient, discoveryClient instanceof EurekaDiscoveryClient);
 	}
 }
-*/

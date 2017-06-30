@@ -26,26 +26,26 @@ public class SwisitApplication {
 
 	
 	public static void main(String[] args) {
-		
-		
+				
 		ApplicationContext ctx = SpringApplication.run(SwisitApplication.class, args);
-        SearcherResult sb = ctx.getBean(SearcherResult.class);
-		
-		
 	}
+	/* Defining the default language for Internationalization */
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
      slr.setDefaultLocale(Locale.US);
         return slr;
     }
+    
+    /* Specifying the message path for internationalization */
     @Bean
     public MessageSource messageSource() {
          ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
          messageSource.setBasename("classpath:/messages/messages");
          return messageSource;
     }
-
+    
+    /* specifying the parameter name for chainging language */
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();

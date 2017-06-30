@@ -22,7 +22,6 @@ public class CrawlerDeserializer implements Deserializer<CrawlerResult>{
         ObjectMapper o=new ObjectMapper();
         CrawlerResult c=null;
         try{
-            //System.out.println(arg1.toString());
             c=o.readValue(data,CrawlerResult.class);
         }
         catch(Exception e){

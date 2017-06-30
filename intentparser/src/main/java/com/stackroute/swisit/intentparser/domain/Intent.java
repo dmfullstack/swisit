@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.domain;
-/*-------Importing Liberaries--------*/
+/*-------Importing Libraries--------*/
 import org.hibernate.validator.constraints.NotEmpty;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;

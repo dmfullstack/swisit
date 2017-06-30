@@ -24,6 +24,7 @@ public class SwaggerCrawlerConfig {
 	                .build()
 	                .apiInfo(metaData());
 	    }
+	    /* method to insert data to swagger documentation */
 	    private ApiInfo metaData() {
 	           ApiInfo apiInfo = new ApiInfo(
 	                   "SWIS-it CrawlerService API",

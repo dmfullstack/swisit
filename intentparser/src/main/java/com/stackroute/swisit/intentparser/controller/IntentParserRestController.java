@@ -6,12 +6,10 @@ package com.stackroute.swisit.intentparser.controller;
 /*--------- Importing Libraries---------------*/
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.intentparser.assembler.HeteoasLinkAssembler;
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 import com.stackroute.swisit.intentparser.domain.Intent;
 import com.stackroute.swisit.intentparser.domain.Term;
-import com.stackroute.swisit.intentparser.exception.ConfidenceScoreNotCalculatedException;
 import com.stackroute.swisit.intentparser.domain.IntentParserResult;
 import com.stackroute.swisit.intentparser.service.IntentParseAlgo;
 import com.stackroute.swisit.intentparser.service.IntentParserService;
@@ -25,15 +23,12 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -71,15 +66,13 @@ public class IntentParserRestController {
 		// CrawlerResult cr[]=new CrawlerResult[l.size()];
 		//l.toArray(cr);
 		for(CrawlerResult lr:l){
-			System.out.println("link is "+lr.getLink());
-			System.out.println("query is "+lr.getQuery());
-			System.out.println("snippet is "+lr.getSnippet());
-			System.out.println("title is  "+lr.getTitle());
-			System.out.println("date is "+lr.getLastindexedof());
-			// System.out.println("terms is "+lr.getTerms());
+			logger.debug("link is "+lr.getLink());
+			logger.debug("query is "+lr.getQuery());
+			logger.debug("snippet is "+lr.getSnippet());
+			logger.debug("title is  "+lr.getTitle());
+			logger.debug("date is "+lr.getLastindexedof());
 
 		}
-		//System.out.println("list is "+l);
 		return new ResponseEntity<Iterable>(l, HttpStatus.OK);
 	}
 
@@ -127,13 +120,6 @@ public class IntentParserRestController {
 
 		/*------Try Catch block for Handling Exceptions-----*/
 		try{
-//						ArrayList<CrawlerResult> intentInput = new ArrayList<CrawlerResult>();
-//						ObjectMapper mapper = new ObjectMapper();
-//						File file = new ClassPathResource("input.json").getFile();
-//						CrawlerResult[] intentInputarr=mapper.readValue(file,CrawlerResult[].class);
-//						for(CrawlerResult c:intentInputarr){
-//				        	intentInput.add(c);
-//				        }
 			/*-------getting input from Kafka subscriber------*/
 			Iterable<CrawlerResult> intentInput=subscriberImpl.receivingMessage("tointent");
 			if(intentInput==null){

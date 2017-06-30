@@ -41,30 +41,7 @@ public class IntentParserApplication {
         ConfigurableApplicationContext applicationContext =SpringApplication.run(IntentParserApplication.class, args);
         SubscriberImpl subscriberImpl = applicationContext.getBean(SubscriberImpl.class);
         List<IntentParserResult> result=null;
-
-//        ArrayList<CrawlerResult> intentInput = new ArrayList<CrawlerResult>();
-//						ObjectMapper mapper = new ObjectMapper();
-//						File file = new ClassPathResource("input.json").getFile();
-//						CrawlerResult[] intentInputarr=mapper.readValue(file,CrawlerResult[].class);
-//						for(CrawlerResult c:intentInputarr){
-//				        	intentInput.add(c);
-//				        }
         Iterable<CrawlerResult> intentInput=subscriberImpl.receivingMessage("tointent");
-//        if(intentInput==null){
-//            //String message = messageSource.getMessage ("user.excep.data", null, locale );
-//            //return new ResponseEntity(message, HttpStatus.OK);
-//        }
-
-//        for(CrawlerResult lr:intentInput){
-//            System.out.println("link is "+lr.getLink());
-////            logger.info("link is "+lr.getLink());
-////            logger.info("query is "+lr.getQuery());
-////            logger.info("content schema is "+lr.getTerms()[0].getWord()+"---"+lr.getTerms()[0].getIntensity());
-////            logger.info("snippet is "+lr.getSnippet());
-////            logger.info("title is  "+lr.getTitle());
-////            logger.info("date is "+lr.getLastindexedof());
-//        }
-
 			/*-------Resulted List from Intent Parser Algo-------*/
         IntentParseAlgoImpl intentParseAlgo = applicationContext.getBean(IntentParseAlgoImpl.class);
         result=(List<IntentParserResult>)intentParseAlgo.calculateConfidence(intentInput);

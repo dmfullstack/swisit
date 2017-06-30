@@ -1,7 +1,7 @@
 /*******This Class is used for Testing the Service only,
  * will finally be removed from the Final product******/
 package com.stackroute.swisit.intentparser.service;
-/*---------Importing Liberaries--------*/
+/*---------Importing Libraries--------*/
 import com.stackroute.swisit.intentparser.domain.Intent;
 import com.stackroute.swisit.intentparser.domain.Term;
 import com.stackroute.swisit.intentparser.repository.IntentRepository;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/*---------Implemenentation Class for IntentParserService-------*/
+/*---------Implementation Class for IntentParserService-------*/
 @Service
 public class IntentParserServiceImpl implements IntentParserService {
 

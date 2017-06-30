@@ -1,7 +1,4 @@
 package com.stackroute.swisit.searcher.domain;
-
-
-
 import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 import org.springframework.hateoas.ResourceSupport;
@@ -10,9 +7,9 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Component
 @JsonIgnoreProperties(ignoreUnknown=true)
+/* To Send the result for the searcherJob */
 public class SearcherResult extends ResourceSupport implements Serializer<SearcherResult>{
 	
 	@JsonProperty("query")
@@ -23,6 +20,14 @@ public class SearcherResult extends ResourceSupport implements Serializer<Search
 	String title;
 	@JsonProperty("snippet")
 	String description;
+	@JsonProperty("concept")
+	String concept;
+	public String getConcept() {
+		return concept;
+	}
+	public void setConcept(String concept) {
+		this.concept = concept;
+	}
 	private String encoding="UTF-8";
 	public String getQuery() {
 		return query;

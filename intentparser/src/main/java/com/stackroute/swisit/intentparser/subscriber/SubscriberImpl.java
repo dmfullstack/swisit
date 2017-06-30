@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.subscriber;
-/*-------Importing Liberaries------*/
+/*-------Importing Libraries------*/
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 
 import java.util.List;
@@ -11,10 +11,13 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 /*-------Implementation Class for Kafka Subscriber------*/
 @Service
 public class SubscriberImpl implements Subscriber{
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public List<CrawlerResult> receivingMessage(String string) {
         Properties props = new Properties();
@@ -25,11 +28,10 @@ public class SubscriberImpl implements Subscriber{
         List<CrawlerResult> final_kafka=new ArrayList<CrawlerResult>();
         KafkaConsumer<String, CrawlerResult> kafkaConsumer = new KafkaConsumer<String, CrawlerResult>(props);
         kafkaConsumer.subscribe(Arrays.asList(string));
-        //System.out.println("hi i am getting");
         while (true) {
             ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(1000);
             for (ConsumerRecord<String, CrawlerResult> record : records) {
-                //System.out.println("inside consumer i am getting"+record.value());
+                logger.debug("inside consumer i am getting"+record.value());
                 final_kafka.add(record.value());
             }
             

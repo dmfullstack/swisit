@@ -9,20 +9,26 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 @Service
 public class IntialConsumerImpl implements IntialConsumer{
-
+	@Value("${brokerid}")
+	String brokerid;
+	/* kafka consumer for searcherJob */
 	@Override
-	public SearcherJob listenmessage(String topic) {
+	public SearcherJob listenMessage(String topic) {
 		Properties props = new Properties();
+		
+			/* configuring the properties for kafka */
 			props.put("group.id", "group-1");
-		    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
+		    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
 			props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		    props.put("value.deserializer", "com.stackroute.swisit.searcher.kafkaserialization.QueryDeserializer");
 		    List<SearcherJob> l=new ArrayList<SearcherJob>();
+		    /* initial consumer is used to consume data from kafka */
 		    KafkaConsumer<String, SearcherJob> kafkaConsumer = new KafkaConsumer<>(props);
 		    kafkaConsumer.subscribe(Arrays.asList(topic));
 		    SearcherJob q=new SearcherJob();

@@ -30,20 +30,14 @@ public class KafkaSubscriberImpl implements Subscriber{
 		System.out.println("inside receiving mesage");
 		// TODO Auto-generated method stub
 		Properties properties = new Properties();
-		//props.put("bootstrap.servers", "172.23.239.180:9095");
-		//props.put("bootstrap.servers", "localhost:9092");
+		/* configure properties for kafka */
 		properties.put("group.id", "group-1");
 		System.out.println("inside main");
 		properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG , brokerid);
 		properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		properties.put("value.deserializer", "com.stackroute.swisit.crawler.domain.SearcherResult");
-
 		List<SearcherResult> searcherResultKafka=new ArrayList<SearcherResult>();
-		System.out.println(string);
-		//props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
-		//props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
-		//SwisitBean[] cb =new Array
-
+		/* consume message from the kafka topic */
 		KafkaConsumer<String, SearcherResult> kafkaConsumer = new KafkaConsumer(properties);
 		kafkaConsumer.subscribe(Arrays.asList(string));
 		System.out.println(kafkaConsumer.toString());
@@ -56,7 +50,6 @@ public class KafkaSubscriberImpl implements Subscriber{
 				searcherResultKafka.add(record.value());
 
 			}
-
 			return searcherResultKafka;
 		}
 	}

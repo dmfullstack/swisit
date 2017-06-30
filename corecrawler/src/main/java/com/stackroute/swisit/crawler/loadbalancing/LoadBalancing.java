@@ -1,9 +1,9 @@
-package com.stackroute.swisit.searcher.loadbalancing;
+package com.stackroute.swisit.crawler.loadbalancing;
 
 import org.springframework.stereotype.Service;
 
-@Service
-public interface LoadBal {
+
+public interface LoadBalancing {
  public void LoadProducer();
  public void LoadConsumer();
 

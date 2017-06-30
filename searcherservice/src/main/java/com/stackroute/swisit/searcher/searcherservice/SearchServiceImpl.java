@@ -17,16 +17,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stackroute.swisit.searcher.domain.ResponsiveBean;
+import com.stackroute.swisit.searcher.domain.SearchResponse;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 import com.stackroute.swisit.searcher.domain.SearcherResult;
 import com.stackroute.swisit.searcher.exception.SearcherServiceException;
 import com.stackroute.swisit.searcher.messageservice.MessageService;
+import com.stackroute.swisit.searcher.publisher.Publisher;
 import com.stackroute.swisit.searcher.repository.SearcherJobRepository;
 import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
-
-
-
 @Service
 public class SearchServiceImpl implements SearchService {
 	
@@ -37,10 +35,9 @@ public class SearchServiceImpl implements SearchService {
 	private SearcherJobRepository searcherJobRepository;
 	
 	@Autowired
-	MessageService kafkaconfig;
-
+	Publisher kafkaconfig;
 	
-	ResponsiveBean responsiveBean = new ResponsiveBean();
+	SearchResponse responsiveBean = new SearchResponse();
 	SearcherJob searcherJob = new SearcherJob();
 	SearcherResult searcherResult=new SearcherResult();
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -85,7 +82,7 @@ public class SearchServiceImpl implements SearchService {
 				/* RestTemplate is a class that contains getForObject method 
 		   		to get the value from the Google Api and stored as object */ 
 				RestTemplate restTemplate = new RestTemplate();
-				responsiveBean = restTemplate.getForObject(finalUrl,ResponsiveBean.class);
+				responsiveBean = restTemplate.getForObject(finalUrl,SearchResponse.class);
 				if(responsiveBean==null)
 				{
 					throw new SearcherServiceException("url is incorrect");
@@ -94,15 +91,16 @@ public class SearchServiceImpl implements SearchService {
 				/* set the values to SearcherResult class and send the object to
 		   		crawlerService via Kafka */ 
 				List<SearcherResult> searcherResultList=new ArrayList<SearcherResult>();
-				for(SearcherResult b:responsiveBean.getS())
+				for(SearcherResult searcherResultRef:responsiveBean.getS())
 				{
 					searcherResult.setQuery(responsiveBean.getQueries());
-					searcherResult.setUrl(b.getUrl());
-					searcherResult.setTitle(b.getTitle());
-					searcherResult.setDescription(b.getDescription());
+					searcherResult.setUrl(searcherResultRef.getUrl());
+					searcherResult.setTitle(searcherResultRef.getTitle());
+					searcherResult.setDescription(searcherResultRef.getDescription());
+					searcherResult.setConcept(concept.get(0));
 					searcherResultRepository.save(searcherResult);
 					try {
-						kafkaconfig.publishmessage("testcontrol", searcherResult);
+						kafkaconfig.publishMessage("testcontrol", searcherResult);
 					} 
 					catch (JsonProcessingException e) {
 						e.printStackTrace();
@@ -114,7 +112,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 		catch(SearcherServiceException e)
 		{
-			logger.debug("Exception "+e.getMessage());
+			logger.error("Exception "+e.getMessage());
 		}
 		
 	return searcherResultRepository.findAll();
@@ -141,7 +139,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 		catch(SearcherServiceException e)
 		{
-			logger.debug("Exception"+e.getMessage());
+			logger.error("Exception"+e.getMessage());
 		}
 	return searcherResultRepository.findAll();
 	}
@@ -200,7 +198,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 		catch(SearcherServiceException e)
 		{
-			logger.debug("Exception"+e.getMessage());
+			logger.error("Exception"+e.getMessage());
 		}
 	return searcherJobRepository.findAll();	
 	}

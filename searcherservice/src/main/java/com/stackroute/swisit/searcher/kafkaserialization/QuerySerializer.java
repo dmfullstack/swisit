@@ -7,6 +7,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 
+/* serializing the searcherJob bean */
 public class QuerySerializer implements Serializer<SearcherJob>{
 
 	@Override
@@ -15,6 +16,7 @@ public class QuerySerializer implements Serializer<SearcherJob>{
 		
 	}
 
+	/* serializing message of SearcherJob */
 	@Override
 	public byte[] serialize(String topic, SearcherJob data) {
 		// TODO Auto-generated method stub

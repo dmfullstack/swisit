@@ -1,4 +1,4 @@
-package com.stackroute.swisit.searcher.config;
+package com.stackroute.swisit.searcher.swaggerconfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +22,11 @@ public class SwaggerConfig {
                 .build()
                 .apiInfo(metaData());
     }
+    /* method to insert data in swagger document */
     private ApiInfo metaData() {
         ApiInfo apiInfo = new ApiInfo(
                 "Spring Boot SearcherService API",
-                "Spring Boot SearcherService for Movie",
+                "Spring Boot SearcherService for swisit",
                 "1.0",
                 "Terms of service",
                 new Contact("Stack Route", "https://stackroute.in/", "simanta.sarma@stackroute.in"),

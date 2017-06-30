@@ -7,6 +7,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.searcher.domain.SearcherResult;
 
+/* serializing the searcherResult bean */
 public class SwisitSerializer implements Serializer<SearcherResult> {
 
 	@Override
@@ -21,6 +22,7 @@ public class SwisitSerializer implements Serializer<SearcherResult> {
 		
 	}
 
+	/* serialize message from SearcherResult */
 	@Override
 	public byte[] serialize(String arg0, SearcherResult arg1) {
 		// TODO Auto-generated method stub

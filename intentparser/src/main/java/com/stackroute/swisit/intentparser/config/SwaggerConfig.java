@@ -2,7 +2,7 @@
  * will finally be removed from the Final product******/
 
 package com.stackroute.swisit.intentparser.config;
-/*-----Importing Liberaries-----*/
+/*-----Importing Libraries-----*/
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

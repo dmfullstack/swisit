@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.subscriber;
-/*-------Importing Liberaries-------*/
+/*-------Importing Libraries-------*/
 import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 
 import java.util.List;

@@ -37,6 +37,17 @@ public class SearcherResult  implements Deserializer<SearcherResult> {
 	@NotNull
     @JsonProperty("snippet")
 	private String snippet;
+	
+	@JsonProperty("concept")
+	private String concept;
+
+	public String getConcept() {
+		return concept;
+	}
+
+	public void setConcept(String concept) {
+		this.concept = concept;
+	}
 
 	/*-----------Default Constructor of Crawler Result Class------------*/
 	public SearcherResult() {

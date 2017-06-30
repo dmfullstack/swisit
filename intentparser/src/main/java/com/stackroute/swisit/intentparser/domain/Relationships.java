@@ -1,5 +1,5 @@
 package com.stackroute.swisit.intentparser.domain;
-/*--------Importing Liberaries--------*/
+/*--------Importing Libraries--------*/
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;

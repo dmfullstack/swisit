@@ -134,17 +134,17 @@ public class KeywordScannerServiceImpl implements KeywordScannerService{
 				}
 			}
 			
-			CrawlerResult cb=new CrawlerResult();
-			cb.setQuery(searcherResult.getQuery());
-			cb.setLink(searcherResult.getLink());
-			cb.setTitle(searcherResult.getTitle());
-			cb.setSnippet(searcherResult.getSnippet());
-			cb.setTerms(contentSchema);
-			cb.setLastindexedof(new Date());
-			crawlerResult.add(cb);
+			CrawlerResult crawlerResultRef=new CrawlerResult();
+			crawlerResultRef.setQuery(searcherResult.getQuery());
+			crawlerResultRef.setLink(searcherResult.getLink());
+			crawlerResultRef.setTitle(searcherResult.getTitle());
+			crawlerResultRef.setSnippet(searcherResult.getSnippet());
+			crawlerResultRef.setTerms(contentSchema);
+			crawlerResultRef.setLastindexedof(new Date());
+			crawlerResultRef.setConcept(searcherResult.getConcept());
+			crawlerResult.add(crawlerResultRef);
 			KafkaPublisherImpl kafkaPublisherImpl = new KafkaPublisherImpl();
-			
-			kafkaPublisherImpl.publishMessage("tointent", cb);
+			kafkaPublisherImpl.publishMessage("tointent", crawlerResultRef);
 	}
 	catch(Exception e){
 		count=0;
@@ -158,14 +158,14 @@ public class KeywordScannerServiceImpl implements KeywordScannerService{
 	public void publishMessage() throws JsonProcessingException {
 		logger.info("inside the list"+crawlerResult);
 		logger.info("size is "+crawlerResult.size());
-		for(CrawlerResult cr : crawlerResult){
-			logger.info("link is "+cr.getLink());
-			logger.info("query is "+cr.getQuery());
-			logger.info("snippet is "+cr.getSnippet());
-			logger.info("title is "+cr.getTitle());
-			logger.info("terms is "+cr.getTerms());
-			logger.info("last indexed of is "+cr.getLastindexedof());
-			kafkaPublisherImpl.publishMessage("tointent", cr);
+		for(CrawlerResult crawlerResultRef : crawlerResult){
+			logger.info("link is "+crawlerResultRef.getLink());
+			logger.info("query is "+crawlerResultRef.getQuery());
+			logger.info("snippet is "+crawlerResultRef.getSnippet());
+			logger.info("title is "+crawlerResultRef.getTitle());
+			logger.info("terms is "+crawlerResultRef.getTerms());
+			logger.info("last indexed of is "+crawlerResultRef.getLastindexedof());
+			kafkaPublisherImpl.publishMessage("tointent", crawlerResultRef);
 		}
 		crawlerResult=null;
 	}

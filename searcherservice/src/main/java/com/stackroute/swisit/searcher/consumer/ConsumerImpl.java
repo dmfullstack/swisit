@@ -9,19 +9,22 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 public class ConsumerImpl implements Consumer{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Value("${brokerid}")
+	String brokerid;
 
 	@Override
-	public void listenmessage(String topic) {
-		// TODO Auto-generated method stub
+	public void listenMessage(String topic) {
 		Properties props = new Properties();
 	    props.put("group.id", "group-1");
-		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 	    props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-		
+		/* consume data from the topic */
 	    KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
 	    kafkaConsumer.subscribe(Arrays.asList(topic));
 	    while (true) {

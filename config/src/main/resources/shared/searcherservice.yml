@@ -6,5 +6,5 @@ spring:
       username: superAdmin
       password: admin123
       port: 27017
-     
+brokerid: 172.23.239.165:9092    
  

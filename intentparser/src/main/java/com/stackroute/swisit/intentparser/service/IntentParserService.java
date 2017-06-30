@@ -2,7 +2,7 @@
  * will finally be removed from the Final product******/
 package com.stackroute.swisit.intentparser.service;
 
-/*------Importing Liberaries-------*/
+/*------Importing Libraries-------*/
 import com.stackroute.swisit.intentparser.domain.Intent;
 import com.stackroute.swisit.intentparser.domain.Term;
 

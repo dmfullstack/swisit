@@ -25,7 +25,7 @@ import com.stackroute.swisit.searcher.exception.SearcherServiceException;
 import com.stackroute.swisit.searcher.hateoes.HateoesAssembler;
 import com.stackroute.swisit.searcher.intialconsumer.IntialConsumer;
 import com.stackroute.swisit.searcher.intialproducer.IntialProducer;
-import com.stackroute.swisit.searcher.loadbalancing.LoadBal;
+import com.stackroute.swisit.searcher.loadbalancing.LoadBalancing;
 import com.stackroute.swisit.searcher.messageservice.MessageService;
 import com.stackroute.swisit.searcher.repository.SearcherJobRepository;
 import com.stackroute.swisit.searcher.searcherservice.SearchServiceImpl;
@@ -47,13 +47,13 @@ public class SearchController {
 	@Autowired
 	private SearchServiceImpl searchServiceImpl;
 	@Autowired
-    	private  IntialProducer intialproducer;
-    	@Autowired
-    	private  IntialConsumer intialConsumer;
+	private  IntialProducer intialproducer;
+    @Autowired
+    private  IntialConsumer intialConsumer;
 	@Autowired
 	private HateoesAssembler hateoesAssembler;
 	@Autowired
-	LoadBal loadBal;
+	LoadBalancing loadBal;
 	
 	SearcherJob searcherJob = new SearcherJob();
 	
@@ -77,9 +77,8 @@ public class SearchController {
 		Locale locale = LocaleContextHolder.getLocale();
 		try{
         		/* Get all data with hateoas link */
-				String message = messageSource.getMessage ("user.excep.nodata", null, locale );
         		List<SearcherResult> searcherResultList = (List<SearcherResult>) searchServiceImpl.getAllSearcherResult();
-        	    hateoasLink = hateoesAssembler.getalllinks(searcherResultList);
+        	    hateoasLink = hateoesAssembler.getAllLinks(searcherResultList);
         }
         catch(SearcherServiceException searching) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -91,31 +90,29 @@ public class SearchController {
 	
 	@ApiOperation(value = "Posting the Domain and Concept")
 	@RequestMapping(value="", method=RequestMethod.POST)
-    public ResponseEntity saveSearcherJob() throws SearcherServiceException, Exception
+    public ResponseEntity saveSearcherJob(@RequestBody SearcherJob produceSearcherJob) throws SearcherServiceException, Exception
     {
 		Locale locale = LocaleContextHolder.getLocale();
 		
 		/* This is used for producing dummy messages */
-		SearcherJob produceSearcherJob=AssignSearcherJob();
-        intialproducer.publishmessage("tosearcher", produceSearcherJob);
+		//SearcherJob produceSearcherJob=AssignSearcherJob();
+        intialproducer.publishMessage("tosearcher", produceSearcherJob);
         
         
         /* This is used to get message from kafka */
-        SearcherJob consumeSearcherJob = intialConsumer.listenmessage("tosearcher");
+        SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher");
         logger.debug(consumeSearcherJob.getSitesearch()+" "+consumeSearcherJob.getResults());
         try {
             
-            	String message = messageSource.getMessage ("user.excep.nodata", null, locale );
             	searchServiceImpl.saveAllSearcherJob(consumeSearcherJob);
-                searchServiceImpl.saveAllSearcherResult();
-                hateoasLink = hateoesAssembler.getlinkspost();
+            	searchServiceImpl.saveAllSearcherResult();
+                hateoasLink = hateoesAssembler.getLinksPost();
         
         } 
         catch (SearcherServiceException e) {
             return new ResponseEntity<SearcherJob>(HttpStatus.NOT_FOUND);
         }
         
-        String message = messageSource.getMessage ("user.msg.receive", null, locale );
         return new ResponseEntity(hateoasLink,HttpStatus.OK);
         
     }
@@ -128,9 +125,8 @@ public class SearchController {
 	{
 		Locale locale = LocaleContextHolder.getLocale();
         try{
-        		String message = messageSource.getMessage ("user.excep.nodata", null, locale );
         		List<SearcherJob> alldata = (List<SearcherJob>) searchServiceImpl.getAllSearcherJob();
-        		hateoasLink = hateoesAssembler.getallquery(alldata);
+        		hateoasLink = hateoesAssembler.getAllQuery(alldata);
         	
         }
         catch(SearcherServiceException searching) {

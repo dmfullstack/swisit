@@ -62,20 +62,20 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 			if(searcherResult == null) 
 				throw new DocumentNotScannedException("Document scanning failed");
 		}catch (DocumentNotScannedException e) {
-			return "failed";
+			logger.error("Exception" +e);
 		}
-		for(SearcherResult sr : searcherResult) {
+		for(SearcherResult searcherResultRef : searcherResult) {
 			DOMCreatorServiceImpl domCreatorService = new DOMCreatorServiceImpl();
-			Document document=domCreatorService.constructDOM(sr.getLink());
+			Document document=domCreatorService.constructDOM(searcherResultRef.getLink());
 
 			/* Fetching terms from neo4j */
 
-			List<Term> l=neo4jRepository.fetchTerms();
-			List<String> result=new ArrayList<String>();
+			List<Term> termList=neo4jRepository.fetchTerms();
+			List<String> resultList=new ArrayList<String>();
 
-			for(Term t:l){
+			for(Term term:termList){
 				//logger.info(t.getName());
-				result.add(t.getName());
+				resultList.add(term.getName());
 			}
 
 			 /*Iterating terms.json for terms */
@@ -92,19 +92,9 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	        }*/
 
 			KeywordScannerServiceImpl keywordScannerService=new KeywordScannerServiceImpl();
-			keywordScannerService.scanDocument(document, result , sr);
+			keywordScannerService.scanDocument(document, resultList , searcherResultRef);
 		}
 		return "sucess";
 	}
-
-
-	/* Local class method to get Terms list from neo4j graph
-	 * arguments- no args
-	 * returns- list of terms from neo4j
-	 * */
-	/*public List<Term> getTerms() {
-		logger.info("Inside getTerms");
-		return neo4jRepository.fetchTerms();
-	}*/	
 
 }

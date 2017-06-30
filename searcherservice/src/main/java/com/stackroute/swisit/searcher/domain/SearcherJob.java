@@ -1,8 +1,4 @@
 package com.stackroute.swisit.searcher.domain;
-
-
-
-
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -14,19 +10,16 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-
 @Component
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document
 @JsonSerialize
+/* To perform task on searcherJob */ 
 public class SearcherJob extends ResourceSupport{
-	
 	
 	@JsonProperty("domain")
 	private String domain;
-	
-	
+		
 	@JsonProperty("concept")
 	private List<String> concept;
 	
@@ -42,6 +35,8 @@ public class SearcherJob extends ResourceSupport{
 	public void setConcept(List<String> concept) {
 		this.concept = concept;
 	}
+	
+	/* engineid and key is used to get the data from Google Api */
 	@JsonProperty("engineid")
 	private List<LinkedHashMap<String,String>> engineId;
 	
