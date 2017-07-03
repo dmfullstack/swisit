@@ -33,28 +33,35 @@ public class CrawlerResult {
     @JsonProperty("lastindexedof")
     private Date lastindexedof;
 
+    @JsonProperty("concept")
+    private String concept;
+
     /*-----------Default Constructor of Crawler Result Class------------*/
     public CrawlerResult() { }
 
     /*----------Parameterized Constructor of Crawler Result Class---------*/
-    public CrawlerResult(String query, String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof) {
+    public CrawlerResult(String query, String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof,String concept) {
         this.query = query;
         this.link = link;
         this.terms = terms;
         this.title = title;
         this.snippet = snippet;
-        this.lastindexedof=lastindexof;
+        this.lastindexedof = lastindexof;
+        this.concept = concept;
     }
 
     /*---------Overridden ToString Method of Crawler Result Class--------*/
+
     @Override
     public String toString() {
-        return "IntentParserInput{" +
+        return "CrawlerResult{" +
                 "query='" + query + '\'' +
                 ", link='" + link + '\'' +
-                ", contentSchema=" + terms.toString() +
+                ", terms=" + terms +
                 ", title='" + title + '\'' +
                 ", snippet='" + snippet + '\'' +
+                ", lastindexedof=" + lastindexedof +
+                ", concept='" + concept + '\'' +
                 '}';
     }
 
@@ -83,7 +90,6 @@ public class CrawlerResult {
         this.link = link;
     }
 
-    
     public ArrayList<ContentSchema> getTerms() {
 		return terms;
 	}
@@ -106,5 +112,13 @@ public class CrawlerResult {
 
     public void setSnippet(String snippet) {
         this.snippet = snippet;
+    }
+
+    public String getConcept() {
+        return concept;
+    }
+
+    public void setConcept(String concept) {
+        this.concept = concept;
     }
 }
