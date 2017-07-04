@@ -85,7 +85,9 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 			}
 			confidenceScore = indicator - counterIndicator;
 			IntentParserResult intentParserResult = new IntentParserResult(intentParserInput.getLink(), intent.getName(), confidenceScore, intentParserInput.getConcept());
-			intentRepository.createDocumentNode(intentParserResult.getUrl());
+			try{
+				intentRepository.createDocumentNode(intentParserResult.getUrl());
+			}catch(Exception e){ e.printStackTrace(); }
 			Map<String,String> map = docToConcept.createDocToConceptRels(intentParserResult.getUrl(),intentParserResult.getIntent(),intentParserResult.getConfidenceScore(),intentParserResult.getConcept());
 			results.add(intentParserResult);
 		}
