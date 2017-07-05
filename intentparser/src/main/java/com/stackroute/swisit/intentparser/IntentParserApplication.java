@@ -12,7 +12,6 @@ import com.stackroute.swisit.intentparser.service.IntentParseAlgo;
 import com.stackroute.swisit.intentparser.service.IntentParseAlgoImpl;
 import com.stackroute.swisit.intentparser.subscriber.SubscriberImpl;
 import com.stackroute.swisit.intentparser.threadconsumer.KakfaConsumer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -41,19 +40,16 @@ public class IntentParserApplication {
    // private static final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext applicationContext =SpringApplication.run(IntentParserApplication.class, args);
+//        SubscriberImpl subscriberImpl = applicationContext.getBean(SubscriberImpl.class);
+//        List<IntentParserResult> result=null;
+//        Iterable<CrawlerResult> intentInput=subscriberImpl.receivingMessage("tointent");
+//			/*-------Resulted List from Intent Parser Algo-------*/
+//        IntentParseAlgoImpl intentParseAlgo = applicationContext.getBean(IntentParseAlgoImpl.class);
+//        result=(List<IntentParserResult>)intentParseAlgo.calculateConfidence(intentInput);
+//        for(IntentParserResult intentParserResult:result)
+//            System.out.println(intentParserResult);
         KakfaConsumer kakfaConsumer = applicationContext.getBean(KakfaConsumer.class);
-        kakfaConsumer.consumeMessage("tointent");
-        //SubscriberImpl subscriberImpl = applicationContext.getBean(SubscriberImpl.class);
-        //List<IntentParserResult> result=null;
-        //Iterable<CrawlerResult> intentInput=subscriberImpl.receivingMessage("tointent");
-        //for(CrawlerResult c : intentInput)
-        	//System.out.println(c.toString());
-			/*-------Resulted List from Intent Parser Algo-------*/
-        //IntentParseAlgoImpl intentParseAlgo = applicationContext.getBean(IntentParseAlgoImpl.class);
-        //result=(List<IntentParserResult>)intentParseAlgo.calculateConfidence(intentInput);
-        //for(IntentParserResult intentParserResult:result)
-          //  System.out.println(intentParserResult);
-
+        kakfaConsumer.consumeMessage("tointent1");
     }
     /*-----------------Resolving Locale-----------------*/
     @Bean

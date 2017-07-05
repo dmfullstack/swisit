@@ -2,10 +2,7 @@ package com.stackroute.swisit.intentparser.threadconsumer;
 //package com.stackroute.swisit..threadconsumer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -48,14 +45,14 @@ public class KafkaConsumerThread extends Thread {
 		configProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "group-1");
 		//configProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");
 		//List<SearcherResult> searcherResultKafka=new ArrayList<SearcherResult>();
-		List<CrawlerResult> final_kafka=new ArrayList<CrawlerResult>();
+		Set<CrawlerResult> final_kafka=new HashSet<>();
 		//Figure out where to start processing messages from
 		kafkaConsumer = new KafkaConsumer<String, CrawlerResult>(configProperties);
 		kafkaConsumer.subscribe(Arrays.asList(topicName));
 
 		//Start processing messages
 		while (true) {
-			ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(100);
+			ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(10000);
 			for (ConsumerRecord<String, CrawlerResult> record : records) {
 				//JsonNode node = objectMapper.readTree(record.value());
 				//logger.debug(record.value());
@@ -71,10 +68,12 @@ public class KafkaConsumerThread extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				intentParseAlgo.calculateConfidence(final_kafka);
+
+				//final_kafka.clear();
 				System.out.println(record.value());
 				//circleService.getActivityType(node); 
-			}
+			}intentParseAlgo.calculateConfidence(final_kafka);
+			break;
 		}
 
 	}
