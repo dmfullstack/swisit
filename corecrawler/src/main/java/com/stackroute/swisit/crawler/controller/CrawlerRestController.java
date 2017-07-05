@@ -96,9 +96,9 @@ public class CrawlerRestController {
 			String message = messageSource.getMessage ("user.excep.null", null, locale );
 			return new ResponseEntity(message,HttpStatus.NOT_FOUND);  
 		}*/
-		masterScannerService.scanDocument(searcherResults);
-		Locale locale = LocaleContextHolder.getLocale();
-		String message = messageSource.getMessage ("user.success.receive", null, locale );
+//		masterScannerService.scanDocument(searcherResults);
+//		Locale locale = LocaleContextHolder.getLocale();
+//		String message = messageSource.getMessage ("user.success.receive", null, locale );
 		return new ResponseEntity("succes",HttpStatus.OK);
 
 	}

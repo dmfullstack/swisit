@@ -20,5 +20,5 @@ public interface MasterScannerService {
 	 * arguments- searcher result array of objects
 	 * returns- string 
 	 * */
-	public String scanDocument(SearcherResult[] searcherResult) throws JsonParseException, JsonMappingException, IOException;
+	public String scanDocument(SearcherResult searcherResult) throws JsonParseException, JsonMappingException, IOException;
 }

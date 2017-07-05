@@ -57,6 +57,7 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public Iterable<SearcherResult> saveAllSearcherResult() {
 		/* Get the data from the SearchJob class */
+		System.out.println("inside saveallsearcherresult");
 		try
 		{
 			if(searcherJob.getDomain()==null || searcherJob.getConcept()==null) {
@@ -100,7 +101,7 @@ public class SearchServiceImpl implements SearchService {
 					searcherResult.setConcept(concept.get(0));
 					searcherResultRepository.save(searcherResult);
 					try {
-						kafkaconfig.publishMessage("testcontrol", searcherResult);
+						kafkaconfig.publishMessage("testcontrol2", searcherResult);
 					} 
 					catch (JsonProcessingException e) {
 						e.printStackTrace();
@@ -149,6 +150,7 @@ public class SearchServiceImpl implements SearchService {
 	/* Created Search Job in the mongodb database */
 	@Override
 	public Iterable<SearcherJob> saveAllSearcherJob(SearcherJob sj) {
+		System.out.println("inside saveallsearcherjob"+sj.getDomain());
 		try 
 		{
 			searcherJob.setDomain(sj.getDomain());
@@ -168,6 +170,7 @@ public class SearchServiceImpl implements SearchService {
 				searcherJob.setResults(sj.getResults());
 				searcherJob.setSitesearch(sj.getSitesearch());
 				searcherJobRepository.save(searcherJob);
+				System.out.println("finsih saveallsearcherjob");
 			}
 		}
 		catch (JsonParseException e) {

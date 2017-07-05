@@ -26,10 +26,11 @@ public class SubscriberImpl implements Subscriber{
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer","com.stackroute.swisit.intentparser.serialization.CrawlerDeserializer");
         List<CrawlerResult> final_kafka=new ArrayList<CrawlerResult>();
+        System.out.println("inside parser "+string);
         KafkaConsumer<String, CrawlerResult> kafkaConsumer = new KafkaConsumer<String, CrawlerResult>(props);
         kafkaConsumer.subscribe(Arrays.asList(string));
         while (true) {
-            ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(1000);
+            ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(10000);
             for (ConsumerRecord<String, CrawlerResult> record : records) {
                 logger.debug("inside consumer i am getting"+record.value());
                 final_kafka.add(record.value());

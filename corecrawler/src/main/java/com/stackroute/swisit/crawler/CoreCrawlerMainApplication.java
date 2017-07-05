@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,10 +26,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.service.MasterScannerServiceImpl;
 import com.stackroute.swisit.crawler.subscriber.KafkaSubscriberImpl;
+import com.stackroute.swisit.crawler.threadconsumer.KakfaConsumer;
 
 /*-------------Spring Boot Application Main Class--------------*/
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableEurekaClient
 public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 	
 	@Value("${topic-fromconsumer}")
@@ -38,20 +40,32 @@ public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 		
 		ConfigurableApplicationContext applicationContext =SpringApplication.run(CoreCrawlerMainApplication.class, args);
-		KafkaSubscriberImpl kafkaSubscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
-		List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrol");
-		SearcherResult searcherResult[]= new SearcherResult[list.size()];
-		list.toArray(searcherResult);
+		KakfaConsumer kakfaConsumer = applicationContext.getBean(KakfaConsumer.class);
+		kakfaConsumer.consumeMessage("testcontrol2");
+		
+		
+		
+		//KafkaSubscriberImpl kafkaSubscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
+		//while(true){
+		//kafkaSubscriberImpl.receivingMessage("testcontrol2");
+		//System.out.println("getting main");
+		//if(list != null){
+		//SearcherResult searcherResult[]= new SearcherResult[list.size()];
+		//list.toArray(searcherResult);
 		
 		/*ObjectMapper mapper = new ObjectMapper();
 		File file = new File("./src/main/resources/common/sample.json");
 	    SearcherResult[] searcherResult=mapper.readValue(file, SearcherResult[].class);*/
 		
-		MasterScannerServiceImpl masterScannerServiceImpl = applicationContext.getBean(MasterScannerServiceImpl.class);
-		masterScannerServiceImpl.scanDocument(searcherResult);
+		//MasterScannerServiceImpl masterScannerServiceImpl = applicationContext.getBean(MasterScannerServiceImpl.class);
+		//masterScannerServiceImpl.scanDocument(searcherResult);
 	}
+	//	}
 
-	/*-------------- Methods to implement internationalization --------------*/
+	/*-------st=kafkaSubscriberImpl.receivingMessage("testcontrol");
+		SearcherResult searcherResult[]= new SearcherResult[list.size()];
+		list.toArray(searcherResult);
+		------- Methods to implement internationalization --------------*/
 
 	/*----------------------Resolving Locale-------------------------*/
 	@Bean

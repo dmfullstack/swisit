@@ -41,7 +41,7 @@ public class KafkaPublisherImpl implements Publisher {
 		ProducerRecord<String, CrawlerResult> producerRecord = new ProducerRecord<String, CrawlerResult>(topicName,message);
 		logger.info("Sending........");
 		producer.send(producerRecord);
-		producer.close();
+		//producer.close();
 		logger.info("Closed");
 	}
 

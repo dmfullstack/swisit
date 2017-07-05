@@ -57,19 +57,20 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	 * returns- string 
 	 * */
 	@Override
-	public String scanDocument(SearcherResult[] searcherResult) throws JsonParseException, JsonMappingException, IOException {
-		logger.info("inside master scandocs"+searcherResult.length);
+	public String scanDocument(SearcherResult searcherResult) throws JsonParseException, JsonMappingException, IOException {
+		logger.info("inside master scandocs"+searcherResult);
 		try {
 			if(searcherResult == null) 
 				throw new DocumentNotScannedException("Document scanning failed");
 		}catch (DocumentNotScannedException e) {
 			logger.error("Exception" +e);
 		}
-		for(SearcherResult searcherResultRef : searcherResult) {
+		//for(SearcherResult searcherResultRef : searcherResult) {
+			System.out.println("i am getting this link "+searcherResult.getLink());
 			DOMCreatorServiceImpl domCreatorService = new DOMCreatorServiceImpl();
 			Document document = null;
 			try {
-				document = domCreatorService.constructDOM(searcherResultRef.getLink());
+				document = domCreatorService.constructDOM(searcherResult.getLink());
 			} catch (DOMNotCreatedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -77,16 +78,16 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 
 			/* Fetching terms from neo4j */
 
-			List<Term> termList=neo4jRepository.fetchTerms();
-			List<String> resultList=new ArrayList<String>();
+			//List<Term> termList=neo4jRepository.fetchTerms();
+			//List<String> resultList=new ArrayList<String>();
 
-			for(Term term:termList){
+			//for(Term term:termList){
 				//logger.info(t.getName());
-				resultList.add(term.getName());
-			}
+				//resultList.add(term.getName());
+			//}
 
 			 /*Iterating terms.json for terms */
-			/*ObjectMapper objectMapper = new ObjectMapper();
+			ObjectMapper objectMapper = new ObjectMapper();
 	        File file = new File("./src/main/resources/common/Terms.json");
 	        List<LinkedHashMap<String,String>> list= (List<LinkedHashMap<String,String>>) objectMapper.readValue(file, ArrayList.class);
 	        List<String> result = new ArrayList<String>();
@@ -96,11 +97,12 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	            //System.out.println(hashMap.get("name"));
 	            result.add(hashMap.get("name"));
 
-	        }*/
+	        }
 
 			KeywordScannerServiceImpl keywordScannerService=new KeywordScannerServiceImpl();
-			keywordScannerService.scanDocument(document, resultList , searcherResultRef);
-		}
+			System.out.println("inside keyword");
+			keywordScannerService.scanDocument(document, result , searcherResult);
+		
 		return "sucess";
 	}
 

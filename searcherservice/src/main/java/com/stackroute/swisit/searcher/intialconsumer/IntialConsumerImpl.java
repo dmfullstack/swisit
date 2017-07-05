@@ -24,7 +24,7 @@ public class IntialConsumerImpl implements IntialConsumer{
 		
 			/* configuring the properties for kafka */
 			props.put("group.id", "group-1");
-		    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
+		    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
 			props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		    props.put("value.deserializer", "com.stackroute.swisit.searcher.kafkaserialization.QueryDeserializer");
 		    List<SearcherJob> l=new ArrayList<SearcherJob>();
@@ -33,12 +33,14 @@ public class IntialConsumerImpl implements IntialConsumer{
 		    kafkaConsumer.subscribe(Arrays.asList(topic));
 		    SearcherJob q=new SearcherJob();
 		    while (true) {
-		      ConsumerRecords<String, SearcherJob> records = kafkaConsumer.poll(10000);
+		      ConsumerRecords<String, SearcherJob> records = kafkaConsumer.poll(100000);
+		      System.out.println("my count is "+records.count());
 		      for (ConsumerRecord<String, SearcherJob> record : records) {
 		    	  q.setDomain(record.value().getDomain());
 		    	  q.setResults(record.value().getResults());//=record.value();
 		    	  q.setConcept(record.value().getConcept());
 		    	  q.setSitesearch(record.value().getSitesearch());
+		    	  System.out.println("consumer"+q.getDomain()+" "+q.getResults()+" "+q.getResults());
 		      }
 		return q;
 		}

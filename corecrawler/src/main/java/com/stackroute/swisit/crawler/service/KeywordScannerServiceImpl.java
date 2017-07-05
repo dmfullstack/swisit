@@ -144,7 +144,8 @@ public class KeywordScannerServiceImpl implements KeywordScannerService{
 			crawlerResultRef.setConcept(searcherResult.getConcept());
 			crawlerResult.add(crawlerResultRef);
 			KafkaPublisherImpl kafkaPublisherImpl = new KafkaPublisherImpl();
-			kafkaPublisherImpl.publishMessage("tointent", crawlerResultRef);
+			System.out.println("publishing........");
+			kafkaPublisherImpl.publishMessage("tointent1", crawlerResultRef);
 	}
 	catch(Exception e){
 		count=0;

@@ -101,6 +101,7 @@ public class SearchController {
         
         /* This is used to get message from kafka */
         SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher");
+        System.out.println("hi this is consumersearcherjon"+consumeSearcherJob.getDomain());
         logger.debug(consumeSearcherJob.getSitesearch()+" "+consumeSearcherJob.getResults());
         try {
             

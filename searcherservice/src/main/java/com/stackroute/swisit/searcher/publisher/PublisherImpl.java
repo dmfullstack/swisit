@@ -23,13 +23,13 @@ public class PublisherImpl implements Publisher {
 		// TODO Auto-generated method stub
 		Properties configProperties = new Properties();
 		/* configure properties for Kafka */
-		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
+		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
 		configProperties.put("key.serializer","org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.searcher.kafkaserialization.SwisitSerializer");
 		Producer producer = new KafkaProducer(configProperties);
 		ProducerRecord<String, SearcherResult> rec = new ProducerRecord<String, SearcherResult>(topic,message);
 		producer.send(rec);
-		producer.close();
+		//producer.close();
 	
 	}
 
