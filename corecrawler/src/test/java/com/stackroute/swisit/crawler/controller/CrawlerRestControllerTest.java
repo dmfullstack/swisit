@@ -1,4 +1,4 @@
-package com.stackroute.swisit.crawler.controller;
+/*package com.stackroute.swisit.crawler.controller;
 
 
 import org.junit.Before;
@@ -52,8 +52,8 @@ import javax.validation.Validator;
 public class CrawlerRestControllerTest
 {
     private MockMvc mockMvc;
-   /* @Autowired
-    private ApplicationContext appCtx;*/
+    @Autowired
+    private ApplicationContext appCtx;
     @Autowired
    private WebApplicationContext webApplicationContext;
 
@@ -80,4 +80,4 @@ public class CrawlerRestControllerTest
        .andExpect(status().isOk());
    
                                                  }
-}
+}*/

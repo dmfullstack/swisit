@@ -1,5 +1,6 @@
 package com.stackroute.swisit.crawler.service;
 
+import java.io.IOException;
 /*-------Importing Libraries------*/
 import java.util.*;
 
@@ -8,6 +9,8 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.stackroute.swisit.crawler.exception.DOMNotCreatedException;
 
 /*-- DOMCreatorServiceImpl implements DOMCreatorService interface to construct DOM --*/
 @Service
@@ -22,17 +25,10 @@ public class DOMCreatorServiceImpl implements DOMCreatorService{
 	 * returns- Document
 	 * */
 	@Override
-	public Document constructDOM(String link) {
+	public Document constructDOM(String link) throws DOMNotCreatedException, IOException {
 		logger.info(link);
 		Document doc = null;
-		try{
-
-			doc=Jsoup.connect(link).get();
-
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
+		doc=Jsoup.connect(link).get();
 		return doc;
 	}
 

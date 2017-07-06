@@ -8,7 +8,6 @@ import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /*---------ContententSchema Domain Class--------*/
-@Component
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class ContentSchema {
 
