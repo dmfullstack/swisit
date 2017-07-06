@@ -55,6 +55,7 @@
 		<module>eurekaserver</module>
 		<module>corecrawler</module>
 		<module>intentparser</module>
+		<module>usersearchservice</module>
 	</modules>
 
 </project>

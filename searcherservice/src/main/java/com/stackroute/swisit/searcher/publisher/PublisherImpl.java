@@ -15,8 +15,8 @@ import com.stackroute.swisit.searcher.domain.SearcherResult;
 @Service
 public class PublisherImpl implements Publisher {
 
-	@Value("${brokerid}")
-	String brokerid;
+//	@Value("${brokerid}")
+//	String brokerid;
 	
 	@Override
 	public void publishMessage(String topic, SearcherResult message) throws JsonProcessingException {

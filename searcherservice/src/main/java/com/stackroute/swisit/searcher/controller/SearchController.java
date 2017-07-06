@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.stackroute.swisit.searcher.searcherservice.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class SearchController {
 	@Autowired
 	MessageSource messageSource;
 	@Autowired
-	private SearchServiceImpl searchServiceImpl;
+	private SearchService searchService;
 	@Autowired
 	private  IntialProducer intialproducer;
     @Autowired
@@ -77,7 +78,7 @@ public class SearchController {
 		Locale locale = LocaleContextHolder.getLocale();
 		try{
         		/* Get all data with hateoas link */
-        		List<SearcherResult> searcherResultList = (List<SearcherResult>) searchServiceImpl.getAllSearcherResult();
+        		List<SearcherResult> searcherResultList = (List<SearcherResult>) searchService.getAllSearcherResult();
         	    hateoasLink = hateoesAssembler.getAllLinks(searcherResultList);
         }
         catch(SearcherServiceException searching) {
@@ -105,8 +106,8 @@ public class SearchController {
         logger.debug(consumeSearcherJob.getSitesearch()+" "+consumeSearcherJob.getResults());
         try {
             
-            	searchServiceImpl.saveAllSearcherJob(consumeSearcherJob);
-            	searchServiceImpl.saveAllSearcherResult();
+            	searchService.saveAllSearcherJob(consumeSearcherJob);
+            	searchService.saveAllSearcherResult();
                 hateoasLink = hateoesAssembler.getLinksPost();
         
         } 
@@ -126,7 +127,7 @@ public class SearchController {
 	{
 		Locale locale = LocaleContextHolder.getLocale();
         try{
-        		List<SearcherJob> alldata = (List<SearcherJob>) searchServiceImpl.getAllSearcherJob();
+        		List<SearcherJob> alldata = (List<SearcherJob>) searchService.getAllSearcherJob();
         		hateoasLink = hateoesAssembler.getAllQuery(alldata);
         	
         }
