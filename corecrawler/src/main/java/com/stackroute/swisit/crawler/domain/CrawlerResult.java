@@ -2,7 +2,6 @@ package com.stackroute.swisit.crawler.domain;
 
 /*---------------Importing Libraries--------------*/
 import java.util.Date;
-import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -29,7 +28,7 @@ public class CrawlerResult extends ResourceSupport {
 
 	@JsonProperty("terms")
 	@NotNull
-	private List<ContentSchema> terms;
+	private ContentSchema[] terms;
 
 	@JsonProperty("title")
 	@NotNull
@@ -38,25 +37,6 @@ public class CrawlerResult extends ResourceSupport {
 	@JsonProperty("snippet")
 	@NotNull
 	private String snippet;
-	
-	public String getConcept() {
-		return concept;
-	}
-
-	public void setConcept(String concept) {
-		this.concept = concept;
-	}
-
-	@JsonProperty("concept")
-	private String concept;
-	
-	public List<ContentSchema> getTerms() {
-		return terms;
-	}
-
-	public void setTerms(List<ContentSchema> terms) {
-		this.terms = terms;
-	}
 
 	@JsonProperty("lastindexedof")
 	private Date lastindexedof;
@@ -67,7 +47,7 @@ public class CrawlerResult extends ResourceSupport {
 	}
 
 	/*----------Parameterized Constructor of Crawler Result Class---------*/
-	public CrawlerResult(String query, String link, List<ContentSchema> terms, String title, String snippet,
+	public CrawlerResult(String query, String link, ContentSchema[] terms, String title, String snippet,
 			Date lastindexedof) {
 		super();
 		this.query = query;
@@ -120,8 +100,12 @@ public class CrawlerResult extends ResourceSupport {
 		this.snippet = snippet;
 	}
 	
+	public ContentSchema[] getTerms() {
+		return terms;
+	}
 	
-	
-	
+	public void setTerms(ContentSchema[] terms) {
+		this.terms = terms;
+	}
 
 }

@@ -21,7 +21,7 @@ import com.stackroute.swisit.searcher.domain.SearcherResult;
 
 @SpringBootApplication
 @EnableMongoRepositories
-@EnableEurekaClient
+//@EnableEurekaClient
 public class SwisitApplication {
 
 	

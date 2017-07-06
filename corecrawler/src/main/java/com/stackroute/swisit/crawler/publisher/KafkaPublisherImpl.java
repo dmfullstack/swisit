@@ -31,17 +31,30 @@ public class KafkaPublisherImpl implements Publisher {
 
 	/*-------------------method to publish message via kafka-------------------*/
 	public void publishMessage(String topicName,CrawlerResult message) throws JsonProcessingException{
+		System.out.println("inside method");
 		Properties configProperties = new Properties();
-		/* configure properties for kafka */
 		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.23.239.165:9092");
+		//configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
 		configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.crawler.serialization.CrawlerSerializer");
 		Producer<String, CrawlerResult> producer = new KafkaProducer<String, CrawlerResult>(configProperties);
 		logger.info("getting published");
+		/* for (int i = 0; i < 100; i++) {
+	        String msg = "Message " + i;
+	        producer.send(new ProducerRecord<String, String>(topicName, msg));
+	        System.out.println("Sent:" + msg);
+        }
+        TODO: Make sure to use the ProducerRecord constructor that does not take parition Id
+        Movie m=new Movie();
+        byte b[]=m.serialize("hi", message);
+        ObjectMapper om=new ObjectMapper();
+        String s=om.writeValueAsString(message);*/
+
 		ProducerRecord<String, CrawlerResult> producerRecord = new ProducerRecord<String, CrawlerResult>(topicName,message);
 		logger.info("Sending........");
 		producer.send(producerRecord);
-		//producer.close();
+
+		producer.close();
 		logger.info("Closed");
 	}
 

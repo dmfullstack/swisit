@@ -8,16 +8,14 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.kafka.common.serialization.Deserializer;
 import org.springframework.hateoas.ResourceSupport;
-import org.springframework.stereotype.Component;
 
 import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /*------- SearcherResult domain class which is the input for crawler service-----*/
-@Component
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class SearcherResult  implements Deserializer<SearcherResult> {
+public class SearcherResult extends ResourceSupport implements Deserializer<SearcherResult> {
 	
 	/*-------------Private variables of domain class------------*/
 	
@@ -37,17 +35,6 @@ public class SearcherResult  implements Deserializer<SearcherResult> {
 	@NotNull
     @JsonProperty("snippet")
 	private String snippet;
-	
-	@JsonProperty("concept")
-	private String concept;
-
-	public String getConcept() {
-		return concept;
-	}
-
-	public void setConcept(String concept) {
-		this.concept = concept;
-	}
 
 	/*-----------Default Constructor of Crawler Result Class------------*/
 	public SearcherResult() {

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.stackroute.swisit.crawler.domain.CrawlerResult;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
-import com.stackroute.swisit.crawler.loadbalancing.LoadBalancing;
+import com.stackroute.swisit.crawler.loadbalancing.LoadBal;
 import com.stackroute.swisit.crawler.service.KeywordScannerServiceImpl;
 import com.stackroute.swisit.crawler.service.MasterScannerService;
 import com.stackroute.swisit.crawler.subscriber.KafkaSubscriberImpl;
@@ -62,7 +62,7 @@ public class CrawlerRestController {
 	private MessageSource messageSource;
 
 	@Autowired
-	LoadBalancing loadBal;
+	LoadBal loadBal;
 
 	/*method to receive the input from kafka subscriber as messages*/
 
@@ -75,7 +75,7 @@ public class CrawlerRestController {
 	}
 			)
 	@RequestMapping(value="/receiver", method=RequestMethod.GET)
-	public ResponseEntity<Map<String,String>> receiveMessage(SearcherResult[] searcherResults) throws JsonParseException, JsonMappingException, IOException{
+	public ResponseEntity<Map<String,String>> receiveMessage(SearcherResult[] sr) throws JsonParseException, JsonMappingException, IOException{
 
 		/*testcontrol is my topic name*/
 		/*List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrol");
@@ -96,9 +96,9 @@ public class CrawlerRestController {
 			String message = messageSource.getMessage ("user.excep.null", null, locale );
 			return new ResponseEntity(message,HttpStatus.NOT_FOUND);  
 		}*/
-//		masterScannerService.scanDocument(searcherResults);
-//		Locale locale = LocaleContextHolder.getLocale();
-//		String message = messageSource.getMessage ("user.success.receive", null, locale );
+		masterScannerService.scanDocument(sr);
+		Locale locale = LocaleContextHolder.getLocale();
+		String message = messageSource.getMessage ("user.success.receive", null, locale );
 		return new ResponseEntity("succes",HttpStatus.OK);
 
 	}

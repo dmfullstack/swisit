@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,10 +22,10 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.stackroute.swisit.crawler.controller.CrawlerRestController;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.service.MasterScannerServiceImpl;
 import com.stackroute.swisit.crawler.subscriber.KafkaSubscriberImpl;
-import com.stackroute.swisit.crawler.threadconsumer.KakfaConsumer;
 
 /*-------------Spring Boot Application Main Class--------------*/
 @SpringBootApplication
@@ -40,32 +39,23 @@ public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 		
 		ConfigurableApplicationContext applicationContext =SpringApplication.run(CoreCrawlerMainApplication.class, args);
-		KakfaConsumer kakfaConsumer = applicationContext.getBean(KakfaConsumer.class);
-		kakfaConsumer.consumeMessage("testcontrol2");
-		
-		
-		
-		//KafkaSubscriberImpl kafkaSubscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
-		//while(true){
-		//kafkaSubscriberImpl.receivingMessage("testcontrol2");
-		//System.out.println("getting main");
-		//if(list != null){
-		//SearcherResult searcherResult[]= new SearcherResult[list.size()];
-		//list.toArray(searcherResult);
-		
-		/*ObjectMapper mapper = new ObjectMapper();
-		File file = new File("./src/main/resources/common/sample.json");
-	    SearcherResult[] searcherResult=mapper.readValue(file, SearcherResult[].class);*/
-		
-		//MasterScannerServiceImpl masterScannerServiceImpl = applicationContext.getBean(MasterScannerServiceImpl.class);
-		//masterScannerServiceImpl.scanDocument(searcherResult);
-	}
-	//	}
-
-	/*-------st=kafkaSubscriberImpl.receivingMessage("testcontrol");
+		KafkaSubscriberImpl kafkaSubscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
+		List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrol");
 		SearcherResult searcherResult[]= new SearcherResult[list.size()];
 		list.toArray(searcherResult);
-		------- Methods to implement internationalization --------------*/
+
+		/*for(SearcherResult sr:list){
+			System.out.println(sr.getLink());
+			//System.out.println(sr.getQuery());
+			//System.out.println(sr.getSnippet());
+			//System.out.println(sr.getTitle());
+		}*/
+		MasterScannerServiceImpl masterScannerServiceImpl = applicationContext.getBean(MasterScannerServiceImpl.class);
+		//MasterScannerServiceImpl masterScannerServiceImpl = new MasterScannerServiceImpl();
+		masterScannerServiceImpl.scanDocument(searcherResult);
+	}
+
+	/*-------------- Methods to implement internationalization --------------*/
 
 	/*----------------------Resolving Locale-------------------------*/
 	@Bean

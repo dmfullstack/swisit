@@ -16,7 +16,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.domain.Term;
-import com.stackroute.swisit.crawler.exception.DOMNotCreatedException;
 import com.stackroute.swisit.crawler.exception.DocumentNotScannedException;
 import com.stackroute.swisit.crawler.repository.Neo4jRepository;
 
@@ -57,36 +56,30 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	 * returns- string 
 	 * */
 	@Override
-	public String scanDocument(SearcherResult searcherResult) throws JsonParseException, JsonMappingException, IOException {
-		logger.info("inside master scandocs"+searcherResult);
+	public String scanDocument(SearcherResult[] searcherResult) throws JsonParseException, JsonMappingException, IOException {
+		logger.info("inside master scandocs"+searcherResult.length);
 		try {
 			if(searcherResult == null) 
 				throw new DocumentNotScannedException("Document scanning failed");
 		}catch (DocumentNotScannedException e) {
-			logger.error("Exception" +e);
+			// TODO Auto-generated catch block
+			return "failed";
 		}
-		//for(SearcherResult searcherResultRef : searcherResult) {
-			System.out.println("i am getting this link "+searcherResult.getLink());
+		for(SearcherResult sr : searcherResult) {
+			logger.info(sr.getLink());
 			DOMCreatorServiceImpl domCreatorService = new DOMCreatorServiceImpl();
-			Document document = null;
-			try {
-				document = domCreatorService.constructDOM(searcherResult.getLink());
-			} catch (DOMNotCreatedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Document document=domCreatorService.constructDOM(sr.getLink());
 
-			/* Fetching terms from neo4j */
+			//neo4j implementation
 
-			//List<Term> termList=neo4jRepository.fetchTerms();
-			//List<String> resultList=new ArrayList<String>();
+			/*List<Term> l=neo4jRepository.fetchTerms();
+			List<String> result=new ArrayList<String>();
 
-			//for(Term term:termList){
-				//logger.info(t.getName());
-				//resultList.add(term.getName());
-			//}
+			for(Term t:l){
+				result.add(t.getName());
+			}*/
 
-			 /*Iterating terms.json for terms */
+			 //Iterating terms.json for terms 
 			ObjectMapper objectMapper = new ObjectMapper();
 	        File file = new File("./src/main/resources/common/Terms.json");
 	        List<LinkedHashMap<String,String>> list= (List<LinkedHashMap<String,String>>) objectMapper.readValue(file, ArrayList.class);
@@ -100,10 +93,19 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	        }
 
 			KeywordScannerServiceImpl keywordScannerService=new KeywordScannerServiceImpl();
-			System.out.println("inside keyword");
-			keywordScannerService.scanDocument(document, result , searcherResult);
-		
+			keywordScannerService.scanDocument(document, result , sr);
+		}
 		return "sucess";
 	}
+
+
+	/* Local class method to get Terms list from neo4j graph
+	 * arguments- no args
+	 * returns- list of terms from neo4j
+	 * */
+	/*public List<Term> getTerms() {
+		logger.info("Inside getTerms");
+		return neo4jRepository.fetchTerms();
+	}*/	
 
 }

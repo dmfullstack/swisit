@@ -123,34 +123,44 @@ public class KeywordScannerServiceImpl implements KeywordScannerService{
 						text=term.get(i);
 						if(element.text().matches(term.get(i))){
 							count=count+Integer.parseInt(intensityList.get(j));
-							ContentSchema c=new ContentSchema();
-							c.setIntensity(count+"");
-							c.setWord(text);
-							contentSchema.add(c);
-							logger.info("Term is: "+term.get(i)+" and Intensity is: "+count);
+							contentSchema[0].setIntensity("8.0");
+							contentSchema[0].setWord("how to code");
+							System.out.println("after setting intensity");
+							logger.info("hi dude "+contentSchema[k].getIntensity());
 							k++;
 						}
 					}
 				}
 			}
 			
-			CrawlerResult crawlerResultRef=new CrawlerResult();
-			crawlerResultRef.setQuery(searcherResult.getQuery());
-			crawlerResultRef.setLink(searcherResult.getLink());
-			crawlerResultRef.setTitle(searcherResult.getTitle());
-			crawlerResultRef.setSnippet(searcherResult.getSnippet());
-			crawlerResultRef.setTerms(contentSchema);
-			crawlerResultRef.setLastindexedof(new Date());
-			crawlerResultRef.setConcept(searcherResult.getConcept());
-			crawlerResult.add(crawlerResultRef);
-			KafkaPublisherImpl kafkaPublisherImpl = new KafkaPublisherImpl();
-			System.out.println("publishing........");
-			kafkaPublisherImpl.publishMessage("tointent1", crawlerResultRef);
+			CrawlerResult cb=new CrawlerResult();
+			cb.setQuery(searcherResult.getQuery());
+			cb.setLink(searcherResult.getLink());
+			cb.setTitle(searcherResult.getTitle());
+			cb.setSnippet(searcherResult.getSnippet());
+			//ContentSchema[] contentSchema;
+			cb.setTerms(contentSchema.);
+			cb.setTerms(contentSchema);
+			//System.out.println(contentSchema[k].getIntensity()+" "+contentSchema[k].getWord());
+			cb.setLastindexedof(new Date());
+//			for(ContentSchema c:contentSchema){
+//				logger.info(c.getIntensity()+"  "+c.getWord());
+//			}
+			crawlerResult.add(cb);
+			
+			//KafkaPublisherImpl kafkaPublisherImpl = new KafkaPublisherImpl();
+			//kafkaPublisherImpl.publishMessage("tointent", cb);
 	}
 	catch(Exception e){
+		System.out.println("this is keyword "+e);
 		count=0;
-		e.printStackTrace();
+		//e.printStackTrace();
 	}
+
+		
+		//logger.info(searcherResult.getLink());
+		//logger.info("intensity is "+count);
+
 		return count;
 	}
 
@@ -159,14 +169,14 @@ public class KeywordScannerServiceImpl implements KeywordScannerService{
 	public void publishMessage() throws JsonProcessingException {
 		logger.info("inside the list"+crawlerResult);
 		logger.info("size is "+crawlerResult.size());
-		for(CrawlerResult crawlerResultRef : crawlerResult){
-			logger.info("link is "+crawlerResultRef.getLink());
-			logger.info("query is "+crawlerResultRef.getQuery());
-			logger.info("snippet is "+crawlerResultRef.getSnippet());
-			logger.info("title is "+crawlerResultRef.getTitle());
-			logger.info("terms is "+crawlerResultRef.getTerms());
-			logger.info("last indexed of is "+crawlerResultRef.getLastindexedof());
-			kafkaPublisherImpl.publishMessage("tointent", crawlerResultRef);
+		for(CrawlerResult cr : crawlerResult){
+			logger.info("link is "+cr.getLink());
+			logger.info("query is "+cr.getQuery());
+			logger.info("snippet is "+cr.getSnippet());
+			logger.info("title is "+cr.getTitle());
+			logger.info("terms is "+cr.getTerms());
+			logger.info("last indexed of is "+cr.getLastindexedof());
+			kafkaPublisherImpl.publishMessage(producerTopic, cr);
 		}
 		crawlerResult=null;
 	}

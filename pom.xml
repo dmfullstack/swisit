@@ -56,6 +56,7 @@
 		<module>corecrawler</module>
 		<module>intentparser</module>
 		<module>usersearchservice</module>
+		<module>DocumentParser</module>
 	</modules>
 
 </project>
