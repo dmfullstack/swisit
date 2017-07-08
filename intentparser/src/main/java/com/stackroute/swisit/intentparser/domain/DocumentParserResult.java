@@ -12,7 +12,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 /*--------Crawler Result Domain Class which is Input for Intent Parser Service--------*/
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CrawlerResult {
+public class DocumentParserResult {
 
     @NotEmpty
     @JsonProperty("query")
@@ -37,10 +37,10 @@ public class CrawlerResult {
     private String concept;
 
     /*-----------Default Constructor of Crawler Result Class------------*/
-    public CrawlerResult() { }
+    public DocumentParserResult() { }
 
     /*----------Parameterized Constructor of Crawler Result Class---------*/
-    public CrawlerResult(String query, String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof,String concept) {
+    public DocumentParserResult(String query, String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof,String concept) {
         this.query = query;
         this.link = link;
         this.terms = terms;

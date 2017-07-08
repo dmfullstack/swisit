@@ -29,7 +29,7 @@ public class PublisherImpl implements Publisher {
 		Producer producer = new KafkaProducer(configProperties);
 		ProducerRecord<String, SearcherResult> rec = new ProducerRecord<String, SearcherResult>(topic,message);
 		producer.send(rec);
-		//producer.close();
+		producer.close();
 	
 	}
 

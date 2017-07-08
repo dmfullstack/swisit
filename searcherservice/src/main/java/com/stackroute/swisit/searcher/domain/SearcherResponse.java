@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document
 /* Handling the response from Google Api */
-public class SearchResponse {
+public class SearcherResponse {
 	
 	String queries;
 	

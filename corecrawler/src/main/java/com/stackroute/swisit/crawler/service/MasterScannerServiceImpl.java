@@ -44,33 +44,33 @@ public class MasterScannerServiceImpl implements MasterScannerService{
 	 * returns- string 
 	 * */
 	@Override
-	public String scanDocument(SearcherResult[] searcherResult) throws JsonParseException, JsonMappingException, IOException {
-		logger.info("inside master scandocs"+searcherResult.length);
+	public String scanDocument(SearcherResult searcherResult) throws JsonParseException, JsonMappingException, IOException {
+		//logger.info("inside master scandocs"+searcherResult.length);
 		try {
 			if(searcherResult == null) 
 				throw new DocumentNotScannedException("Document scanning failed");
 		}catch (DocumentNotScannedException e) {
 			logger.error("Exception" +e);
 		}
-		for(SearcherResult searcherResultRef : searcherResult) {
+		//for(SearcherResult searcherResultRef : searcherResult) {
 			DOMCreatorServiceImpl domCreatorService = new DOMCreatorServiceImpl();
 			Document document = null;
 			try {
-				document = domCreatorService.constructDOM(searcherResultRef.getLink());
+				document = domCreatorService.constructDOM(searcherResult.getLink());
 				CrawlerResult crawlerResult = new  CrawlerResult();
-				crawlerResult.setQuery(searcherResultRef.getQuery());
-				crawlerResult.setLink(searcherResultRef.getLink());
-				crawlerResult.setTitle(searcherResultRef.getTitle());
-				crawlerResult.setSnippet(searcherResultRef.getSnippet());
-				crawlerResult.setConcept(searcherResultRef.getConcept());
+				crawlerResult.setQuery(searcherResult.getQuery());
+				crawlerResult.setLink(searcherResult.getLink());
+				crawlerResult.setTitle(searcherResult.getTitle());
+				crawlerResult.setSnippet(searcherResult.getSnippet());
+				crawlerResult.setConcept(searcherResult.getConcept());
 				crawlerResult.setDocument(document.toString());
 				KafkaPublisherImpl kafkaPublisherImpl = new KafkaPublisherImpl();
-				kafkaPublisherImpl.publishMessage("tonewparser", crawlerResult);
+				kafkaPublisherImpl.publishMessage("tonewparser3", crawlerResult);
 			} catch (DOMNotCreatedException e) {
 				e.printStackTrace();
 			}
 
-		}
+		
 		return "sucess";
 	}
 

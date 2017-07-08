@@ -21,7 +21,7 @@ package com.stackroute.swisit.searcher.controllertest;
 	import org.springframework.web.context.WebApplicationContext;
 
 import com.stackroute.swisit.searcher.controller.SearchController;
-import com.stackroute.swisit.searcher.domain.SearchResponse;
+import com.stackroute.swisit.searcher.domain.SearcherResponse;
 	import com.stackroute.swisit.searcher.domain.SearcherJob;
 	import com.stackroute.swisit.searcher.hateoes.HateoesAssembler;
 	import com.stackroute.swisit.searcher.intialconsumer.IntialConsumerImpl;
@@ -62,7 +62,7 @@ import com.stackroute.swisit.searcher.domain.SearchResponse;
 	   @MockBean
 	   private SearcherResultRepository searcherResultRepository; 
 	   @MockBean
-	   private SearchResponse searchResponse;
+	   private SearcherResponse searchResponse;
 	   
 	   @MockBean
 	   private SearcherJob searcherJob;

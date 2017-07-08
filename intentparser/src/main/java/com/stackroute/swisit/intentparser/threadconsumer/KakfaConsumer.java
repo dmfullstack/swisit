@@ -15,10 +15,11 @@ public class KakfaConsumer {
 	KafkaConsumerThread consumerRunnable = new KafkaConsumerThread(topic,intentParseAlgo);
     consumerRunnable.start();
     consumerRunnable.getKafkaConsumer().wakeup();
+   // consumerRunnable.destroy();
     //logger.debug(environment.getProperty("circleconsumer.consumer-stopmessage"));
-    try {
-		consumerRunnable.join(100);
-	} catch (InterruptedException e) {
-		e.printStackTrace();
-	}
+//    try {
+//		consumerRunnable.join(100);
+//	} catch (InterruptedException e) {
+//		e.printStackTrace();
+//	}
 }}

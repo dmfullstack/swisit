@@ -36,7 +36,7 @@ public class UserSearchServiceImpl implements UserSearchService {
 
         List<String> conceptResult = userSearchServiceRepository.findConcepts();
 
-        System.out.println(conceptResult.size());
+        //System.out.println(conceptResult.size());
         return conceptResult;
     }
 
@@ -46,7 +46,7 @@ public class UserSearchServiceImpl implements UserSearchService {
     @Override
     public List<String> fetchTerm() {
         List<String> termResults = userSearchServiceRepository.findTerms();
-        System.out.println(termResults.size());
+       // System.out.println(termResults.size());
         return termResults;
     }
 
@@ -58,11 +58,11 @@ public class UserSearchServiceImpl implements UserSearchService {
         userInput.setDomain(userInputRef.getDomain());
         userInput.setTerm(userInputRef.getTerm());
         logger.debug(userInput.getConcept());
-        System.out.println("hai" + userInput.getTerm());
+       // System.out.println("hai" + userInput.getTerm());
         List<Map<String, Object>> intentResultIndicatorOfRelation = userSearchServiceRepository.getAllIndicatorRelation(userInput.getTerm());
-        System.out.println(intentResultIndicatorOfRelation.size());
+        //System.out.println(intentResultIndicatorOfRelation.size());
         List<Map<String, Object>> intentResultRelatesRelation = userSearchServiceRepository.getAllRelatesRelation(userInput.getConcept());
-        System.out.println("" + intentResultRelatesRelation.size());
+        //.out.println("" + intentResultRelatesRelation.size());
 
         /*exception handling*/
         try {

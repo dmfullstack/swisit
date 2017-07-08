@@ -6,3 +6,5 @@ spring:
       password: root123
   application:
     name: documentparser
+server:
+  port: 8088

@@ -1,20 +1,20 @@
 url: https://www.googleapis.com/customsearch/v1?q=
 key: engineid
-spring:
-  application:
-    name: searcherservice
-  cloud:
-    config:
-      uri: http://localhost:8888
-
 #spring:
-#  data:
-#    mongodb:
-#      authentication-database: admin
-#      database: swisit
-#      username: superAdmin
-#      password: admin123
-#      port: 27017
-#brokerid: 172.23.239.165:9092    
-#server:
-#  port: 8080 
+#  application:
+#    name: searcherservice
+#  cloud:
+#    config:
+#      uri: http://localhost:8888
+
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      database: swisit
+      username: superAdmin
+      password: admin123
+      port: 27017
+brokerid: 172.23.239.165:9092    
+server:
+  port: 8080 

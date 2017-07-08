@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stackroute.swisit.intentparser.domain.CrawlerResult;
+import com.stackroute.swisit.intentparser.domain.DocumentParserResult;
 import com.stackroute.swisit.intentparser.domain.IntentParserResult;
 import com.stackroute.swisit.intentparser.service.IntentParseAlgo;
 import com.stackroute.swisit.intentparser.service.IntentParseAlgoImpl;
@@ -32,24 +32,25 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 /*-------------Spring Boot Application Main Class--------------*/
-@EnableDiscoveryClient
-@EnableEurekaClient
+//@EnableDiscoveryClient
+//@EnableEurekaClient
 @SpringBootApplication
 @EnableNeo4jRepositories(basePackages = "com.stackroute.swisit.intentparser.repository")
 public class IntentParserApplication {
    // private static final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext applicationContext =SpringApplication.run(IntentParserApplication.class, args);
-//        SubscriberImpl subscriberImpl = applicationContext.getBean(SubscriberImpl.class);
-//        List<IntentParserResult> result=null;
-//        Iterable<CrawlerResult> intentInput=subscriberImpl.receivingMessage("tointent");
+      //SubscriberImpl subscriberImpl = applicationContext.getBean(SubscriberImpl.class);
+       //subscriberImpl.receivingMessage("tointentfinal");
+       //        List<IntentParserResult> result=null;
+        //subscriberImpl.receivingMessage("tointent");
 //			/*-------Resulted List from Intent Parser Algo-------*/
 //        IntentParseAlgoImpl intentParseAlgo = applicationContext.getBean(IntentParseAlgoImpl.class);
 //        result=(List<IntentParserResult>)intentParseAlgo.calculateConfidence(intentInput);
 //        for(IntentParserResult intentParserResult:result)
 //            System.out.println(intentParserResult);
-        KakfaConsumer kakfaConsumer = applicationContext.getBean(KakfaConsumer.class);
-        kakfaConsumer.consumeMessage("tointent1");
+       KakfaConsumer kakfaConsumer = applicationContext.getBean(KakfaConsumer.class);
+        kakfaConsumer.consumeMessage("tointentfinal2");
     }
     /*-----------------Resolving Locale-----------------*/
     @Bean

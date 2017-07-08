@@ -14,6 +14,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,23 +65,25 @@ public class UserSearchServiceController {
             }
             return new ResponseEntity(userSearchResults, HttpStatus.OK);
         }
-
-    @RequestMapping(value="/getConcepts", method = RequestMethod.GET)
-    public ResponseEntity getConcept() {
+    @CrossOrigin
+    @RequestMapping(value="/getConcept", method = RequestMethod.POST)
+    public ResponseEntity getConcept(@RequestBody String domain) {
         /*------Locale which identify a specific language and geographic region, used for Internationalization-----*/
         Locale locale = LocaleContextHolder.getLocale();
         /*-------Resulted List from User Search Service-------*/
+        System.out.println("my concepr doamin is "+domain);
         List<String> conceptResults = userSearchService.fetchConcept();
 
 
         return new ResponseEntity(conceptResults, HttpStatus.OK);
     }
-
+    @CrossOrigin
     @RequestMapping(value="/getTerms", method = RequestMethod.GET)
     public ResponseEntity getTerms() {
         /*------Locale which identify a specific language and geographic region, used for Internationalization-----*/
         Locale locale = LocaleContextHolder.getLocale();
         /*-------Resulted List from User Search Service-------*/
+        System.out.println("my term is");
         List<String> termResults = userSearchService.fetchTerm();
 
         return new ResponseEntity(termResults, HttpStatus.OK);

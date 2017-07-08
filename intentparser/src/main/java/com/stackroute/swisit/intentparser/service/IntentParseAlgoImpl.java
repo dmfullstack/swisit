@@ -25,10 +25,10 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 	DocToConcept docToConcept;
     /*------------CalculateConfidence method for getting List of IntentParserResult-----------*/
     @Override
-    public ArrayList<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput){
+    public ArrayList<IntentParserResult> calculateConfidence(Iterable<DocumentParserResult> intentInput){
     	List<Intent> intentsList = intentRepository.findIntents();
         ArrayList<IntentParserResult> intentParserResultList = new ArrayList<IntentParserResult>();
-        for(CrawlerResult intentParserInput : intentInput){
+        for(DocumentParserResult intentParserInput : intentInput){
             intentParserResultList.addAll(calculateConfidenceScore(intentParserInput,intentsList));
         }
         Collections.sort(intentParserResultList, new Comparator<IntentParserResult>() {
@@ -45,7 +45,7 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
                  also saves the result in Neo4jDatabse. It returns the arraylist of
                  IntentParseResult for Each Intent-----------*/
 	@Override
-	public ArrayList<IntentParserResult> calculateConfidenceScore(CrawlerResult intentParserInput,List<Intent> intentList){
+	public ArrayList<IntentParserResult> calculateConfidenceScore(DocumentParserResult intentParserInput,List<Intent> intentList){
 		ArrayList<IntentParserResult> results=new ArrayList<IntentParserResult>();
 		for (Intent intent : intentList) {
 			List<Map<String, String>> relationshipList = relationshipRepository.getAllTermsRelationOfIntent(intent.getName());

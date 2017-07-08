@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +20,12 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stackroute.swisit.searcher.domain.SearchResponse;
+import com.stackroute.swisit.searcher.domain.SearcherResponse;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 import com.stackroute.swisit.searcher.domain.SearcherResult;
 import com.stackroute.swisit.searcher.exception.SearcherServiceException;
 import com.stackroute.swisit.searcher.messageservice.MessageService;
+import com.stackroute.swisit.searcher.messageservice.MessageServiceImpl;
 import com.stackroute.swisit.searcher.publisher.Publisher;
 import com.stackroute.swisit.searcher.repository.SearcherJobRepository;
 import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
@@ -37,9 +41,11 @@ public class SearchServiceImpl implements SearchService {
 	@Autowired
 	Publisher kafkaconfig;
 	
-	SearchResponse responsiveBean = new SearchResponse();
+	SearcherResponse responsiveBean = new SearcherResponse();
 	SearcherJob searcherJob = new SearcherJob();
 	SearcherResult searcherResult=new SearcherResult();
+	SearchServiceAsync searchServiceAsync = new SearchServiceAsync();
+	RestTemplate restTemplate =  new RestTemplate();
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	/* used to get the values from application.yml */
@@ -49,76 +55,94 @@ public class SearchServiceImpl implements SearchService {
 	String key;
 	String domain="";
 	String url1;
+	String url2;
 	List<String> concept;
 	List<LinkedHashMap<String,String>> engineid = new ArrayList<LinkedHashMap<String,String>>();
 	
 
 	/* save the search result for the query into SearchResult class */
-	@Override
-	public Iterable<SearcherResult> saveAllSearcherResult() {
-		/* Get the data from the SearchJob class */
-		System.out.println("inside saveallsearcherresult");
-		try
-		{
-			if(searcherJob.getDomain()==null || searcherJob.getConcept()==null) {
-				throw new SearcherServiceException("SearcherJob has no value");
-				
-			}
-			else
-			{
-				for(SearcherJob qb: searcherJobRepository.findAll())
-				{
-					domain = qb.getDomain();
-					logger.debug(domain);
-					concept = qb.getConcept();
-					String query = domain+" "+concept.get(0);	
-					engineid = qb.getEngineId();
-					for(Map<String, String> map : engineid){
-						url1=map.get(key);
-						break;
-					}
-					url1 = query+url1;
-				}
-				String finalUrl = url+url1;
-				/* RestTemplate is a class that contains getForObject method 
-		   		to get the value from the Google Api and stored as object */ 
-				RestTemplate restTemplate = new RestTemplate();
-				responsiveBean = restTemplate.getForObject(finalUrl,SearchResponse.class);
-				if(responsiveBean==null)
-				{
-					throw new SearcherServiceException("url is incorrect");
-				}
-
-				/* set the values to SearcherResult class and send the object to
-		   		crawlerService via Kafka */ 
-				List<SearcherResult> searcherResultList=new ArrayList<SearcherResult>();
-				for(SearcherResult searcherResultRef:responsiveBean.getS())
-				{
-					searcherResult.setQuery(responsiveBean.getQueries());
-					searcherResult.setUrl(searcherResultRef.getUrl());
-					searcherResult.setTitle(searcherResultRef.getTitle());
-					searcherResult.setDescription(searcherResultRef.getDescription());
-					searcherResult.setConcept(concept.get(0));
-					searcherResultRepository.save(searcherResult);
-					try {
-						kafkaconfig.publishMessage("testcontrol2", searcherResult);
-					} 
-					catch (JsonProcessingException e) {
-						e.printStackTrace();
-					}
-					searcherResultList.add(searcherResult);
-				}
-			}
-
-		}
-		catch(SearcherServiceException e)
-		{
-			logger.error("Exception "+e.getMessage());
-		}
-		
-	return searcherResultRepository.findAll();
-	}
-	
+    @Override
+    public Iterable<SearcherResult> saveAllSearcherResult() {
+        
+        SearcherResult searcherResult =  new SearcherResult();
+        //CompletableFuture<SearcherResponse> searcherResponse=null;
+        SearcherResponse searcherResponse = new SearcherResponse();
+        //MessageServiceImpl kafkaconfig = new MessageServiceImpl(); 
+        /* Get the data from the SearchJob class */
+        try
+        {
+            if(searcherJob.getDomain()==null || searcherJob.getConcept()==null) {
+                throw new SearcherServiceException("SearcherJob has no value");
+                
+            }
+            else
+            {
+                for(SearcherJob qb: searcherJobRepository.findAll())
+                {
+                    domain = qb.getDomain();
+                    logger.debug(domain);
+                    concept = qb.getConcept();
+                    /* To iterate concept */
+                    for(int k=0;k<concept.size();k++)
+                    {
+                    	//StartValue=0;
+                    	String query = domain+" "+concept.get(k); 
+                        engineid = qb.getEngineId();
+                        for(Map<String, String> map : engineid){
+                            url1=map.get(key);
+                            System.out.println("url "+url1);
+                            break;
+                        }
+                        
+                        /* iterate to get various value from Google Api */
+                       	for(int i=1;i<=11;i=i+10)
+                        {   url2 = query+"&start="+i+url1;
+                            String finalUrl = url+url2;
+                            searcherResponse = restTemplate.getForObject(finalUrl, SearcherResponse.class);             
+                            if(searcherResponse==null)
+                            {
+                                throw new SearcherServiceException("url is incorrect");
+                            }
+                            /* set the values to SearcherResult class and send the object to
+                    crawlerService via Kafka */ 
+                            try
+                            {   
+                                for(SearcherResult searcherResultRef:searcherResponse.getS())
+                                {
+                                    searcherResult.setQuery(searcherResponse.getQueries());
+                                    searcherResult.setUrl(searcherResultRef.getUrl());
+                                    searcherResult.setTitle(searcherResultRef.getTitle());
+                                    searcherResult.setDescription(searcherResultRef.getDescription());
+                                    searcherResult.setConcept(concept.get(k));
+                                    try {               
+                                        kafkaconfig.publishMessage("testcontrol", searcherResult);
+                                    } 
+                                    catch (JsonProcessingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    /* To save Searcher Result in MongoDB */
+                                    searcherResultRepository.save(searcherResult);
+                                }
+                            }
+                            catch(Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                            
+                        }
+                        //StartValue=StartValue+10;
+                    }
+                   
+                }
+            }
+        }
+        catch(SearcherServiceException e)
+        {
+            logger.error("Exception "+e.getMessage());
+        }
+        
+    return searcherResultRepository.findAll();
+    }	
 
 	/* get all data from the SearchResult class */
 	@Override

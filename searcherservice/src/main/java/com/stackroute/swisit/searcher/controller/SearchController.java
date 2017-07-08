@@ -97,11 +97,11 @@ public class SearchController {
 		
 		/* This is used for producing dummy messages */
 		//SearcherJob produceSearcherJob=AssignSearcherJob();
-        intialproducer.publishMessage("tosearcher", produceSearcherJob);
+        intialproducer.publishMessage("tosearcher2", produceSearcherJob);
         
         
         /* This is used to get message from kafka */
-        SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher");
+        SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher2");
         System.out.println("hi this is consumersearcherjon"+consumeSearcherJob.getDomain());
         logger.debug(consumeSearcherJob.getSitesearch()+" "+consumeSearcherJob.getResults());
         try {

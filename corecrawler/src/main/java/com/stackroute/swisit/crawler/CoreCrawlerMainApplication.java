@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.service.MasterScannerServiceImpl;
 import com.stackroute.swisit.crawler.subscriber.KafkaSubscriberImpl;
+import com.stackroute.swisit.crawler.threadconsumer.KafkaConsumer;
+//import com.stackroute.swisit.intentparser.threadconsumer.KakfaConsumer;
 
 /*-------------Spring Boot Application Main Class--------------*/
 @SpringBootApplication
@@ -40,17 +42,19 @@ public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 		
 		ConfigurableApplicationContext applicationContext =SpringApplication.run(CoreCrawlerMainApplication.class, args);
-		KafkaSubscriberImpl kafkaSubscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
-		List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrol");
-		SearcherResult searcherResult[]= new SearcherResult[list.size()];
-		list.toArray(searcherResult);
+		 KafkaConsumer kakfaConsumer = applicationContext.getBean(KafkaConsumer.class);
+	        kakfaConsumer.consumeMessage("testcontrolfinal1");
+		//KafkaSubscriberImpl kafkaSubscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
+		//List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrolfinal");
+		//SearcherResult searcherResult[]= new SearcherResult[list.size()];
+		//list.toArray(searcherResult);
 		
 		/*ObjectMapper mapper = new ObjectMapper();
 		File file = new File("./src/main/resources/common/sample.json");
 	    SearcherResult[] searcherResult=mapper.readValue(file, SearcherResult[].class);*/
 		
-		MasterScannerServiceImpl masterScannerServiceImpl = applicationContext.getBean(MasterScannerServiceImpl.class);
-		masterScannerServiceImpl.scanDocument(searcherResult);
+		//MasterScannerServiceImpl masterScannerServiceImpl = applicationContext.getBean(MasterScannerServiceImpl.class);
+		//masterScannerServiceImpl.scanDocument(searcherResult);
 	}
 
 	/*-------------- Methods to implement internationalization --------------*/

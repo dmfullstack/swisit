@@ -21,8 +21,8 @@ import com.stackroute.swisit.searcher.domain.SearcherResult;
 @Service
 public class MessageServiceImpl implements MessageService {
 	
-	@Value("${brokerid}")
-	String brokerid;
+	//@Value("${brokerid}")
+	//String brokerid;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
@@ -30,7 +30,7 @@ public class MessageServiceImpl implements MessageService {
 		// TODO Auto-generated method stub
 		Properties configProperties = new Properties();
 		/* Configure properties for Kafka */
-		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
+		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
 		configProperties.put("key.serializer","org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.searcher.kafkaserialization.SwisitSerializer");
 		Producer producer = new KafkaProducer(configProperties);
@@ -45,7 +45,7 @@ public class MessageServiceImpl implements MessageService {
 		Properties props = new Properties();
 		/* Configure properties for Kafka */
 		props.put("group.id", "group-1");
-		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");			
 		KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
