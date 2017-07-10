@@ -1,5 +1,6 @@
 package com.stackroute.swisit.documentparser.service;
 /*---------- Importing Libraries ---------*/
+import com.stackroute.swisit.documentparser.exception.DocumentNotScannedException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -13,7 +14,7 @@ import java.util.*;
  * Created by user on 30/6/17.
  */
 @Service
-public class KeywordScannerServiceImpl implements KeywordScannerService {
+public class                                                                                                                                     KeywordScannerServiceImpl implements KeywordScannerService {
 
     @Autowired
     ObjectMapperService objectMapperService;
@@ -26,20 +27,30 @@ public class KeywordScannerServiceImpl implements KeywordScannerService {
         List<String> tagList = new ArrayList<>();
         StringTokenizer stringTokenizer = null;
 
-        for(int i=0;i<titleList.size();i++){ tagList.add(titleList.get(i).get("title")); }
-        for(String tag:tagList){
-            //String[] strings ={};
-        	String tagText = null;
-            Elements elements = document.select(tag);
-            for(Element element : elements){
-                tagText = element.text();
+        try {
+            if (document == null) {
+                throw new DocumentNotScannedException("Document scanning failed");
+            }
+            for (int i = 0; i < titleList.size(); i++) {
+                tagList.add(titleList.get(i).get("title"));
+            }
+            for (String tag : tagList) {
+                //String[] strings ={};
+                String tagText = null;
+                Elements elements = document.select(tag);
+                for (Element element : elements) {
+                    tagText = element.text();
                 /*stringTokenizer = new StringTokenizer(tagText,"[$&+,:;=?@#|'<>.^*()%!-]");
                 strings = null;
                 for(int i=0;stringTokenizer.hasMoreElements();i++){
                     strings[i] = stringTokenizer.nextElement().toString();
                 }*/
+                }
+                resultMap.put(tag, tagText);
             }
-            resultMap.put(tag,tagText);
+        }
+        catch (DocumentNotScannedException e){
+            e.printStackTrace();
         }
         return resultMap;
     }

@@ -1,5 +1,6 @@
 package com.stackroute.swisit.documentparser.service;
 
+import com.stackroute.swisit.documentparser.exception.DocumentNotScannedException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -21,16 +22,25 @@ public class PhraseScannerServiceImpl implements PhraseScannerService{
         List<LinkedHashMap<String,String>> titleList = objectMapperService.objectMapping("./src/main/resources/common/intensity.json");
         List<String> tagList = new ArrayList<>();
         StringTokenizer stringTokenizer = null;
-
-        for(int i=0;i<titleList.size();i++){ tagList.add(titleList.get(i).get("title")); }
-        for(String tag:tagList){
-            List<String> strings =null;
-            Elements elements = document.select(tag);
-            for(Element element : elements){
-                String tagText = element.text();
-                strings = ngrams(6,tagText);
+        try {
+            if (document == null) {
+                throw new DocumentNotScannedException("Document scanning failed");
             }
-            resultMap.put(tag,strings);
+            for (int i = 0; i < titleList.size(); i++) {
+                tagList.add(titleList.get(i).get("title"));
+            }
+            for (String tag : tagList) {
+                List<String> strings = null;
+                Elements elements = document.select(tag);
+                for (Element element : elements) {
+                    String tagText = element.text();
+                    strings = ngrams(6, tagText);
+                }
+                resultMap.put(tag, strings);
+            }
+        }
+        catch (DocumentNotScannedException e){
+            e.printStackTrace();
         }
         return resultMap;
     }

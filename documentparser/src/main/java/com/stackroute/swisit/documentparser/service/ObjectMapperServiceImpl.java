@@ -1,6 +1,7 @@
 package com.stackroute.swisit.documentparser.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stackroute.swisit.documentparser.exception.FilePathNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -23,8 +24,12 @@ public class ObjectMapperServiceImpl implements ObjectMapperService {
         System.out.println(file.getName());
         List<LinkedHashMap<String,String>> list = null;
         try {
+            if (filePath == null) {
+                throw new FilePathNotFoundException("Path not found");
+            }
+
             list = objectMapper.readValue(file, ArrayList.class);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         for(LinkedHashMap<String,String> linked : list){

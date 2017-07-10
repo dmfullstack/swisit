@@ -40,6 +40,10 @@ public class WordCheckerServiceImpl implements WordCheckerService{
 			String filteredWords = "";
 			String swearWords = "";
 			try {
+
+					if (inputData == null ){
+						throw new InvalidDataException("Empty input data");
+					}
 				filteredWords = ExudeData.getInstance().filterStoppings(inputData);
 				swearWords = ExudeData.getInstance().getSwearWords(inputData);
 			} catch (InvalidDataException e) {
