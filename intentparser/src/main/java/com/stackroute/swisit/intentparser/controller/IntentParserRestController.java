@@ -7,7 +7,7 @@ package com.stackroute.swisit.intentparser.controller;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.stackroute.swisit.intentparser.assembler.HeteoasLinkAssembler;
-import com.stackroute.swisit.intentparser.domain.DocumentParserResult;
+import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 import com.stackroute.swisit.intentparser.domain.Intent;
 import com.stackroute.swisit.intentparser.domain.Term;
 import com.stackroute.swisit.intentparser.domain.IntentParserResult;
@@ -51,7 +51,7 @@ public class IntentParserRestController {
 	private MessageSource messageSource;
 
 	/*----------------Swagger API Operations-----------------*/
-	@ApiOperation(value="subscribe",response = DocumentParserResult.class)
+	@ApiOperation(value="subscribe",response = CrawlerResult.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successfully retrieved Crawler"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -62,10 +62,10 @@ public class IntentParserRestController {
 	/*---------------REST Controller get Input from Kafka-----------------*/
 	@RequestMapping(value="subscribe" , method=RequestMethod.GET)
 	public ResponseEntity<Iterable> subscribe(){
-		Iterable<DocumentParserResult> l=subscriberImpl.receivingMessage("tointent");
+		Iterable<CrawlerResult> l=subscriberImpl.receivingMessage("tointent");
 		// CrawlerResult cr[]=new CrawlerResult[l.size()];
 		//l.toArray(cr);
-		for(DocumentParserResult lr:l){
+		for(CrawlerResult lr:l){
 			logger.debug("link is "+lr.getLink());
 			logger.debug("query is "+lr.getQuery());
 			logger.debug("snippet is "+lr.getSnippet());
@@ -77,7 +77,7 @@ public class IntentParserRestController {
 	}
 
 	/*----------------Swagger API Operations-----------------*/
-	@ApiOperation(value="fetchNeoData",response = DocumentParserResult.class)
+	@ApiOperation(value="fetchNeoData",response = CrawlerResult.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successfully retrieved Crawler"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -101,7 +101,7 @@ public class IntentParserRestController {
 	}
 
 	/*----------------Swagger API Operations-----------------*/
-	@ApiOperation(value="Calculate Confidence Score",response = DocumentParserResult.class)
+	@ApiOperation(value="Calculate Confidence Score",response = CrawlerResult.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successfully retrieved Crawler"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -121,13 +121,13 @@ public class IntentParserRestController {
 		/*------Try Catch block for Handling Exceptions-----*/
 		try{
 			/*-------getting input from Kafka subscriber------*/
-			Iterable<DocumentParserResult> intentInput=subscriberImpl.receivingMessage("tointent");
+			Iterable<CrawlerResult> intentInput=subscriberImpl.receivingMessage("tointent");
 			if(intentInput==null){
 				String message = messageSource.getMessage ("user.excep.data", null, locale );
 				return new ResponseEntity(message,HttpStatus.OK);
 			}
 
-			for(DocumentParserResult lr:intentInput){
+			for(CrawlerResult lr:intentInput){
 				logger.info("link is "+lr.getLink());
 				logger.info("query is "+lr.getQuery());
 				logger.info("content schema is "+lr.getTerms().get(0).getWord()+"---"+lr.getTerms().get(0).getIntensity());

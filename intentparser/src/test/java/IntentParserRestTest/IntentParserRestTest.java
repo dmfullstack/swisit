@@ -72,7 +72,7 @@ public	class IntentParserRestTest{
 	private IntentParserResult intentParserResult;
 
 	@MockBean
-	private DocumentParserResult crawlerResult;
+	private CrawlerResult crawlerResult;
 
 	@MockBean
 	private HeteoasLinkAssembler heteoasLinkAssembler;
@@ -228,7 +228,7 @@ public	class IntentParserRestTest{
 		ContentSchema contentSchema = new ContentSchema();
 		contentSchema.setWord("how to code");
 		contentSchema.setIntensity(2f);
-		DocumentParserResult crawlerResult = new DocumentParserResult();
+		CrawlerResult crawlerResult = new CrawlerResult();
 		crawlerResult.setQuery("Decorator");
 		crawlerResult.setLink("https://docs.angularjs.org/guide/component");
 		ArrayList<ContentSchema> contentSchemaList= new ArrayList<ContentSchema>();

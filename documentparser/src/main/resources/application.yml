@@ -4,7 +4,10 @@ spring:
       uri: http://172.23.239.174:7474
       username: neo4j
       password: root123
+    mongodb:
+      authentication-database: admin
+      username: superAdmin
+      password: admin123
+      database: swisit
   application:
     name: documentparser
-server:
-  port: 8088

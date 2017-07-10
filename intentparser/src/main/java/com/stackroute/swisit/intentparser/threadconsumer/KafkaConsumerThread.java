@@ -15,13 +15,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.stackroute.swisit.crawler.domain.SearcherResult;
 //import com.stackroute.swisit.crawler.domain.SearcherResult;
 //import com.stackroute.swisit.crawler.service.MasterScannerService;
-import com.stackroute.swisit.intentparser.domain.DocumentParserResult;
+import com.stackroute.swisit.intentparser.domain.CrawlerResult;
 import com.stackroute.swisit.intentparser.service.IntentParseAlgo;
 
 public class KafkaConsumerThread extends Thread {
 	private String topicName;
 	private String groupId;
-	private KafkaConsumer<String, DocumentParserResult> kafkaConsumer;
+	private KafkaConsumer<String, CrawlerResult> kafkaConsumer;
 	private IntentParseAlgo intentParseAlgo;
 	private Environment environment;
 	//@Autowired
@@ -45,39 +45,44 @@ public class KafkaConsumerThread extends Thread {
 		configProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "group-1");
 		//configProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");
 		//List<SearcherResult> searcherResultKafka=new ArrayList<SearcherResult>();
-		Set<DocumentParserResult> final_kafka=new HashSet<>();
+		Set<CrawlerResult> final_kafka=new HashSet<>();
 		//Figure out where to start processing messages from
-		kafkaConsumer = new KafkaConsumer<String, DocumentParserResult>(configProperties);
+		kafkaConsumer = new KafkaConsumer<String, CrawlerResult>(configProperties);
 		kafkaConsumer.subscribe(Arrays.asList(topicName));
 
 		//Start processing messages
 		while (true) {
-			ConsumerRecords<String, DocumentParserResult> records = kafkaConsumer.poll(1000);
-			for (ConsumerRecord<String, DocumentParserResult> record : records) {
+			ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(10000);
+			for (ConsumerRecord<String, CrawlerResult> record : records) {
 				//JsonNode node = objectMapper.readTree(record.value());
 				//logger.debug(record.value());
-				DocumentParserResult crawlerResult = new DocumentParserResult();
+				int count=0;
+				CrawlerResult crawlerResult = new CrawlerResult();
 				crawlerResult = record.value();
 				System.out.println("hi i am getting "+crawlerResult.getConcept());
 				try {
+					System.out.println("count is" + count);
 					final_kafka.add(record.value());
+					intentParseAlgo.calculateConfidenceScore(record.value());
 					//implenment here
 					//intentParseAlgo.calculateConfidenceScore(intentParserInput, intentList)
 					//(searcherResult);
+					count++;
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 				//final_kafka.clear();
 				System.out.println(record.value());
 				//circleService.getActivityType(node); 
-			}intentParseAlgo.calculateConfidence(final_kafka);
-			
+			}
+			//intentParseAlgo.calculateConfidence(final_kafka);
+			//final_kafka.clear();
+			//final_kafka=null;
 		}
 
 	}
-	public KafkaConsumer<String,DocumentParserResult> getKafkaConsumer()
+	public KafkaConsumer<String,CrawlerResult> getKafkaConsumer()
 	{
 		return this.kafkaConsumer;
 	}

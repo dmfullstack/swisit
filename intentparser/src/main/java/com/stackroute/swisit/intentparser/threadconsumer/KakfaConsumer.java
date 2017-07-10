@@ -15,7 +15,8 @@ public class KakfaConsumer {
 	KafkaConsumerThread consumerRunnable = new KafkaConsumerThread(topic,intentParseAlgo);
     consumerRunnable.start();
     consumerRunnable.getKafkaConsumer().wakeup();
-   // consumerRunnable.destroy();
+    //consumerRunnable.destroy();
+
     //logger.debug(environment.getProperty("circleconsumer.consumer-stopmessage"));
 //    try {
 //		consumerRunnable.join(100);

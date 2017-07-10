@@ -12,5 +12,5 @@ import com.stackroute.swisit.documentparser.domain.DocumentParserResult;
  */
 public interface MasterParserService {
 
-    public Iterable<DocumentParserResult> parseDocument(CrawlerResult crawlerResult) throws JsonProcessingException, ParseException;
+    public Iterable<DocumentParserResult> parseDocument(/*CrawlerResult crawlerResults*/) throws JsonProcessingException, ParseException;
 }

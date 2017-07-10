@@ -15,10 +15,10 @@ public class KafkaConsumer {
 		KafkaConsumerThread consumerRunnable = new KafkaConsumerThread(topic,masterScannerService);
 		consumerRunnable.start();
 		consumerRunnable.getKafkaConsumer().wakeup();
-//		try {
-//			consumerRunnable.join(100);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			consumerRunnable.join(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

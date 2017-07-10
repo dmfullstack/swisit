@@ -25,11 +25,11 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 	DocToConcept docToConcept;
     /*------------CalculateConfidence method for getting List of IntentParserResult-----------*/
     @Override
-    public ArrayList<IntentParserResult> calculateConfidence(Iterable<DocumentParserResult> intentInput){
+    public ArrayList<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput){
     	List<Intent> intentsList = intentRepository.findIntents();
         ArrayList<IntentParserResult> intentParserResultList = new ArrayList<IntentParserResult>();
-        for(DocumentParserResult intentParserInput : intentInput){
-            intentParserResultList.addAll(calculateConfidenceScore(intentParserInput,intentsList));
+        for(CrawlerResult intentParserInput : intentInput){
+            //intentParserResultList.addAll(calculateConfidenceScore(intentParserInput,intentsList));
         }
         Collections.sort(intentParserResultList, new Comparator<IntentParserResult>() {
             @Override
@@ -45,8 +45,9 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
                  also saves the result in Neo4jDatabse. It returns the arraylist of
                  IntentParseResult for Each Intent-----------*/
 	@Override
-	public ArrayList<IntentParserResult> calculateConfidenceScore(DocumentParserResult intentParserInput,List<Intent> intentList){
+	public ArrayList<IntentParserResult> calculateConfidenceScore(CrawlerResult intentParserInput/*,List<Intent> intentList*/){
 		ArrayList<IntentParserResult> results=new ArrayList<IntentParserResult>();
+		List<Intent> intentList = intentRepository.findIntents();
 		for (Intent intent : intentList) {
 			List<Map<String, String>> relationshipList = relationshipRepository.getAllTermsRelationOfIntent(intent.getName());
 			/*exception handling*/
@@ -61,6 +62,7 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 			/*exception handling*/
 			ArrayList<ContentSchema> contentSchemas = intentParserInput.getTerms();
 			ArrayList<Relationships> relationsList = new ArrayList<Relationships>();
+			System.out.print("weight problem here ------- ");
 			for (Map<String, String> map : relationshipList) {
 				Relationships relationships = new Relationships();
 				relationships.setIntentName(map.get("intentName"));
@@ -69,7 +71,7 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 				relationships.setWeight(Float.parseFloat(map.get("weight")));
 				relationsList.add(relationships);
 			}
-			float indicator = 0f, counterIndicator = 0f, confidenceScore;
+			float indicator = 0f, counterIndicator = 0f;
 			for (ContentSchema contentSchema : contentSchemas) {
 				for (Relationships relationships : relationsList) {
 					if (contentSchema.getWord() == null) { continue; }
@@ -83,16 +85,20 @@ public class IntentParseAlgoImpl implements IntentParseAlgo {
 					}
 				}
 			}
-			confidenceScore = indicator - counterIndicator;
+			float confidenceScore = indicator - counterIndicator;
 			IntentParserResult intentParserResult = new IntentParserResult(intentParserInput.getLink(), intent.getName(), confidenceScore, intentParserInput.getConcept());
 			System.out.println(intentParserResult.toString());
 			try{
 				intentRepository.createDocumentNode(intentParserResult.getUrl());
 			}catch(Exception e){ }
-			docToConcept.createDocToConceptRels(intentParserResult.getUrl(),intentParserResult.getIntent(),intentParserResult.getConfidenceScore(),intentParserResult.getConcept());
+			docToConcept.createDocToConceptRels(intentParserResult.getUrl(),intentParserResult.getIntent(),intentParserResult.getConfidenceScore(),intentParserResult.getConcept(),intentParserInput.getSnippet());
 			results.add(intentParserResult);
 		}
 		return results;
+	}
+
+	public void get(CrawlerResult cr){
+		System.out.println(cr);
 	}
 }
 

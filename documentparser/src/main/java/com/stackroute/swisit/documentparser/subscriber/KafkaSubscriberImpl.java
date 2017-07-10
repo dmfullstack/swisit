@@ -1,6 +1,5 @@
 package com.stackroute.swisit.documentparser.subscriber;
 
-import java.text.ParseException;
 /*------------ Importing Libraries-----------*/
 import java.util.ArrayList;
 
@@ -14,18 +13,13 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stackroute.swisit.documentparser.domain.CrawlerResult;
-import com.stackroute.swisit.documentparser.service.MasterParserService;
 
 /*-- Kafka subscriber that implements Subscriber interface to receive the message from kafka --*/
 @Service
 public class KafkaSubscriberImpl implements Subscriber {
-	@Autowired
-	MasterParserService masterParserService;
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/* Overriding receiveMessage of the interface to receive message from kafka as list
@@ -33,7 +27,7 @@ public class KafkaSubscriberImpl implements Subscriber {
 	 * returns- list of Crawler result
 	 *  */
 	@Override
-	public List<CrawlerResult> receiveMessage(String topic) throws JsonProcessingException, ParseException {
+	public List<CrawlerResult> receiveMessage(String topic) {
 		Properties properties = new Properties();
 		properties.put("group.id", "group-1");
 		properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG , "172.23.239.165:9092");
@@ -49,10 +43,6 @@ public class KafkaSubscriberImpl implements Subscriber {
 			//logger.info("records  "+records);
 			for (ConsumerRecord<String, CrawlerResult> record : records) {
 				//logger.info("record  "+record);
-				CrawlerResult cr= new CrawlerResult();
-				cr=record.value();
-				if(cr!=null)
-				masterParserService.parseDocument(cr);
 				crawlerResultKafka.add(record.value());
 
 			}
