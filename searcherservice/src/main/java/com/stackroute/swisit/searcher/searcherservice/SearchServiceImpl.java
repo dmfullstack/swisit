@@ -136,7 +136,7 @@ public class SearchServiceImpl implements SearchService {
 									searcherResultList.add(searcherResult);
 									try {
 										/* publish the searcherResult object to kafka */
-										kafkaconfig.publishMessage("testcontrol", searcherResult);
+										kafkaconfig.publishMessage("testcontrolfinal3", searcherResult);
 									} 
 									catch (JsonProcessingException e) {
 										e.printStackTrace();
