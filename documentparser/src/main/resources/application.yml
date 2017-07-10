@@ -6,8 +6,12 @@ spring:
       password: root123
     mongodb:
       authentication-database: admin
+      database: swisit
       username: superAdmin
       password: admin123
-      database: swisit
+      port: 27017
   application:
-    name: documentparser
+    name: documentparser 
+server:
+  port: 8088
+      

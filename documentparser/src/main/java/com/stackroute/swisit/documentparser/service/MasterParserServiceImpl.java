@@ -6,6 +6,7 @@ import com.stackroute.swisit.documentparser.domain.CrawlerResult;
 import com.stackroute.swisit.documentparser.domain.DocumentModel;
 import com.stackroute.swisit.documentparser.domain.DocumentParserResult;
 import com.stackroute.swisit.documentparser.publisher.Publisher;
+import com.stackroute.swisit.documentparser.repository.MongoParserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stackroute.swisit.documentparser.domain.ContentSchema;
 
@@ -30,27 +31,44 @@ public class MasterParserServiceImpl implements MasterParserService {
 	
 	@Autowired
 	Publisher publisher;
+    /*@Autowired
+    public void setKeywordScannerService(KeywordScannerService keywordScannerService){
+        this.keywordScannerService = keywordScannerService;
+    }*/
 
 	@Autowired
     IntensityAlgoService intensityAlgoService;
-
+    
+    /*@Autowired
+    public void setIntensityAlgoService(IntensityAlgoService intensityAlgoService){
+    	this.intensityAlgoService = intensityAlgoService;
+    }*/
+    
 	@Autowired
     ConceptNetService conceptNetService;
+    
+    /*@Autowired
+    public void setConceptNetService(ConceptNetService conceptNetService){
+    	this.conceptNetService = conceptNetService;
+    }*/
 
-	@Autowired
+    @Autowired
     WordCheckerService wordCheckerService;
-
-	@Autowired
+    
+    /*@Autowired
+    public void setWordCheckerService(WordCheckerService wordCheckerService){
+    	this.wordCheckerService=wordCheckerService;
+    }*/
+    @Autowired
     ObjectMapperService objectMapperService;
 
-	@Autowired
-	MongoRepository mongoRepository;
-    
-    public Iterable<DocumentParserResult> parseDocument(/*CrawlerResult crawlerResults*/) throws JsonProcessingException , ParseException{
+    @Autowired
+    MongoParserRepository mongoRepository;
+    public Iterable<DocumentParserResult> parseDocument(CrawlerResult crawlerResult) throws JsonProcessingException , ParseException{
 
-    	List<LinkedHashMap<String,String>> cR = objectMapperService.objectMapping("./src/main/resources/common/sample.json");
-    	ArrayList<CrawlerResult> crawlerResults = new ArrayList<>();
-    	for(LinkedHashMap<String,String> linkedMap : cR){
+/*    	//List<LinkedHashMap<String,String>> cR = objectMapperService.objectMapping("./src/main/resources/common/sample.json");
+    	//ArrayList<CrawlerResult> crawlerResults = new ArrayList<>();
+    	//for(LinkedHashMap<String,String> linkedMap : cR){
     		CrawlerResult crawlerResult = new CrawlerResult();
     		crawlerResult.setConcept(linkedMap.get("concept"));
     		crawlerResult.setLink(linkedMap.get("link"));
@@ -60,12 +78,15 @@ public class MasterParserServiceImpl implements MasterParserService {
     		crawlerResult.setTitle(linkedMap.get("title"));
     		crawlerResult.setLastindexedof(new SimpleDateFormat("dd/MM/yyyy").parse("05/07/2017"));
     		crawlerResults.add(crawlerResult);
-    	}
+    	//}
         Document document=null;
         ArrayList<DocumentParserResult> documentParserResults = new ArrayList<DocumentParserResult>();
         for(CrawlerResult crawlerResult : crawlerResults) {
-        System.out.println(crawlerResult.getLink());
-        document = Jsoup.parse(crawlerResult.getDocument());
+*/       
+    	ArrayList<DocumentParserResult> documentParserResults = new ArrayList<DocumentParserResult>();
+    	System.out.println(crawlerResult.getLink());
+Document document=null;
+			document = Jsoup.parse(crawlerResult.getDocument());
 	        HashMap<String, String> keywordScannerResult = keywordScannerService.scanDocument(document);
 	        /*Iterator<HashMap.Entry<String,String>> ksritr = keywordScannerResult.entrySet().iterator();
 	        while(ksritr.hasNext()){
@@ -91,8 +112,9 @@ public class MasterParserServiceImpl implements MasterParserService {
 
 				}
 			}*/
-			DocumentModel documentModel = new DocumentModel(conceptNetResult);
-			mongoRepository.save(documentModel);
+	        DocumentModel documentModel = new DocumentModel(conceptNetResult);
+            mongoRepository.save(documentModel);
+
 			ArrayList<ContentSchema> contentSchema = intensityAlgoService.calculateIntensity(conceptNetResult);
 			DocumentParserResult documentParserResult = new DocumentParserResult();
 	        documentParserResult.setQuery(crawlerResult.getQuery());
@@ -105,9 +127,9 @@ public class MasterParserServiceImpl implements MasterParserService {
 	        	//System.out.println(cs.getWord()+"     "+cs.getIntensity());
 	        documentParserResult.setSnippet(crawlerResult.getSnippet());
 	        documentParserResult.setLastindexedof(crawlerResult.getLastindexedof());
-	        publisher.publishMessage("tointent", documentParserResult);
+	        publisher.publishMessage("tointentfinal5", documentParserResult);
 	        documentParserResults.add(documentParserResult);
-        }
+        //}
         return documentParserResults;
     }
 }

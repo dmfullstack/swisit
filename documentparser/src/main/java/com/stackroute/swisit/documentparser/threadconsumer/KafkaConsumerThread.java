@@ -39,12 +39,12 @@ public class KafkaConsumerThread extends Thread {
 		/*Start processing messages*/
 
 		while (true) {
-			ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(100);
+			ConsumerRecords<String, CrawlerResult> records = kafkaConsumer.poll(1000);
 			for (ConsumerRecord<String, CrawlerResult> record : records) {
 				CrawlerResult crawlerResult = new CrawlerResult();
 				crawlerResult = record.value();
 				try {
-					masterScannerService.parseDocument();
+					masterScannerService.parseDocument(crawlerResult);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

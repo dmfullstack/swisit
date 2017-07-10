@@ -3,9 +3,13 @@ package com.stackroute.swisit.documentparser.service;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.stackroute.swisit.documentparser.domain.ContentSchema;
+
+
 /**
  * Created by user on 30/6/17.
  */
@@ -30,11 +34,12 @@ public class IntensityAlgoServiceImpl implements IntensityAlgoService {
             }
             for (Entry<String, HashMap<String, Integer>> parsedDocumentMapRef : parsedDocumentMap.entrySet()) {
                 wordKey = parsedDocumentMapRef.getKey();
+                System.out.println("My term is: "+wordKey);
                 for (Entry<String, Integer> wordKeyValueRef : parsedDocumentMapRef.getValue().entrySet()) {
                     String tagKey = wordKeyValueRef.getKey();
                     Integer tagFrequency = wordKeyValueRef.getValue();
                     float intensity = Float.parseFloat(map.get(tagKey));
-
+                    System.out.println("tagKey "+tagKey+"frequency "+tagFrequency);
                     count += tagFrequency * intensity;
 
                 }
@@ -48,8 +53,5 @@ public class IntensityAlgoServiceImpl implements IntensityAlgoService {
         }*/
         return contentSchemas;
     }
-
-
-
 }
 
