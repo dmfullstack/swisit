@@ -33,14 +33,12 @@ public class IntialConsumerImpl implements IntialConsumer{
 		    kafkaConsumer.subscribe(Arrays.asList(topic));
 		    SearcherJob q=new SearcherJob();
 		    while (true) {
-		      ConsumerRecords<String, SearcherJob> records = kafkaConsumer.poll(100000);
-		      System.out.println("my count is "+records.count());
+		      ConsumerRecords<String, SearcherJob> records = kafkaConsumer.poll(10000);
 		      for (ConsumerRecord<String, SearcherJob> record : records) {
 		    	  q.setDomain(record.value().getDomain());
 		    	  q.setResults(record.value().getResults());//=record.value();
 		    	  q.setConcept(record.value().getConcept());
 		    	  q.setSitesearch(record.value().getSitesearch());
-		    	  System.out.println("consumer"+q.getDomain()+" "+q.getResults()+" "+q.getResults());
 		      }
 		return q;
 		}

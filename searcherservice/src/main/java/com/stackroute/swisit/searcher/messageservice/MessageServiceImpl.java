@@ -12,7 +12,9 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,13 +23,13 @@ import com.stackroute.swisit.searcher.domain.SearcherResult;
 @Service
 public class MessageServiceImpl implements MessageService {
 	
-	//@Value("${brokerid}")
-	//String brokerid;
+	@Value("${brokerid}")
+	String brokerid;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	@Override
 	public void publishMessage(String topic, SearcherResult message) throws JsonProcessingException {
 		// TODO Auto-generated method stub
+		
 		Properties configProperties = new Properties();
 		/* Configure properties for Kafka */
 		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");

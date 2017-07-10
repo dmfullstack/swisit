@@ -24,13 +24,12 @@ public class IntialProducerImpl implements IntialProducer{
 		// TODO Auto-generated method stub
 		Properties configProperties = new Properties();
 		/* configure the properties for kafka */
-        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
+        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.23.239.165:9092");
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
         configProperties.put("value.serializer","com.stackroute.swisit.searcher.kafkaserialization.QuerySerializer");
         /* produce data to kafka */
         Producer producer = new KafkaProducer(configProperties);
         ProducerRecord<String, SearcherJob> rec = new ProducerRecord<String, SearcherJob>(topic,message);
-        
         producer.send(rec);
         producer.close();
 	

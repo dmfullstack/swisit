@@ -15,8 +15,8 @@ import com.stackroute.swisit.searcher.domain.SearcherResult;
 @Service
 public class PublisherImpl implements Publisher {
 
-//	@Value("${brokerid}")
-//	String brokerid;
+	@Value("${brokerid}")
+	String brokerid;
 	
 	@Override
 	public void publishMessage(String topic, SearcherResult message) throws JsonProcessingException {
@@ -28,6 +28,7 @@ public class PublisherImpl implements Publisher {
 		configProperties.put("value.serializer","com.stackroute.swisit.searcher.kafkaserialization.SwisitSerializer");
 		Producer producer = new KafkaProducer(configProperties);
 		ProducerRecord<String, SearcherResult> rec = new ProducerRecord<String, SearcherResult>(topic,message);
+		System.out.println("topic is "+topic+" "+"link is "+message.getTitle()+" "+message.getUrl());
 		producer.send(rec);
 		producer.close();
 	

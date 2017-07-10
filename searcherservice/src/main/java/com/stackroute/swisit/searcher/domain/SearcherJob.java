@@ -2,21 +2,22 @@ package com.stackroute.swisit.searcher.domain;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.springframework.core.env.Environment;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-@Component
+
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document
 @JsonSerialize
-/* To perform task on searcherJob */ 
+//@RedisHash("SearcherJob")
+/* To perform task on searcherJob */
 public class SearcherJob extends ResourceSupport{
-	
+	@Id
 	@JsonProperty("domain")
 	private String domain;
 		

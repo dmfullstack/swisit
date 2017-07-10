@@ -28,7 +28,7 @@ public class ConsumerImpl implements Consumer{
 	    KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
 	    kafkaConsumer.subscribe(Arrays.asList(topic));
 	    while (true) {
-	      ConsumerRecords<String, String> records = kafkaConsumer.poll(100);
+	      ConsumerRecords<String, String> records = kafkaConsumer.poll(10000);
 	      for (ConsumerRecord<String, String> record : records) {
 	    	  logger.debug("inside consumer i am getting"+record.value());
 	    	  }

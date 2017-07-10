@@ -31,6 +31,7 @@ public class SearcherResponse {
         ArrayList<Object> al = (ArrayList<Object>) queries.get("request");
         Map<Object,Object> map = (Map<Object,Object>)al.get(0);
         setQueries((String) map.get("searchTerms"));
+        System.out.println(map.get("SearchTerms"));
         return (String) map.get("searchTerms");
     }
 	/* set array of values from google api json */

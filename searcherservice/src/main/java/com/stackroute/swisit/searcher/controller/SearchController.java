@@ -6,20 +6,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.stackroute.swisit.searcher.searcherservice.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.stackroute.swisit.searcher.domain.SavingSearcherResult;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 import com.stackroute.swisit.searcher.domain.SearcherResult;
 import com.stackroute.swisit.searcher.exception.SearcherServiceException;
@@ -29,6 +31,7 @@ import com.stackroute.swisit.searcher.intialproducer.IntialProducer;
 import com.stackroute.swisit.searcher.loadbalancing.LoadBalancing;
 import com.stackroute.swisit.searcher.messageservice.MessageService;
 import com.stackroute.swisit.searcher.repository.SearcherJobRepository;
+import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
 import com.stackroute.swisit.searcher.searcherservice.SearchServiceImpl;
 
 import io.swagger.annotations.Api;
@@ -46,7 +49,7 @@ public class SearchController {
 	@Autowired
 	MessageSource messageSource;
 	@Autowired
-	private SearchService searchService;
+	private SearchServiceImpl searchServiceImpl;
 	@Autowired
 	private  IntialProducer intialproducer;
     @Autowired
@@ -56,9 +59,13 @@ public class SearchController {
 	@Autowired
 	LoadBalancing loadBal;
 	
+	@Autowired
+	private SearcherResultRepository searcherResultRepository;
+	
 	SearcherJob searcherJob = new SearcherJob();
 	
 	List hateoasLink = null;
+	List hateoasLinkRef = null;
 	
 	
 	@ApiOperation(value = "View a list of URLs from Google")
@@ -70,15 +77,23 @@ public class SearchController {
     }
     )
 	
+	/*---------------------------Get data by query--------------------------------*/
+	@RequestMapping(value="/find/{query}", method=RequestMethod.GET)
+	@Cacheable(value = "Java object",key = "#query")
+	public ResponseEntity findByQuery(@PathVariable String query)
+	{
+		return new ResponseEntity("success",HttpStatus.OK);
+	}
+	
 	/*------------------------To get data from Google API----------------------------------------------*/
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public ResponseEntity<List<SearcherResult>> getSearcherResult()
+	public ResponseEntity<List<SavingSearcherResult>> getSearcherResult()
 	{
 		Locale locale = LocaleContextHolder.getLocale();
 		try{
         		/* Get all data with hateoas link */
-        		List<SearcherResult> searcherResultList = (List<SearcherResult>) searchService.getAllSearcherResult();
+        		List<SavingSearcherResult> searcherResultList = (List<SavingSearcherResult>) searchServiceImpl.getAllSearcherResult();
         	    hateoasLink = hateoesAssembler.getAllLinks(searcherResultList);
         }
         catch(SearcherServiceException searching) {
@@ -97,45 +112,114 @@ public class SearchController {
 		
 		/* This is used for producing dummy messages */
 		//SearcherJob produceSearcherJob=AssignSearcherJob();
-        intialproducer.publishMessage("tosearcher2", produceSearcherJob);
+        intialproducer.publishMessage("tosearcher", produceSearcherJob);
         
         
         /* This is used to get message from kafka */
-        SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher2");
-        System.out.println("hi this is consumersearcherjon"+consumeSearcherJob.getDomain());
-        logger.debug(consumeSearcherJob.getSitesearch()+" "+consumeSearcherJob.getResults());
+        SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher");
+        logger.info(consumeSearcherJob.getDomain()+" "+consumeSearcherJob.getConcept());
+        String domain = consumeSearcherJob.getDomain();
+		List concept = consumeSearcherJob.getConcept();
+		int flag = 0;
         try {
-            
-            	searchService.saveAllSearcherJob(consumeSearcherJob);
-            	searchService.saveAllSearcherResult();
-                hateoasLink = hateoesAssembler.getLinksPost();
-        
-        } 
-        catch (SearcherServiceException e) {
-            return new ResponseEntity<SearcherJob>(HttpStatus.NOT_FOUND);
+        		
+        		/* To find the given domain and concept already present in DB */
+        		List<String> queryList=new ArrayList<String>();
+        		List<String> conceptList =  new ArrayList<String>();
+        		if(searcherResultRepository.findAll().isEmpty())
+        		{
+        			System.out.println("is empty");
+        			searchServiceImpl.saveAllSearcherResult(consumeSearcherJob);
+        			 hateoasLink = hateoesAssembler.getLinksPost();
+                     return new ResponseEntity(hateoasLink,HttpStatus.OK);
+        		}
+        		else
+        		{
+        			System.out.println("not empty");
+        			for(SavingSearcherResult savingSearcherResult:searcherResultRepository.findAll()){
+            			queryList.add(savingSearcherResult.getQuery());
+        			}
+        			for(int i=0;i<concept.size();i++)
+            		{
+            			String query = domain+" "+concept.get(i);
+            			for(int j=0;j<queryList.size();j++)
+            			{
+            				if(query.equals(queryList.get(j)))
+            				{
+            					flag++;
+            				}
+            				else
+            				{
+            					flag=0;
+            				}
+            			}
+            			if(flag==0)
+            			{
+            				conceptList.add((String) concept.get(i));
+            			}
+            				
+            		}
+        			if(flag>0)
+        			{
+        				hateoasLinkRef = hateoesAssembler.getLinksPostError();
+        				return new ResponseEntity(hateoasLinkRef,HttpStatus.OK);
+        			}
+        			else
+        			{
+        				consumeSearcherJob.setConcept(conceptList);
+        				searchServiceImpl.saveAllSearcherResult(consumeSearcherJob);
+        				System.out.println("after service");
+                        hateoasLink = hateoesAssembler.getLinksPost();
+                        return new ResponseEntity(hateoasLink,HttpStatus.OK);
+        			}
+        		}
         }
-        
-        return new ResponseEntity(hateoasLink,HttpStatus.OK);
-        
-    }
-	
-	/*------------------------To fetch data from mongo DB----------------------------------------------*/
-	
-	@ApiOperation(value = "Get the URLs stored in MongoDB")
-	@RequestMapping(value="urlgetquery",method=RequestMethod.GET)
-	public ResponseEntity<List<SearcherJob>> getAllSearcherJob()
-	{
-		Locale locale = LocaleContextHolder.getLocale();
-        try{
-        		List<SearcherJob> alldata = (List<SearcherJob>) searchService.getAllSearcherJob();
-        		hateoasLink = hateoesAssembler.getAllQuery(alldata);
+        catch(Exception e)
+        {
+        	e.printStackTrace();
+        }
+		return new ResponseEntity(hateoasLink,HttpStatus.OK);
+    }		
+        		
         	
+	@RequestMapping(value="/post", method=RequestMethod.POST)
+    public ResponseEntity saveSearcherJob1(@RequestBody SearcherJob produceSearcherJob) throws SearcherServiceException, Exception
+    {
+		Locale locale = LocaleContextHolder.getLocale();
+		
+		/* This is used for producing dummy messages */
+		//SearcherJob produceSearcherJob=AssignSearcherJob();
+        intialproducer.publishMessage("tosearcher", produceSearcherJob);
+        
+        
+        /* This is used to get message from kafka */
+        SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher");
+        logger.info(consumeSearcherJob.getDomain()+" "+consumeSearcherJob.getConcept());
+        try {
+        		String domain = consumeSearcherJob.getDomain();
+        		List concept = consumeSearcherJob.getConcept();
+        		int flag = 0;
+        		/* To find the given domain and concept already present in DB */
+        		List<String> l=new ArrayList<String>();
+        		if(searcherResultRepository.findAll().isEmpty())
+        		{
+        			System.out.println("is empty");
+        		}
+        		else
+        		{
+        			System.out.println("not empty");
+        		}
         }
-        catch(SearcherServiceException searching) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        catch(Exception e)
+        {
+        	e.printStackTrace();
         }
-        return  new ResponseEntity(hateoasLink,HttpStatus.OK);
-	}
+        return new ResponseEntity("data inserted",HttpStatus.OK);
+    }
+    
+	
+	
+	
 	
 	/*--------------------Dummy producer for Searcher Service--------------------------- */
 	public SearcherJob AssignSearcherJob(){

@@ -1,4 +1,4 @@
-package com.stackroute.swisit.searchertest;
+package com.stackroute.swisit.searcher.searchertest;
 
 import static org.junit.Assert.assertTrue;
 

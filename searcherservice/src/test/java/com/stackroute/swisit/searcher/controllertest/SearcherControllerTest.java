@@ -100,7 +100,7 @@ import com.stackroute.swisit.searcher.domain.SearcherResponse;
 	            
 	            Iterable<SearcherJob> i=new ArrayList<>();
 	            
-	            when(searchService.saveAllSearcherJob(sj)).thenReturn(i);
+	            when(searchService.saveAllSearcherResult(sj)).thenReturn((List) i);
 	            mockMvc.perform(post("v1/api/swisit/searcher"))
 	                    .andExpect(status().is(404));
 	            

@@ -1,19 +1,23 @@
 package com.stackroute.swisit.searcher.domain;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-@Component
+
+
+
 @JsonIgnoreProperties(ignoreUnknown=true)
+@Document
 /* To Send the result for the searcherJob */
 public class SearcherResult extends ResourceSupport implements Serializer<SearcherResult>{
-	
-	@JsonProperty("query")
-	String query;
 	@JsonProperty("link")
 	String url;
 	@JsonProperty("title")
@@ -29,12 +33,6 @@ public class SearcherResult extends ResourceSupport implements Serializer<Search
 		this.concept = concept;
 	}
 	private String encoding="UTF-8";
-	public String getQuery() {
-		return query;
-	}
-	public void setQuery(String query) {
-		this.query = query;
-	}
 	public String getUrl() {
 		return url;
 	}

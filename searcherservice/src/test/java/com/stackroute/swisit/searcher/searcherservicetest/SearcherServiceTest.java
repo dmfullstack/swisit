@@ -28,7 +28,6 @@ public class SearcherServiceTest {
     public void SearcherResultTest()
     {
         
-        searcherResult.setQuery("Angular Component");
         searcherResult.setTitle("GitHub - brillout/awesome-angular-components: Catalog of Angular ...");
         searcherResult.setUrl("https://docs.angularjs.org/guide/component");
         searcherResult.setDescription("Nov 13, 2015 ... AngularJS 1.5 introduced the .component() helper method, which is much \nsimpler than the .directive() definition and advocates best practices ...");
@@ -36,7 +35,6 @@ public class SearcherServiceTest {
         
         
         assertEquals("https://docs.angularjs.org/guide/component",searcherResult.getUrl());
-        assertEquals("Angular Component",searcherResult.getQuery());
         assertEquals("GitHub - brillout/awesome-angular-components: Catalog of Angular ...", searcherResult.getTitle());
         assertEquals("Nov 13, 2015 ... AngularJS 1.5 introduced the .component() helper method, which is much \nsimpler than the .directive() definition and advocates best practices ...", searcherResult.getDescription());
         
