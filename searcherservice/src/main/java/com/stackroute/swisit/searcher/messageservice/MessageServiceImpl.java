@@ -1,5 +1,5 @@
 package com.stackroute.swisit.searcher.messageservice;
-
+/*----- Import Libraries ------*/
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -20,32 +20,32 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.searcher.domain.SearcherResult;
+/*---- Class to listen and publish message via kafka ----*/
 @Service
 public class MessageServiceImpl implements MessageService {
 	
 	@Value("${brokerid}")
 	String brokerid;
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Override
 	public void publishMessage(String topic, SearcherResult message) throws JsonProcessingException {
-		// TODO Auto-generated method stub
-		
 		Properties configProperties = new Properties();
-		/* Configure properties for Kafka */
+		/*---- Configure properties for Kafka ----*/
 		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
 		configProperties.put("key.serializer","org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.searcher.kafkaserialization.SwisitSerializer");
 		Producer producer = new KafkaProducer(configProperties);
-		ProducerRecord<String, SearcherResult> rec = new ProducerRecord<String, SearcherResult>(topic,message);
-		producer.send(rec);
+		ProducerRecord<String, SearcherResult> producerRecord = new ProducerRecord<String, SearcherResult>(topic,message);
+		producer.send(producerRecord);
 		producer.close();
 	}
-	
 
 	@Override
 	public void listenMessage(String topic) {
 		Properties props = new Properties();
-		/* Configure properties for Kafka */
+		/*---- Configure properties for Kafka ----*/
 		props.put("group.id", "group-1");
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
@@ -53,12 +53,10 @@ public class MessageServiceImpl implements MessageService {
 		KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
 		kafkaConsumer.subscribe(Arrays.asList(topic));
 	    while (true) {
-	    ConsumerRecords<String, String> records = kafkaConsumer.poll(100);
-	    for (ConsumerRecord<String, String> record : records) {
-	    	logger.debug("inside consumer i am getting"+record.value());
-	    }
-	 }
-
-}
-
+	    	ConsumerRecords<String, String> records = kafkaConsumer.poll(100);
+			for (ConsumerRecord<String, String> record : records) {
+				logger.debug("Inside listen message for kafka "+record.value());
+			}
+	 	}
+	}
 }

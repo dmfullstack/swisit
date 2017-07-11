@@ -1,4 +1,5 @@
 package com.stackroute.swisit.searcher.domain;
+/*------ Import Libraries ------*/
 import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,13 +13,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /* To Send the result for the searcherJob */
 public class SearcherResult extends ResourceSupport implements Serializer<SearcherResult>{
 	@JsonProperty("link")
-	String url;
+	private String url;
+
 	@JsonProperty("title")
-	String title;
+	private String title;
+
 	@JsonProperty("snippet")
-	String description;
+	private String description;
+
 	@JsonProperty("concept")
-	String concept;
+	private String concept;
+
+    /*------- Getters and Setters for properties ------*/
 	public String getConcept() {
 		return concept;
 	}
@@ -44,9 +50,10 @@ public class SearcherResult extends ResourceSupport implements Serializer<Search
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	/*--------- Serializing searcher result to be produced to kafka --------*/
 	@Override
 	public byte[] serialize(String arg0, SearcherResult arg1) {
-		// TODO Auto-generated method stub
 		byte[] retVal = null;
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    try {
@@ -59,20 +66,10 @@ public class SearcherResult extends ResourceSupport implements Serializer<Search
 	}
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void configure(Map<String, ?> arg0, boolean arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 }
-	
-	
-	
-	
-	
-	
-
-

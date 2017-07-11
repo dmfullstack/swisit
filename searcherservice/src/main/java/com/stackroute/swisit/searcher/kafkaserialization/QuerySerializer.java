@@ -1,5 +1,5 @@
 package com.stackroute.swisit.searcher.kafkaserialization;
-
+/*------ Import Libraries -----*/
 import java.util.Map;
 
 import org.apache.kafka.common.serialization.Serializer;
@@ -7,19 +7,16 @@ import org.apache.kafka.common.serialization.Serializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 
-/* serializing the searcherJob bean */
+/*---- Serializing the searcherJob domain ----*/
 public class QuerySerializer implements Serializer<SearcherJob>{
 
 	@Override
 	public void configure(Map<String, ?> configs, boolean isKey) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	/* serializing message of SearcherJob */
+	}
+	/*---- Serializing message of SearcherJob ----*/
 	@Override
 	public byte[] serialize(String topic, SearcherJob data) {
-		// TODO Auto-generated method stub
 		byte[] retVal = null;
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    try {
@@ -27,13 +24,10 @@ public class QuerySerializer implements Serializer<SearcherJob>{
 	    } catch (Exception e) {
 	      e.printStackTrace();
 	    }
-	    return retVal;}
-	
-
+	    return retVal;
+	}
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-		
-	}
 
+	}
 }

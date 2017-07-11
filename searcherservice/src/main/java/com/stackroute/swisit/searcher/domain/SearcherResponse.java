@@ -1,5 +1,6 @@
 package com.stackroute.swisit.searcher.domain;
 
+/*------ Import Libraries ------*/
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -11,22 +12,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document
-/* Handling the response from Google Api */
+/*---- Handling the response from Google Api -----*/
 public class SearcherResponse {
 	
-	String queries;
-	
-	public String getQueries() {
-		return queries;
-	}
+	private String queries;
 
-	public void setQueries(String queries) {
-		this.queries = queries;
-	}
-	/* set array of values from google api json */ 
+	/*---- Set array of values from google api json -----*/
 	@JsonProperty("queries")
-    public String getNestedObject(Map<String, Object> queries)
-    {
+    public String getNestedObject(Map<String, Object> queries) {
         
         ArrayList<Object> al = (ArrayList<Object>) queries.get("request");
         Map<Object,Object> map = (Map<Object,Object>)al.get(0);
@@ -34,14 +27,20 @@ public class SearcherResponse {
         System.out.println(map.get("SearchTerms"));
         return (String) map.get("searchTerms");
     }
-	/* set array of values from google api json */
+	/*---- Set array of values from google api json -----*/
 	@JsonProperty("items")
-	SearcherResult[] s;
-	
+	private SearcherResult[] s;
+
+    /*------- Getters and Setters for properties ------*/
+    public String getQueries() {
+        return queries;
+    }
+    public void setQueries(String queries) {
+        this.queries = queries;
+    }
 	public SearcherResult[] getS() {
 		return s;
 	}
-
 	public void setS(SearcherResult[] s) {
 		this.s = s;
 	}

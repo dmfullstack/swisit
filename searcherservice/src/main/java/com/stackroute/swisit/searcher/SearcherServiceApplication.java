@@ -1,6 +1,5 @@
 package com.stackroute.swisit.searcher;
-
-
+/*------ Import Libraries ------*/
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
@@ -28,27 +27,26 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+/*------ Main class which is executed when the application loads ------*/
 @SpringBootApplication
 @EnableMongoRepositories
 @EnableEurekaClient
 @EnableAsync
-//@EnableRedisRepositories
 public class SearcherServiceApplication extends CachingConfigurerSupport{
 
-	
 	public static void main(String[] args) {
-				
 		SpringApplication.run(SearcherServiceApplication.class, args);
 	}
-	/* Defining the default language for Internationalization */
+
+	/*---- Defining the default language for Internationalization -----*/
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-     slr.setDefaultLocale(Locale.US);
+        slr.setDefaultLocale(Locale.US);
         return slr;
     }
     
-    /* Specifying the message path for internationalization */
+    /*---- Specifying the message path for internationalization -----*/
     @Bean
     public MessageSource messageSource() {
          ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -56,15 +54,15 @@ public class SearcherServiceApplication extends CachingConfigurerSupport{
          return messageSource;
     }
     
-    /* specifying the parameter name for chainging language */
+    /*---- Specifying the parameter name for chainging language -----*/
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName("lang");
-        return lci;
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        return localeChangeInterceptor;
     }
     
-    /* Executor calls the Async method */
+    /*----- Executor calls the Async method -----*/
     @Bean
     public Executor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -79,7 +77,4 @@ public class SearcherServiceApplication extends CachingConfigurerSupport{
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
     }
-    
-		
-	}
-
+}

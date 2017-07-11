@@ -1,5 +1,5 @@
 package com.stackroute.swisit.searcher.searcherservice;
-
+/*------ Import Libaraies -------*/
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,94 +35,76 @@ import com.stackroute.swisit.searcher.messageservice.MessageServiceImpl;
 import com.stackroute.swisit.searcher.publisher.Publisher;
 import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
 
-
+/*------- Class to implement searcher service interface to get and save searcher service result -------*/
 @Service
 public class SearcherServiceImpl implements SearcherService {
 	
 	@Autowired
 	private SearcherResultRepository searcherResultRepository;
-	
-	
+
 	@Autowired
-	Publisher kafkaconfig;
-	
-	SearcherJob searcherJob = new SearcherJob();
-	SearcherResult searcherResult=new SearcherResult();
-	List<SearcherResult> searcherResultList=new ArrayList<SearcherResult>();
-	RestTemplate restTemplate = new RestTemplate();
+	Publisher publisher;
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	/* used to get the values from application.yml */
+	/*----- Used to get the values from application.yml -----*/
 	@Value("${url}")
 	String url;
+
 	@Value("${key}")
 	String key;
+
 	String domain="";
 	String url1;
 	String url2;
 	List<String> concept;
 	List<LinkedHashMap<String,String>> engineid = new ArrayList<LinkedHashMap<String,String>>();
-	/* To Make the Google Api Async */
-	SearcherServiceAsync SearchServiceAsync = new SearcherServiceAsync();
+
+	/*----- To Make the Google Api Async -----*/
+	SearcherServiceAsync searchServiceAsync = new SearcherServiceAsync();
 	
-	/* save the search result for the query into SearchResult class */
+	/*----- Save the search result for the query into SearchResult class -----*/
 	@Override
 	public List saveAllSearcherResult(SearcherJob searcherJob) throws JsonProcessingException, InterruptedException, ExecutionException {
 		
 		CompletableFuture<SearcherResponse> searcherResponse=null;
-		MessageServiceImpl kafkaconfig = new MessageServiceImpl(); 
 		List<SearcherResult> searcherResultList = new ArrayList<SearcherResult>();
 		ObjectMapper mapper = new ObjectMapper();
 		File file = new File("./src/main/resources/common/googleEngine.json");
 		List<LinkedHashMap<String, String>> endigeIdList;
 		try {
-			
 			endigeIdList = (List<LinkedHashMap<String,String>>) mapper.readValue(file, ArrayList.class);
 			searcherJob.setEngineId(endigeIdList);
 		} catch (JsonMappingException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		/* Get the data from the SearchJob class */
-		try
-		{
+		try {
 			if(searcherJob.getDomain()==null || searcherJob.getConcept()==null) {
 				throw new SearcherServiceException("SearcherJob has no value");
-				
 			}
-			else
-			{
-					domain = searcherJob.getDomain();
-					concept = searcherJob.getConcept();
-					for(int k=0;k<concept.size();k++)
-					{
-						String query = domain+" "+concept.get(k);	
-						engineid = searcherJob.getEngineId();
-						for(Map<String, String> map : engineid){
-							url1=map.get(key);
-							break;
-						}
-						SavingSearcherResult savingSearcherResult =  new SavingSearcherResult();
-						
-						for(int i=1;i<=11;i=i+10)
-						{	
-							url2 = query+"&start="+i+url1;
-							String finalUrl = url+url2;
-							searcherResponse = (CompletableFuture<SearcherResponse>) SearchServiceAsync.getSearchResult(finalUrl);						
-								
-							/* setting the query from the Google Api */
-							savingSearcherResult.setQuery(searcherResponse.get().getQueries());
-						
-							/* set the values to SearcherResult class and send the object to
-			   				crawlerService via Kafka */ 
-							try
-							{	
-								for(SearcherResult searcherResultRef:searcherResponse.get().getS())
-								{
+			else {
+				domain = searcherJob.getDomain();
+				concept = searcherJob.getConcept();
+				for(int k=0;k<concept.size();k++) {
+					String query = domain+" "+concept.get(k);
+					engineid = searcherJob.getEngineId();
+					for(Map<String, String> map : engineid){
+						url1=map.get(key);
+						break;
+					}
+					SavingSearcherResult savingSearcherResult =  new SavingSearcherResult();
+					for(int i=1;i<=11;i=i+10) {
+						url2 = query+"&start="+i+url1;
+						String finalUrl = url+url2;
+						searcherResponse = (CompletableFuture<SearcherResponse>) searchServiceAsync.getSearchResult(finalUrl);
+						/*---- Setting the query from the Google Api ----*/
+						savingSearcherResult.setQuery(searcherResponse.get().getQueries());
+						/* --Set the values to SearcherResult class and send the object to crawlerService via Kafka --*/
+							try {
+								for(SearcherResult searcherResultRef:searcherResponse.get().getS()) {
 									SearcherResult searcherResult =  new SearcherResult();
 									searcherResult.setUrl(searcherResultRef.getUrl());
 									searcherResult.setTitle(searcherResultRef.getTitle());
@@ -130,64 +112,49 @@ public class SearcherServiceImpl implements SearcherService {
 									searcherResult.setConcept(concept.get(k));
 									searcherResultList.add(searcherResult);
 									try {
-										/* publish the searcherResult object to kafka */
-										kafkaconfig.publishMessage("testcontrolfinal3", searcherResult);
+										/*--- Publish the searcherResult object to kafka ---*/
+										publisher.publishMessage("testcontrolfinal3", searcherResult);
 									} 
 									catch (JsonProcessingException e) {
 										e.printStackTrace();
 									}
 								}
-								
 							}
-							catch(Exception e)
-							{
-								e.printStackTrace();
+							catch(SearcherServiceException searcherServiceException) {
+                                searcherServiceException.printStackTrace();
 							}
-							
 						}
 						savingSearcherResult.setSearcherResults(searcherResultList);
-						/* save SearcherResult to mongoDB */
+						/*--- Save SearcherResult to mongoDB ---*/
 						searcherResultRepository.save(savingSearcherResult);
 						searcherResultList.clear();
-						
 					}
 				}
-			
 		}
-		catch(SearcherServiceException e)
-		{
-			logger.error("Exception "+e.getMessage());
+		catch(SearcherServiceException searcherServiceException) {
+			logger.error("Exception "+searcherServiceException.getMessage());
 		}
-		
 	return searcherResultRepository.findAll();
 	}
-	
 
-	/* get all data from the SearchResult class */
+	/*--- Get all data from the SearchResult class ----*/
 	@Override
 	public List getAllSearcherResult() {
-		try
-		{
-			if(searcherResultRepository.findAll()==null)
-			{
+		try {
+			if(searcherResultRepository.findAll()==null) {
 				throw new SearcherServiceException("No data available");
 			}
 			else if(domain==null) {
 				throw new SearcherServiceException("Domain was not Found");
 			}
-			else
-			{
-				/* method to get all data from the database */
+			else {
+				/*--- Method to get all data from the database ---*/
 				searcherResultRepository.findAll();
 			}
 		}
-		catch(SearcherServiceException e)
-		{
-			logger.error("Exception"+e.getMessage());
+		catch(SearcherServiceException searcherServiceException) {
+			logger.error("Exception"+searcherServiceException.getMessage());
 		}
 	return searcherResultRepository.findAll();
 	}
-
-
-
 }

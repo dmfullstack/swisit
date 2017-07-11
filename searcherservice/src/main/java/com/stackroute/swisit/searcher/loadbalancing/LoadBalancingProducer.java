@@ -1,5 +1,6 @@
 package com.stackroute.swisit.searcher.loadbalancing;
 
+/*----- Import Libraries -----*/
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -15,17 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-/* Producing and consuming messages for loadbalancing */
+/*---- Producing and consuming messages for loadbalancing -----*/
 @Service
-public class LoadBalancingProducer implements LoadBalancing{
-	
-	
+public class LoadBalancingProducer implements LoadBalancing {
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	/* Kafka producer for load balancing*/
+	/*---- Kafka producer for load balancing ------*/
 	@Override
-    public void LoadProducer() {
-    
+    public void loadProducer() {
          Properties configProperties = new Properties();
          /* configuring the properties for kafka */
          configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
@@ -39,28 +38,21 @@ public class LoadBalancingProducer implements LoadBalancing{
             }
     }
 
-	/* kafka consumer for load balancing */
+	/*----- Kafka consumer for load balancing -------*/
     @Override
-    public void LoadConsumer() {
-        // TODO Auto-generated method stub
+    public void loadConsumer() {
         Properties properties = new Properties();
-        /* configuring the properties for kafka */
+        /*---- Configuring the properties for kafka -----*/
         properties.put("group.id", "group-1");
-        
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(properties);
         kafkaConsumer.subscribe(Arrays.asList("kafkaproducer"));
-        
-        
         while (true) {
           ConsumerRecords<String, String> records = kafkaConsumer.poll(100000);
           for (ConsumerRecord<String, String> record : records) {
-              //searcherResultKafka.add(record.value());
               logger.debug(record.value());
-          
           }
           
         }

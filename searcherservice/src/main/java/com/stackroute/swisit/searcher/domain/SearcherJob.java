@@ -1,4 +1,5 @@
 package com.stackroute.swisit.searcher.domain;
+/*------ Import Libraries ------*/
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document
 @JsonSerialize
-/* To perform task on searcherJob */
+/*----- To perform task on searcherJob ------*/
 public class SearcherJob extends ResourceSupport{
 	@Id
 	@JsonProperty("domain")
@@ -22,7 +23,18 @@ public class SearcherJob extends ResourceSupport{
 		
 	@JsonProperty("concept")
 	private List<String> concept;
-	
+
+    /*---- Engineid and key is used to get the data from Google Api */
+    @JsonProperty("engineid")
+    private List<LinkedHashMap<String,String>> engineId;
+
+    @JsonProperty("results")
+    private String results;
+
+    @JsonProperty("sitesearch")
+    private String sitesearch;
+
+    /*------- Getters and Setters for properties ------*/
 	public String getDomain() {
 		return domain;
 	}
@@ -35,17 +47,6 @@ public class SearcherJob extends ResourceSupport{
 	public void setConcept(List<String> concept) {
 		this.concept = concept;
 	}
-	
-	/* engineid and key is used to get the data from Google Api */
-	@JsonProperty("engineid")
-	private List<LinkedHashMap<String,String>> engineId;
-	
-	@JsonProperty("results")
-	private String results;
-	
-	@JsonProperty("sitesearch")
-	private String sitesearch;
-	
 	public List<LinkedHashMap<String, String>> getEngineId() {
 		return engineId;
 	}

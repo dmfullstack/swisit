@@ -1,5 +1,5 @@
 package com.stackroute.swisit.searcher.searcherservice;
-
+/*------ Import Libaraies -------*/
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -25,55 +25,49 @@ import com.stackroute.swisit.searcher.exception.SearcherServiceException;
 import com.stackroute.swisit.searcher.messageservice.MessageService;
 import com.stackroute.swisit.searcher.messageservice.MessageServiceImpl;
 import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
+/*------- Class to implement searcher service asychronously to get searcher service result -------*/
 @Service
 public class SearcherServiceAsync {
-	
-	@Autowired
-	MessageService kafkaconfig;
+
 	@Autowired
 	private SearcherResultRepository searcherResultRepository;
-	
+
 	SearcherResponse searchResponse = new SearcherResponse();
-	
 	SearcherResult searcherResult = new SearcherResult();
-	
-	List<SearcherResult> searcherResultList=new ArrayList<SearcherResult>();
-	
+	List<SearcherResult> searcherResultList = new ArrayList<SearcherResult>();
+
 	private static final Logger logger = LoggerFactory.getLogger(SearcherService.class);
-	
-	/* Returns SearcherResult as Async to the SearchServiceImpl class */
+
+	/*---- Returns SearcherResult as Async to the SearchServiceImpl class ----*/
 	@Async
 	public CompletableFuture<SearcherResponse> getSearchResult(String finalUrl) throws JsonProcessingException, InterruptedException, ExecutionException {
 		 
-		/* RestTemplate is uesd to get object from the url */
+		/*--- RestTemplate is uesd to get object from the url ---*/
 		RestTemplate restTemplate = new RestTemplate();
 		
-		/* executor is used to start the FutureTask */
+		/*---- Executor is used to start the FutureTask -----*/
 		ExecutorService executor = Executors.newFixedThreadPool(2);
+
 		/* Created futureTask for SearchResponse 
 		 * call() method is used to request the Google Api to get result and stored 
 		 * in the futureTask object*/
-		FutureTask<SearcherResponse> futureTask = new FutureTask<SearcherResponse>(new Callable<SearcherResponse>(){
-
+		FutureTask<SearcherResponse> futureTask = new FutureTask<SearcherResponse>(new Callable<SearcherResponse>() {
 			@Override
 			public SearcherResponse call() throws Exception {
 				/* RestTemplate is a class that contains getForObject method 
-		   		to get the value from the Google Api and stored as object */ 
-				return restTemplate.getForObject(finalUrl,SearcherResponse.class);
+		   		to get the value from the Google Api and stored as object */
+				return restTemplate.getForObject(finalUrl, SearcherResponse.class);
 			}
-			
 		});
-		/* method to execute the futureTask */
+		/*---- Method to execute the futureTask ----*/
 		executor.execute(futureTask);
 		try {
-			searchResponse=futureTask.get();
+			searchResponse = futureTask.get();
 		} catch (ExecutionException e1) {
 			e1.printStackTrace();
 		}
 		return CompletableFuture.completedFuture(searchResponse);
-		
 	}
-
 }
 
 
