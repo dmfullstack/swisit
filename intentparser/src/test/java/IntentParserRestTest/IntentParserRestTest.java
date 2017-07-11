@@ -1,49 +1,29 @@
 package IntentParserRestTest;
-//import static org.hamcrest.CoreMatchers.is;
 
 import com.stackroute.swisit.intentparser.assembler.HeteoasLinkAssembler;
-import com.stackroute.swisit.intentparser.controller.IntentParserRestController;
-import com.stackroute.swisit.intentparser.domain.*;
-import com.stackroute.swisit.intentparser.assembler.HeteoasLinkAssembler;
-import com.stackroute.swisit.intentparser.controller.IntentParserRestController;
 import com.stackroute.swisit.intentparser.domain.*;
 import com.stackroute.swisit.intentparser.repository.IntentRepository;
 import com.stackroute.swisit.intentparser.repository.RelationshipRepository;
 import com.stackroute.swisit.intentparser.repository.TermRepository;
 import com.stackroute.swisit.intentparser.service.IntentParseAlgo;
-import com.stackroute.swisit.intentparser.service.IntentParserService;
-import com.stackroute.swisit.intentparser.subscriber.SubscriberImpl;
-import com.stackroute.swisit.intentparser.repository.IntentRepository;
-import com.stackroute.swisit.intentparser.repository.RelationshipRepository;
-import com.stackroute.swisit.intentparser.repository.TermRepository;
-import com.stackroute.swisit.intentparser.service.IntentParseAlgo;
-import com.stackroute.swisit.intentparser.service.IntentParserService;
 import com.stackroute.swisit.intentparser.subscriber.SubscriberImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.util.*;
-
 import static junit.framework.TestCase.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = IntentParserRestController.class)
-@WebMvcTest(controllers= IntentParserRestController.class)
+
 
 public	class IntentParserRestTest{
 	@Autowired
@@ -66,9 +46,6 @@ public	class IntentParserRestTest{
 
 
 	@MockBean
-	private IntentParserService intentParserService;
-
-	@MockBean
 	private IntentParserResult intentParserResult;
 
 	@MockBean
@@ -80,31 +57,10 @@ public	class IntentParserRestTest{
 	@MockBean
 	private SubscriberImpl subscriberImpl;
 
-	@InjectMocks
-	private IntentParserRestController intentParserRestController;
-
 	@Before
 	public void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
-	}
-
-	@Test
-	public void fetchNeoData() throws Exception
-	{
-
-		String expectedstring="{"+"\"message\":\"Data received successfully\""+"}";
-		mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/parse/fetch"))
-				.andExpect(status().isOk());
-	}
-
-	@Test
-	public void intentParserResponse() throws Exception
-	{
-
-		String expectedstring="{"+"\"message\":\"Data received successfully\""+"}";
-		mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/parse/"))
-				.andExpect(status().isOk());
 	}
 
 	@Test
@@ -145,22 +101,6 @@ public	class IntentParserRestTest{
 		Assert.assertEquals("basics", intent.getName());
 		Assert.assertEquals("2", intent.getNodeid());
 	}
-
-//
-//	@Test
-//	public void equalGraphsWhichHaveAllIndicatorOf()
-//	{
-//		Term term= new Term();
-//		term.setName("how to code");
-//		Intent intent= new Intent();
-//		intent.setName("getting started");
-//		IndicatorOf indicatorOf=new IndicatorOf();
-//		indicatorOf.setIntent(indicatorOf.getIntent());
-//		indicatorOf.setTerm(indicatorOf.getTerm());
-//		indicatorOf.setWeight("7");
-//		Iterable<Map<String,Object>> indicator = relationshipRepository.getAllIndicator();
-//
-//	}
 
 	@Test
 	public void equalGraphsWithBothRelationShip()
@@ -215,12 +155,6 @@ public	class IntentParserRestTest{
 		assertEquals(7f,relationships1.getWeight());
 
 	}
-//	@Test
-//	public void equalGraphsWhichGetAllRelationships()
-//	{
-//
-//	}
-
 
 	@Test
 	public void toCalculateConfidenceScore()

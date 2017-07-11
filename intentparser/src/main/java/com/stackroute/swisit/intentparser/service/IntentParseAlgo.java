@@ -9,7 +9,5 @@ import java.util.List;
 /*-------Intent Parser Algorithms Interface Class--------*/
 public interface IntentParseAlgo {
 
-    public List<IntentParserResult> calculateConfidence(Iterable<CrawlerResult> intentInput);
-    public ArrayList<IntentParserResult> calculateConfidenceScore(CrawlerResult intentParserInput/*, List<Intent> intentList*/);
-    public void get(CrawlerResult cr);
+    public ArrayList<IntentParserResult> calculateConfidenceScore(CrawlerResult intentParserInput);
 }
