@@ -30,9 +30,8 @@ import com.stackroute.swisit.searcher.intialconsumer.IntialConsumer;
 import com.stackroute.swisit.searcher.intialproducer.IntialProducer;
 import com.stackroute.swisit.searcher.loadbalancing.LoadBalancing;
 import com.stackroute.swisit.searcher.messageservice.MessageService;
-import com.stackroute.swisit.searcher.repository.SearcherJobRepository;
 import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
-import com.stackroute.swisit.searcher.searcherservice.SearchServiceImpl;
+import com.stackroute.swisit.searcher.searcherservice.SearcherServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,14 +41,14 @@ import io.swagger.annotations.ApiResponse;
 @RestController
 @RequestMapping(value="v1/api/swisit/searcher")
 @Api(value="SWIS-IT", description="Operations pertaining to the SearcherService")
-public class SearchController {
+public class SearcherController {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	MessageSource messageSource;
 	@Autowired
-	private SearchServiceImpl searchServiceImpl;
+	private SearcherServiceImpl searchServiceImpl;
 	@Autowired
 	private  IntialProducer intialproducer;
     @Autowired
@@ -77,13 +76,6 @@ public class SearchController {
     }
     )
 	
-	/*---------------------------Get data by query--------------------------------*/
-	@RequestMapping(value="/find/{query}", method=RequestMethod.GET)
-	@Cacheable(value = "Java object",key = "#query")
-	public ResponseEntity findByQuery(@PathVariable String query)
-	{
-		return new ResponseEntity("success",HttpStatus.OK);
-	}
 	
 	/*------------------------To get data from Google API----------------------------------------------*/
 	
@@ -120,28 +112,29 @@ public class SearchController {
         logger.info(consumeSearcherJob.getDomain()+" "+consumeSearcherJob.getConcept());
         String domain = consumeSearcherJob.getDomain();
 		List concept = consumeSearcherJob.getConcept();
+		List<String> queryList=new ArrayList<String>();
+		List<String> conceptList =  new ArrayList<String>();
 		int flag = 0;
         try {
         		
         		/* To find the given domain and concept already present in DB */
-        		List<String> queryList=new ArrayList<String>();
-        		List<String> conceptList =  new ArrayList<String>();
+        		
         		if(searcherResultRepository.findAll().isEmpty())
         		{
-        			System.out.println("is empty");
-        			searchServiceImpl.saveAllSearcherResult(consumeSearcherJob);
+        			 searchServiceImpl.saveAllSearcherResult(consumeSearcherJob);
         			 hateoasLink = hateoesAssembler.getLinksPost();
                      return new ResponseEntity(hateoasLink,HttpStatus.OK);
         		}
         		else
         		{
-        			System.out.println("not empty");
         			for(SavingSearcherResult savingSearcherResult:searcherResultRepository.findAll()){
             			queryList.add(savingSearcherResult.getQuery());
         			}
+        			/* loop for different concept */
         			for(int i=0;i<concept.size();i++)
             		{
             			String query = domain+" "+concept.get(i);
+            			/* loop for checking the query with the database */
             			for(int j=0;j<queryList.size();j++)
             			{
             				if(query.equals(queryList.get(j)))
@@ -153,6 +146,7 @@ public class SearchController {
             					flag=0;
             				}
             			}
+            			/* Add concept to the list which is not present in database */
             			if(flag==0)
             			{
             				conceptList.add((String) concept.get(i));
@@ -167,8 +161,8 @@ public class SearchController {
         			else
         			{
         				consumeSearcherJob.setConcept(conceptList);
+        				/* To send the details to coreCrawler service */
         				searchServiceImpl.saveAllSearcherResult(consumeSearcherJob);
-        				System.out.println("after service");
                         hateoasLink = hateoesAssembler.getLinksPost();
                         return new ResponseEntity(hateoasLink,HttpStatus.OK);
         			}
@@ -180,60 +174,7 @@ public class SearchController {
         }
 		return new ResponseEntity(hateoasLink,HttpStatus.OK);
     }		
-        		
-        	
-	@RequestMapping(value="/post", method=RequestMethod.POST)
-    public ResponseEntity saveSearcherJob1(@RequestBody SearcherJob produceSearcherJob) throws SearcherServiceException, Exception
-    {
-		Locale locale = LocaleContextHolder.getLocale();
-		
-		/* This is used for producing dummy messages */
-		//SearcherJob produceSearcherJob=AssignSearcherJob();
-        intialproducer.publishMessage("tosearcher", produceSearcherJob);
-        
-        
-        /* This is used to get message from kafka */
-        SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher");
-        logger.info(consumeSearcherJob.getDomain()+" "+consumeSearcherJob.getConcept());
-        try {
-        		String domain = consumeSearcherJob.getDomain();
-        		List concept = consumeSearcherJob.getConcept();
-        		int flag = 0;
-        		/* To find the given domain and concept already present in DB */
-        		List<String> l=new ArrayList<String>();
-        		if(searcherResultRepository.findAll().isEmpty())
-        		{
-        			System.out.println("is empty");
-        		}
-        		else
-        		{
-        			System.out.println("not empty");
-        		}
-        }
-        catch(Exception e)
-        {
-        	e.printStackTrace();
-        }
-        return new ResponseEntity("data inserted",HttpStatus.OK);
-    }
-    
-	
-	
-	
-	
-	/*--------------------Dummy producer for Searcher Service--------------------------- */
-	public SearcherJob AssignSearcherJob(){
-        List<String> list=new ArrayList<String>();
-        list.add("class");
-        list.add("interface");
-        /* setting all values for SearcherJob */
-        searcherJob.setDomain("java");
-        searcherJob.setConcept(list);
-        searcherJob.setSitesearch("none");
-        searcherJob.setResults("10");
-        return searcherJob;
-    }
-	
+        			
 	/*-----------------produce message through kafka for load balancing------------------- */
 	@RequestMapping(value="producer",method=RequestMethod.GET)
     public ResponseEntity producer()
@@ -243,7 +184,7 @@ public class SearchController {
         return new ResponseEntity("success",HttpStatus.OK);
     }
     
-	/*-----------------------consume message from kafka------------------------------------ */
+	/*-----------------------consume message from kafka for load balancing------------------------------------ */
     @RequestMapping(value="consumer",method=RequestMethod.GET)
     public ResponseEntity consumer()
     {

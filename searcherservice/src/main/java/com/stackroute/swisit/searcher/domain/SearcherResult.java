@@ -1,18 +1,11 @@
 package com.stackroute.swisit.searcher.domain;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.redis.core.RedisHash;
 import org.springframework.hateoas.ResourceSupport;
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document

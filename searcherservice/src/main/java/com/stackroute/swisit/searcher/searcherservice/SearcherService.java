@@ -7,7 +7,7 @@ import com.stackroute.swisit.searcher.domain.SearcherJob;
 import com.stackroute.swisit.searcher.domain.SearcherResult;
 import com.stackroute.swisit.searcher.exception.SearcherServiceException;
 
-public interface SearchService {
+public interface SearcherService {
 	
 	public Iterable<SearcherResult> saveAllSearcherResult(SearcherJob searcherJob) throws JsonProcessingException, InterruptedException, ExecutionException;
 	public Iterable<SearcherResult> getAllSearcherResult();

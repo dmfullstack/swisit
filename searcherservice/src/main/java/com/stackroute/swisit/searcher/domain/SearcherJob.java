@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Document
 @JsonSerialize
-//@RedisHash("SearcherJob")
 /* To perform task on searcherJob */
 public class SearcherJob extends ResourceSupport{
 	@Id

@@ -33,18 +33,15 @@ import com.stackroute.swisit.searcher.exception.SearcherServiceException;
 import com.stackroute.swisit.searcher.messageservice.MessageService;
 import com.stackroute.swisit.searcher.messageservice.MessageServiceImpl;
 import com.stackroute.swisit.searcher.publisher.Publisher;
-import com.stackroute.swisit.searcher.repository.SearcherJobRepository;
 import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
 
 
 @Service
-public class SearchServiceImpl implements SearchService {
+public class SearcherServiceImpl implements SearcherService {
 	
 	@Autowired
 	private SearcherResultRepository searcherResultRepository;
 	
-	@Autowired
-	private SearcherJobRepository searcherJobRepository;
 	
 	@Autowired
 	Publisher kafkaconfig;
@@ -66,7 +63,7 @@ public class SearchServiceImpl implements SearchService {
 	List<String> concept;
 	List<LinkedHashMap<String,String>> engineid = new ArrayList<LinkedHashMap<String,String>>();
 	/* To Make the Google Api Async */
-	SearchServiceAsync SearchServiceAsync = new SearchServiceAsync();
+	SearcherServiceAsync SearchServiceAsync = new SearcherServiceAsync();
 	
 	/* save the search result for the query into SearchResult class */
 	@Override
@@ -103,7 +100,6 @@ public class SearchServiceImpl implements SearchService {
 					concept = searcherJob.getConcept();
 					for(int k=0;k<concept.size();k++)
 					{
-						System.out.println("first loop" +concept.get(k));
 						String query = domain+" "+concept.get(k);	
 						engineid = searcherJob.getEngineId();
 						for(Map<String, String> map : engineid){
@@ -114,7 +110,6 @@ public class SearchServiceImpl implements SearchService {
 						
 						for(int i=1;i<=11;i=i+10)
 						{	
-							System.out.println("inside second loop");
 							url2 = query+"&start="+i+url1;
 							String finalUrl = url+url2;
 							searcherResponse = (CompletableFuture<SearcherResponse>) SearchServiceAsync.getSearchResult(finalUrl);						
@@ -141,14 +136,6 @@ public class SearchServiceImpl implements SearchService {
 									catch (JsonProcessingException e) {
 										e.printStackTrace();
 									}
-									//						SearcherResult s;
-									//						redisTemplate.opsForHash().put(searcherResult.getQuery(), searcherResult.getConcept(), searcherResultRef);
-									//redisTemplate.opsForList("SearcherResult",searcherResult);
-									//redisTemplate.opsForSet.add("SearcherResult",searcherResult);
-									/* saving the searcherResult to mongoDB */
-									//						System.out.println("before redis store");
-									//						redisTemplate.opsForHash().put("SResult",searcherResult.getQuery(),searcherResult);
-									//searcherResultRepository.save(searcherResult);
 								}
 								
 							}

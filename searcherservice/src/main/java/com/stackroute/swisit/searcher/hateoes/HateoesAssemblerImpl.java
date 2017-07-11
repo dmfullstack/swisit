@@ -8,65 +8,52 @@ import java.util.List;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
-import com.stackroute.swisit.searcher.controller.SearchController;
+import com.stackroute.swisit.searcher.controller.SearcherController;
 import com.stackroute.swisit.searcher.domain.SavingSearcherResult;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 import com.stackroute.swisit.searcher.domain.SearcherResult;
 @Service
 public class HateoesAssemblerImpl implements HateoesAssembler{
-	/* link used in post method */
+	/* Used to return link when the post method is called */
 	@Override
 	public List getLinksPost() {
 		List sb=new ArrayList();
-		Link postQuery = linkTo(SearchController.class).slash("").withSelfRel();
+		Link postQuery = linkTo(SearcherController.class).slash("").withSelfRel();
 		sb.add(postQuery);
 		        
-		Link getAll = linkTo(SearchController.class).slash("").withRel("GetSearcherResult");
+		Link getAll = linkTo(SearcherController.class).slash("").withRel("GetSearcherResult");
 		sb.add(getAll);
 		
-		Link getQuery = linkTo(SearchController.class).slash("/getsearcherjob").withRel("GetJob");
+		Link getQuery = linkTo(SearcherController.class).slash("/getsearcherjob").withRel("GetJob");
         sb.add(getQuery);
 		    
 		 return sb;
 		}
 
-	/* Hateoas link used in urlgetquery */
-	@Override
-	public List<SearcherJob> getAllQuery(List<SearcherJob> all) {
-		 for ( SearcherJob sb : all) {
-		        Link postQuery = linkTo(SearchController.class).slash("").withRel("PostJob");
-		        sb.add(postQuery);
-		        Link getQuery = linkTo(SearchController.class).slash("/getsearcherjob").withRel("GetJob");
-		        sb.add(getQuery);
-		        Link getAll = linkTo(SearchController.class).slash("").withRel("GetSearcherResult");
-		        sb.add(getAll);
-		    }
-		 return all;
-		}
-
+	/* Used to return if domain and concept is already present */
 	@Override
 	public List getLinksPostError() {
 		List sb=new ArrayList();
 		sb.add("Document Already Inserted");
-		Link postQuery = linkTo(SearchController.class).slash("").withSelfRel();
+		Link postQuery = linkTo(SearcherController.class).slash("").withSelfRel();
 		sb.add(postQuery);
 		        
-		Link getAll = linkTo(SearchController.class).slash("").withRel("GetSearcherResult");
+		Link getAll = linkTo(SearcherController.class).slash("").withRel("GetSearcherResult");
 		sb.add(getAll);
 		
-		Link getQuery = linkTo(SearchController.class).slash("/getsearcherjob").withRel("GetJob");
+		Link getQuery = linkTo(SearcherController.class).slash("/getsearcherjob").withRel("GetJob");
         sb.add(getQuery);    
 		return sb;
 	}
-	/* Hateoas link used in get method */
+	/* Used to get all the SearcherResult */
 	@Override
 	public List<SavingSearcherResult> getAllLinks(List<SavingSearcherResult> all) {
 		for ( SavingSearcherResult sb : all) {
-	        Link postQuery = linkTo(SearchController.class).slash("").withRel("PostJob");
+	        Link postQuery = linkTo(SearcherController.class).slash("").withRel("PostJob");
 	        sb.add(postQuery);
-	        Link getQuery = linkTo(SearchController.class).slash("/getsearcherjob").withRel("GetJob");
+	        Link getQuery = linkTo(SearcherController.class).slash("/getsearcherjob").withRel("GetJob");
 	        sb.add(getQuery);
-	        Link getAll = linkTo(SearchController.class).slash("").withSelfRel();
+	        Link getAll = linkTo(SearcherController.class).slash("").withSelfRel();
 	        sb.add(getAll);
 	    }
 	 return all;

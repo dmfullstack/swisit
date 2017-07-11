@@ -33,45 +33,13 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 @EnableEurekaClient
 @EnableAsync
 //@EnableRedisRepositories
-public class SwisitApplication extends CachingConfigurerSupport{
+public class SearcherServiceApplication extends CachingConfigurerSupport{
 
 	
 	public static void main(String[] args) {
 				
-		SpringApplication.run(SwisitApplication.class, args);
+		SpringApplication.run(SearcherServiceApplication.class, args);
 	}
-	
-	/* Jedis ConnectionFactory */
-	/*@Bean
-	RedisConnectionFactory connectionFactory()
-	{
-		return new JedisConnectionFactory();
-	}
-
-     redis template definition 
-	@Bean
-	 RedisTemplate< String, Object > redisTemplate() {
-	  final RedisTemplate< String, Object > template =  new RedisTemplate< String, Object >();
-	  template.setConnectionFactory( connectionFactory() );
-	  template.setExposeConnection(true);
-	  template.setKeySerializer( new StringRedisSerializer() );
-	  template.setHashValueSerializer( new GenericToStringSerializer< Object >( Object.class ) );
-	  template.setValueSerializer( new GenericToStringSerializer< Object >( Object.class ) );
-	  return template;
-	 }
-*/	
-	
-//	 /* declare Redis Cache Manager */
-//    @Bean(name="cacheManager")
-//    @Override
-//    public RedisCacheManager cacheManager()
-//    {
-//        RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate());
-//        redisCacheManager.setTransactionAware(true);
-//        redisCacheManager.setLoadRemoteCachesOnStartup(true);
-//        redisCacheManager.setUsePrefix(true);
-//        return redisCacheManager;
-//    }
 	/* Defining the default language for Internationalization */
     @Bean
     public LocaleResolver localeResolver() {

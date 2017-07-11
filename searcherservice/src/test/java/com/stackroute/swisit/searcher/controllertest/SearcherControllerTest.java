@@ -20,17 +20,16 @@ package com.stackroute.swisit.searcher.controllertest;
 	import org.springframework.web.bind.annotation.RequestBody;
 	import org.springframework.web.context.WebApplicationContext;
 
-import com.stackroute.swisit.searcher.controller.SearchController;
+import com.stackroute.swisit.searcher.controller.SearcherController;
 import com.stackroute.swisit.searcher.domain.SearcherResponse;
 	import com.stackroute.swisit.searcher.domain.SearcherJob;
 	import com.stackroute.swisit.searcher.hateoes.HateoesAssembler;
 	import com.stackroute.swisit.searcher.intialconsumer.IntialConsumerImpl;
 	import com.stackroute.swisit.searcher.intialproducer.IntialProducerImpl;
 	import com.stackroute.swisit.searcher.loadbalancing.LoadBalancing;
-	import com.stackroute.swisit.searcher.repository.SearcherJobRepository;
 	import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
-	import com.stackroute.swisit.searcher.searcherservice.SearchService;
-	import com.stackroute.swisit.searcher.searcherservice.SearchServiceImpl;
+	import com.stackroute.swisit.searcher.searcherservice.SearcherService;
+	import com.stackroute.swisit.searcher.searcherservice.SearcherServiceImpl;
 	import java.util.*;
 	import javax.naming.directory.SearchResult;
 	import static junit.framework.TestCase.assertEquals;
@@ -39,8 +38,8 @@ import com.stackroute.swisit.searcher.domain.SearcherResponse;
 	import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 	@RunWith(SpringJUnit4ClassRunner.class)
 	@WebAppConfiguration
-	@ContextConfiguration(classes = SearchController.class)
-	@WebMvcTest(controllers=SearchController.class)
+	@ContextConfiguration(classes = SearcherController.class)
+	@WebMvcTest(controllers=SearcherController.class)
 	public class SearcherControllerTest{
 	   
 	   @Autowired
@@ -54,11 +53,9 @@ import com.stackroute.swisit.searcher.domain.SearcherResponse;
 	   private IntialConsumerImpl intialConsumerImpl;
 	   
 	   @MockBean
-	   private SearchServiceImpl searchService;
+	   private SearcherServiceImpl searchService;
 	   @Autowired
 	   private WebApplicationContext webApplicationContext;
-	   @MockBean
-	   private SearcherJobRepository searcherJobRepository;
 	   @MockBean
 	   private SearcherResultRepository searcherResultRepository; 
 	   @MockBean
@@ -78,7 +75,7 @@ import com.stackroute.swisit.searcher.domain.SearcherResponse;
 	   @MockBean
 	   private MessageSource messageSource;
 	   @InjectMocks
-	   private SearchController searchController;
+	   private SearcherController searchController;
 	   
 	  
 	        @Before

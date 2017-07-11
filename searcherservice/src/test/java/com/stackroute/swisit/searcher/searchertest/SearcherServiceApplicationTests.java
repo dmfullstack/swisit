@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @DirtiesContext
-public class SwisitApplicationTests {
+public class SearcherServiceApplicationTests {
 
 	@Autowired
 	DiscoveryClient discoveryClient;

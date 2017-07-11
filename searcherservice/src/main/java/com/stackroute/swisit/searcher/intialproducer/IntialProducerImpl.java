@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 @Service
 public class IntialProducerImpl implements IntialProducer{
-
-	@Value("${brokerid}")
-	String brokerid;
+	
 	/* kafka producer for searcherJob */
 	@Override
 	public void publishMessage(String topic, SearcherJob message) throws JsonProcessingException {

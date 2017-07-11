@@ -26,7 +26,7 @@ import com.stackroute.swisit.searcher.messageservice.MessageService;
 import com.stackroute.swisit.searcher.messageservice.MessageServiceImpl;
 import com.stackroute.swisit.searcher.repository.SearcherResultRepository;
 @Service
-public class SearchServiceAsync {
+public class SearcherServiceAsync {
 	
 	@Autowired
 	MessageService kafkaconfig;
@@ -39,7 +39,7 @@ public class SearchServiceAsync {
 	
 	List<SearcherResult> searcherResultList=new ArrayList<SearcherResult>();
 	
-	private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SearcherService.class);
 	
 	/* Returns SearcherResult as Async to the SearchServiceImpl class */
 	@Async

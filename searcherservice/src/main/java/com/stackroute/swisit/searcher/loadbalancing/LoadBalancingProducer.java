@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoadBalancingProducer implements LoadBalancing{
 	
-	@Value("${brokerid}")
-	String brokerid;
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -30,7 +28,7 @@ public class LoadBalancingProducer implements LoadBalancing{
     
          Properties configProperties = new Properties();
          /* configuring the properties for kafka */
-         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
+         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
          configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
          configProperties.put("value.serializer","org.apache.kafka.common.serialization.StringSerializer");
             Producer producer = new KafkaProducer(configProperties);   

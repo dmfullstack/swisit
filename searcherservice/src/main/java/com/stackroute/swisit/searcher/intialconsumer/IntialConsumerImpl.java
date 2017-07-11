@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 @Service
 public class IntialConsumerImpl implements IntialConsumer{
-	@Value("${brokerid}")
-	String brokerid;
+	
 	/* kafka consumer for searcherJob */
 	@Override
 	public SearcherJob listenMessage(String topic) {
