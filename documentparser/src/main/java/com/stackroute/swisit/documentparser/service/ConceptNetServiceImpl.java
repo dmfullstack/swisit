@@ -20,7 +20,6 @@ public class ConceptNetServiceImpl implements ConceptNetService {
 
         HashMap<String,HashMap<String,Integer>> resultMap = new HashMap<>();
         List<Term> termsList = neo4jParserService.getTerms();
-        System.out.println("Inside create document model");
         try {
             if (input == null) {
                 throw new DocumentModelNotCreatedException(" Document model creation failed");
@@ -32,9 +31,7 @@ public class ConceptNetServiceImpl implements ConceptNetService {
                 while (entries.hasNext()) {
                     Map.Entry<String, List<String>> entry = entries.next();
                     String tag = entry.getKey();
-                    //System.out.println("My tag is ========"+tag);
                     List<String> textValue = entry.getValue();
-                    //tagTextMap = null;
                     int count = Collections.frequency(textValue, term.getName());
                     tagTextMap.put(tag, count);
                 }

@@ -23,6 +23,13 @@
         <artifactId>spring-boot-starter-web</artifactId>
         <version>1.5.4.RELEASE</version>
     </dependency>
+    
+    <!-- ############################Eureka Dependencies #############################-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+		</dependency>
+		
     <!--############################# Neo4j Dependency #######################################-->
     <dependency>
     <groupId>org.springframework.boot</groupId>

@@ -1,10 +1,10 @@
 server:
  port: 9000
 
-#searcherservice:
-#  ribbon:  
-#    listOfServers: localhost:8060,localhost:8061,localhost:8062
-#    ServerListRefreshInterval: 15000 
+searcherservice:
+  ribbon:  
+    listOfServers: localhost:8060,localhost:8061,localhost:8062
+    ServerListRefreshInterval: 15000 
     
 crawlerservice:
   ribbon:  

@@ -36,7 +36,11 @@
 			<scope>test</scope>
 		</dependency>
 
-
+	<!-- ############################Eureka Dependencies #############################-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

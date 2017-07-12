@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -65,6 +66,9 @@ public class SearcherController {
 	List hateoasLink = null;
 	List hateoasLinkRef = null;
 	
+	@Value("${initialtopic}")
+	String initialtopic;
+	
 	/*------------------------ Swagger Implementation ---------------------------*/
 	@ApiOperation(value = "View a list of URLs from Google")
     @ApiResponses(value = {
@@ -95,9 +99,9 @@ public class SearcherController {
     public ResponseEntity saveSearcherJob(@RequestBody SearcherJob produceSearcherJob) throws SearcherServiceException, Exception {
 		Locale locale = LocaleContextHolder.getLocale();
 		/*----Used for producing dummy messages -----*/
-        intialproducer.publishMessage("tosearcher", produceSearcherJob);
+        intialproducer.publishMessage(initialtopic, produceSearcherJob);
         /*------ Get message from kafka -----*/
-        SearcherJob consumeSearcherJob = intialConsumer.listenMessage("tosearcher");
+        SearcherJob consumeSearcherJob = intialConsumer.listenMessage(initialtopic);
         logger.info(consumeSearcherJob.getDomain()+" "+consumeSearcherJob.getConcept());
         String domain = consumeSearcherJob.getDomain();
 		List concept = consumeSearcherJob.getConcept();
@@ -137,7 +141,7 @@ public class SearcherController {
         			}
         			else {
         				consumeSearcherJob.setConcept(conceptList);
-        				/*---- To send the details to coreCrawler service -----*/
+        				/*---- To send the details to CoreCrawler service -----*/
         				searcherServiceImpl.saveAllSearcherResult(consumeSearcherJob);
                         hateoasLink = hateoesAssembler.getLinksPost();
                         return new ResponseEntity(hateoasLink,HttpStatus.OK);

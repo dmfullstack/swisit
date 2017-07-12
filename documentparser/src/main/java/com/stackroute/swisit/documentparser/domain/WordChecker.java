@@ -10,9 +10,6 @@ public class WordChecker {
 	@JsonProperty("word")
 	private String word;
 
-	
-	
-	
 	public WordChecker(String word) {
 		super();
 		this.word = word;

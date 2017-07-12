@@ -17,18 +17,19 @@ import com.stackroute.swisit.searcher.domain.SearcherResult;
 @Service
 public class PublisherImpl implements Publisher {
 
+	@Value("${brokerid}")
+	String brokerid;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void publishMessage(String topic, SearcherResult message) throws JsonProcessingException {
 		Properties configProperties = new Properties();
 		/*---- Configure properties for Kafka -----*/
-		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
+		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
 		configProperties.put("key.serializer","org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.searcher.kafkaserialization.SwisitSerializer");
 		Producer producer = new KafkaProducer(configProperties);
 		ProducerRecord<String, SearcherResult> producerRecord = new ProducerRecord<String, SearcherResult>(topic,message);
-		logger.info("topic is "+topic+" "+"link is "+message.getTitle()+" "+message.getUrl());
 		producer.send(producerRecord);
 		producer.close();
 	}

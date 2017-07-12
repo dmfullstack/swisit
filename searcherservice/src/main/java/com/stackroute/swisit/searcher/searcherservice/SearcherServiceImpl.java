@@ -53,6 +53,9 @@ public class SearcherServiceImpl implements SearcherService {
 
 	@Value("${key}")
 	String key;
+	
+	@Value("${publishertopic}")
+	String publishertopic;
 
 	String domain="";
 	String url1;
@@ -96,7 +99,7 @@ public class SearcherServiceImpl implements SearcherService {
 						break;
 					}
 					SavingSearcherResult savingSearcherResult =  new SavingSearcherResult();
-					for(int i=1;i<=11;i=i+10) {
+					for(int i=1;i<=1;i=i+10) {
 						url2 = query+"&start="+i+url1;
 						String finalUrl = url+url2;
 						searcherResponse = (CompletableFuture<SearcherResponse>) searchServiceAsync.getSearchResult(finalUrl);
@@ -113,7 +116,7 @@ public class SearcherServiceImpl implements SearcherService {
 									searcherResultList.add(searcherResult);
 									try {
 										/*--- Publish the searcherResult object to kafka ---*/
-										publisher.publishMessage("testcontrolfinal3", searcherResult);
+										publisher.publishMessage(publishertopic, searcherResult);
 									} 
 									catch (JsonProcessingException e) {
 										e.printStackTrace();

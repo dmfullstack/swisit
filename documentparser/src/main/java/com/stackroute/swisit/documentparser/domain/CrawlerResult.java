@@ -18,10 +18,6 @@ public class CrawlerResult extends ResourceSupport {
 
 	/*-------------Private variables of domain class------------*/
 
-	@JsonProperty("query")
-	@NotNull
-	private String query;
-
 	@JsonProperty("concept")
 	@NotNull
 	private String concept;
@@ -51,10 +47,9 @@ public class CrawlerResult extends ResourceSupport {
 	}
 
 	/*----------Parameterized Constructor of Crawler Result Class---------*/
-	public CrawlerResult(String query,String concept, String link, String document, String title, String snippet,
+	public CrawlerResult(String concept, String link, String document, String title, String snippet,
 			Date lastindexedof) {
 		super();
-		this.query = query;
 		this.concept=concept;
 		this.link = link;
 		this.document = document;
@@ -79,14 +74,6 @@ public class CrawlerResult extends ResourceSupport {
 	
 	public void setLastindexedof(Date lastindexedof) {
 		this.lastindexedof = lastindexedof;
-	}
-	
-	public String getQuery() {
-		return query;
-	}
-	
-	public void setQuery(String query) {
-		this.query = query;
 	}
 	
 	public String getLink() {

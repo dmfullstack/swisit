@@ -1,12 +1,13 @@
 package com.stackroute.swisit.crawler;
 
-import java.io.File;
+
 /*--------------- Importing Libraries --------------*/
 import java.io.IOException;
 
-import java.util.List;
+
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,35 +16,33 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import com.couchbase.client.deps.com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.stackroute.swisit.crawler.domain.SearcherResult;
-import com.stackroute.swisit.crawler.service.MasterScannerServiceImpl;
-import com.stackroute.swisit.crawler.subscriber.KafkaSubscriberImpl;
 import com.stackroute.swisit.crawler.threadconsumer.KafkaConsumer;
-//import com.stackroute.swisit.intentparser.threadconsumer.KakfaConsumer;
+
 
 /*-------------Spring Boot Application Main Class--------------*/
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableEurekaClient
 public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 	
-	@Value("${topic-fromconsumer}")
-	static String consumerTopic;
+	@Autowired
+	private static Environment environment;
 
 	/*-----------------Main method where execution starts ------------------*/
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 		
 		ConfigurableApplicationContext applicationContext =SpringApplication.run(CoreCrawlerMainApplication.class, args);
-		 KafkaConsumer kakfaConsumer = applicationContext.getBean(KafkaConsumer.class);
-	        kakfaConsumer.consumeMessage("testcontrolfinal1");
+		
+		KafkaConsumer kakfaConsumer = applicationContext.getBean(KafkaConsumer.class);
+	    kakfaConsumer.consumeMessage();
+	    
 		//KafkaSubscriberImpl kafkaSubscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
 		//List<SearcherResult> list=kafkaSubscriberImpl.receivingMessage("testcontrolfinal");
 		//SearcherResult searcherResult[]= new SearcherResult[list.size()];

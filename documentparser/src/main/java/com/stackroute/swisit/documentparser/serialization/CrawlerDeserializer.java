@@ -19,15 +19,15 @@ public class CrawlerDeserializer implements Deserializer<CrawlerResult>{
 	@Override
 	public CrawlerResult deserialize(String arg0, byte[] arg1) {
 		ObjectMapper objectMapper=new ObjectMapper();
-		CrawlerResult c=null;
+		CrawlerResult crawlerResult=null;
 		try{
 			//logger.info(arg1.toString());
-			c=objectMapper.readValue(arg1,CrawlerResult.class);
+			crawlerResult=objectMapper.readValue(arg1,CrawlerResult.class);
 			}
 		catch(Exception e){
-			logger.info("hi this "+e);
+			logger.info("Cannot Deserializer"+e);
 		}
-		return c;
+		return crawlerResult;
 	}
 	
 	/*-- Overriding configure method of Deserializer --*/

@@ -1,0 +1,11 @@
+spring:
+ data:
+  neo4j:
+   uri: http://172.23.239.174:7474
+   username: neo4j
+   password: root123
+brokerid: 172.23.239.165:9092
+topic-fromconsumer: testcontrol
+topic-toproducer: todocumentparser
+server:
+  port: 8060

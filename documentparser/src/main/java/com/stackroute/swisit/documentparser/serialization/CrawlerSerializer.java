@@ -17,14 +17,14 @@ public class CrawlerSerializer implements Serializer<DocumentParserResult> {
 
     @Override
     public byte[] serialize(String topic, DocumentParserResult data) {
-       byte[] b=null;
+       byte[] byteArray=null;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            b = objectMapper.writeValueAsString(data).getBytes();
+            byteArray = objectMapper.writeValueAsString(data).getBytes();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return b;
+        return byteArray;
        // return new byte[0];
     }
 

@@ -35,16 +35,10 @@ public class                                                                    
                 tagList.add(titleList.get(i).get("title"));
             }
             for (String tag : tagList) {
-                //String[] strings ={};
                 String tagText = null;
                 Elements elements = document.select(tag);
                 for (Element element : elements) {
                     tagText = element.text();
-                /*stringTokenizer = new StringTokenizer(tagText,"[$&+,:;=?@#|'<>.^*()%!-]");
-                strings = null;
-                for(int i=0;stringTokenizer.hasMoreElements();i++){
-                    strings[i] = stringTokenizer.nextElement().toString();
-                }*/
                 }
                 resultMap.put(tag, tagText);
             }

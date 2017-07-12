@@ -15,12 +15,15 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 @Service
 public class IntialProducerImpl implements IntialProducer{
+	@Value("${brokerid}")
+	String brokerid;
+	
 	/*---- Kafka producer for searcherJob ----*/
 	@Override
 	public void publishMessage(String topic, SearcherJob message) throws JsonProcessingException {
 		Properties configProperties = new Properties();
 		/*--- Configure the properties for kafka ---*/
-        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.23.239.165:9092");
+        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
         configProperties.put("value.serializer","com.stackroute.swisit.searcher.kafkaserialization.QuerySerializer");
         /*---- Produce data to kafka ----*/

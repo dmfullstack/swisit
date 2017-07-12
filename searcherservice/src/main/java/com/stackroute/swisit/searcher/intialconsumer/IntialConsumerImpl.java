@@ -15,13 +15,15 @@ import org.springframework.stereotype.Service;
 import com.stackroute.swisit.searcher.domain.SearcherJob;
 @Service
 public class IntialConsumerImpl implements IntialConsumer{
+	@Value("${brokerid}")
+	String brokerid;
 	/*--- Kafka consumer for searcherJob ---*/
 	@Override
 	public SearcherJob listenMessage(String topic) {
-		Properties props = new Properties();
+			Properties props = new Properties();
 			/*--- Configuring the properties for kafka ----*/
 			props.put("group.id", "group-1");
-		    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
+		    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
 			props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		    props.put("value.deserializer", "com.stackroute.swisit.searcher.kafkaserialization.QueryDeserializer");
 		    List<SearcherJob> l=new ArrayList<SearcherJob>();

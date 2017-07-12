@@ -14,19 +14,19 @@ import com.stackroute.swisit.documentparser.service.MasterParserService;
 
 public class KafkaConsumerThread extends Thread {
 	private String topicName;
-	//private String groupId;
+	private String brokerid;
 	private KafkaConsumer<String, CrawlerResult> kafkaConsumer;
 	private MasterParserService masterScannerService;
-	//private Environment environment;
 
-	public KafkaConsumerThread(String topicName, MasterParserService masterScannerService ){
+	public KafkaConsumerThread(String brokerid, String topicName, MasterParserService masterScannerService ){
+		this.brokerid = brokerid;
 		this.topicName = topicName;
 		this.masterScannerService = masterScannerService;
 	}
 
 	public void run() {
 		Properties configProperties = new Properties();
-		configProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
+		configProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
 		configProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 		configProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.stackroute.swisit.documentparser.serialization.CrawlerDeserializer");
 		configProperties.put("group.id", "group-1");
@@ -48,8 +48,6 @@ public class KafkaConsumerThread extends Thread {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
-				System.out.println(record.value()); 
 			}
 		}
 

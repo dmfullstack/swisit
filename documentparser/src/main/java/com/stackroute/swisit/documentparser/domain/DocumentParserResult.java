@@ -15,10 +15,6 @@ import javax.validation.constraints.NotNull;
 /*--------Crawler Result Domain Class which is Input for Intent Parser Service--------*/
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DocumentParserResult {
-
-        @NotEmpty
-        @JsonProperty("query")
-        private String query;
         @NotEmpty
         @JsonProperty("concept")
         private String concept;
@@ -42,8 +38,7 @@ public class DocumentParserResult {
         public DocumentParserResult() { }
 
         /*----------Parameterized Constructor of Crawler Result Class---------*/
-        public DocumentParserResult(String query,String concept, String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof) {
-            this.query = query;
+        public DocumentParserResult(String concept, String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof) {
             this.concept = concept;
             this.link = link;
             this.terms = terms;
@@ -56,7 +51,6 @@ public class DocumentParserResult {
         @Override
         public String toString() {
             return "IntentParserInput{" +
-                    "query='" + query + '\'' +
                     "concept='" + concept + '\'' +
                     ", link='" + link + '\'' +
                     ", contentSchema=" + terms.toString() +
@@ -73,14 +67,7 @@ public class DocumentParserResult {
         public void setLastindexedof(Date lastindexedof) {
             this.lastindexedof = lastindexedof;
         }
-
-        public String getQuery() {
-            return query;
-        }
-
-        public void setQuery(String query) {
-            this.query = query;
-        }
+        
         public String getConcept() {
             return concept;
         }

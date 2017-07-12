@@ -9,7 +9,10 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,19 +24,16 @@ import com.stackroute.swisit.crawler.domain.CrawlerResult;
  */
 @Service
 public class KafkaPublisherImpl implements Publisher {
-
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/*------ Kafka broker id fetched from properties file------*/
-	
-	@Value("${broker-id}")
-	String brokerid;
+
 
 	/*-------------------method to publish message via kafka-------------------*/
-	public void publishMessage(String topicName,CrawlerResult message) throws JsonProcessingException{
+	public void publishMessage(String topicName,CrawlerResult message, String brokerid) throws JsonProcessingException{
 		Properties configProperties = new Properties();
 		/* configure properties for kafka */
-		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.23.239.165:9092");
+		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerid);
 		configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.crawler.serialization.CrawlerSerializer");
 		Producer<String, CrawlerResult> producer = new KafkaProducer<String, CrawlerResult>(configProperties);

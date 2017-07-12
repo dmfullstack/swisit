@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.apache.kafka.common.serialization.Deserializer;
+import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.stereotype.Component;
 
@@ -14,22 +16,19 @@ import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ch.qos.logback.classic.Logger;
+
 /*------- SearcherResult domain class which is the input for crawler service-----*/
 @Component
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class SearcherResult  implements Deserializer<SearcherResult> {
-	
+	private final Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 	/*-------------Private variables of domain class------------*/
-	
-    @JsonProperty("query")
-    @NotNull
-	private String query;
     
     @JsonProperty("link")
     @Pattern(regexp="(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?")
 	private String link;
-    
-    
+
 	@JsonProperty("title")
 	@NotNull
 	private String title;
@@ -55,9 +54,8 @@ public class SearcherResult  implements Deserializer<SearcherResult> {
 	}
 
 	/*----------Parameterized Constructor of Crawler Result Class---------*/
-	public SearcherResult(String query, String link, String title, String snippet) {
+	public SearcherResult(String link, String title, String snippet) {
 		super();
-		this.query = query;
 		this.link = link;
 		this.title = title;
 		this.snippet = snippet;
@@ -65,13 +63,6 @@ public class SearcherResult  implements Deserializer<SearcherResult> {
 
 	/*------------- Getters and setters for fields -----------*/
 	
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
-	}
 
 	public String getLink() {
 		return link;
@@ -108,16 +99,15 @@ public class SearcherResult  implements Deserializer<SearcherResult> {
 	@Override
 	public SearcherResult deserialize(String arg0, byte[] arg1) {
 		//return (CrawlerBean) SerializationUtils.deserialize(arg1);
-		ObjectMapper o=new ObjectMapper();
-		SearcherResult c=null;
+		ObjectMapper objectMapper=new ObjectMapper();		
+		SearcherResult searcherResult=null;
 		try{
-			System.out.println(arg1.toString());
-			c=o.readValue(arg1,SearcherResult.class);
+			searcherResult=objectMapper.readValue(arg1,SearcherResult.class);
 			}
 		catch(Exception e){
-			System.out.println("hi this "+e);
+			logger.error("Cannot Deserialize"+e);
 		}
-		return c;
+		return searcherResult;
 	}
 
 	@Override

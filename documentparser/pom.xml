@@ -25,24 +25,30 @@
 
 	<dependencies>
                 <!-- exude dependencies -->
-	<dependency>
-		<groupId>com.uttesh</groupId>
-		<artifactId>exude</artifactId>
-		<version>0.0.3</version>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.tika</groupId>
-		<artifactId>tika-core</artifactId>
-		<version>0.7</version>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.tika</groupId>
-		<artifactId>tika-parsers</artifactId>
-		<version>0.7</version>
-	</dependency>
+		<dependency>
+			<groupId>com.uttesh</groupId>
+			<artifactId>exude</artifactId>
+			<version>0.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>0.7</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		
+		<!-- ############################Eureka Dependencies #############################-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
 		</dependency>
 
 		<!-- neo4j dependencices -->

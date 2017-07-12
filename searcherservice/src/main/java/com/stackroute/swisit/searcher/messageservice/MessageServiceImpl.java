@@ -33,7 +33,7 @@ public class MessageServiceImpl implements MessageService {
 	public void publishMessage(String topic, SearcherResult message) throws JsonProcessingException {
 		Properties configProperties = new Properties();
 		/*---- Configure properties for Kafka ----*/
-		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
+		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
 		configProperties.put("key.serializer","org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.searcher.kafkaserialization.SwisitSerializer");
 		Producer producer = new KafkaProducer(configProperties);

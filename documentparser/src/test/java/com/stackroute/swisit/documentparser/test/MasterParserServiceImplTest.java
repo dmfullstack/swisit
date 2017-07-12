@@ -73,7 +73,6 @@ public class MasterParserServiceImplTest {
         crawlerResult.setConcept("Aggregation");
         crawlerResult.setLastindexedof(new SimpleDateFormat("dd/MM/yyyy").parse("10/07/2017"));
         crawlerResult.setLink("http://javarevisited.blogspot.com/2014/02/ifference-between-association-vs-composition-vs-aggregation.html");
-        crawlerResult.setQuery("Java Web Application Development Aggregation");
         crawlerResult.setSnippet("Both Composition and Aggregation are the form of association between two \n" +
                 "objects, but ... Composition vs Association vs Aggregation in Java.");
         crawlerResult.setTitle("Difference between Association, Composition and Aggregation in Java, UML and Object Oriented Programming");
@@ -88,7 +87,6 @@ public class MasterParserServiceImplTest {
         documentParserResult.setConcept("Aggregation");
         documentParserResult.setLink("http://javarevisited.blogspot.com/2014/02/ifference-between-association-vs-composition-vs-aggregation.html");
         documentParserResult.setLastindexedof(new SimpleDateFormat("dd/MM/yyyy").parse("10/07/2017"));
-        documentParserResult.setQuery("Java Web Application Development Aggregation");
         documentParserResult.setSnippet("Both Composition and Aggregation are the form of association between two \n" +
                 "objects, but ... Composition vs Association vs Aggregation in Java.");
         documentParserResult.setTerms(contentSchemaList);
@@ -97,7 +95,6 @@ public class MasterParserServiceImplTest {
         Assert.assertEquals("Aggregation",documentParserResult.getConcept());
         Assert.assertEquals("http://javarevisited.blogspot.com/2014/02/ifference-between-association-vs-composition-vs-aggregation.html",documentParserResult.getLink());
         Assert.assertEquals(new SimpleDateFormat("dd/MM/yyyy").parse("10/07/2017"),documentParserResult.getLastindexedof());
-        Assert.assertEquals("Java Web Application Development Aggregation",documentParserResult.getQuery());
         Assert.assertEquals("Both Composition and Aggregation are the form of association between two \n" +
                 "objects, but ... Composition vs Association vs Aggregation in Java.", documentParserResult.getSnippet());
         Assert.assertEquals(contentSchemaList,documentParserResult.getTerms());

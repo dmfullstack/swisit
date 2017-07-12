@@ -7,6 +7,10 @@ spring:
       password: admin123
       port: 27017
 brokerid: 172.23.239.165:9092
+initialtopic: tosearcher
+publishertopic: testcontrol
 url: https://www.googleapis.com/customsearch/v1?q=
 key: engineid
+server:
+  port: 8050
  

@@ -2,13 +2,9 @@ package com.stackroute.swisit.crawler.domain;
 
 /*---------------Importing Libraries--------------*/
 import java.util.Date;
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
-
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.stereotype.Component;
-
 import com.couchbase.client.deps.com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -18,10 +14,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class CrawlerResult extends ResourceSupport {
 
 	/*-------------Private variables of domain class------------*/
-
-	@JsonProperty("query")
-	@NotNull
-	private String query;
 
 	@JsonProperty("link")
 	@NotNull
@@ -52,10 +44,9 @@ public class CrawlerResult extends ResourceSupport {
 	}
 
 	/*----------Parameterized Constructor of Crawler Result Class---------*/
-	public CrawlerResult(String query, String link, String title, String snippet, String document,
+	public CrawlerResult(String link, String title, String snippet, String document,
 			Date lastindexedof) {
 		super();
-		this.query = query;
 		this.link = link;
 		this.title = title;
 		this.snippet = snippet;
@@ -79,14 +70,6 @@ public class CrawlerResult extends ResourceSupport {
 	
 	public void setLastindexedof(Date lastindexedof) {
 		this.lastindexedof = lastindexedof;
-	}
-	
-	public String getQuery() {
-		return query;
-	}
-	
-	public void setQuery(String query) {
-		this.query = query;
 	}
 	
 	public String getLink() {

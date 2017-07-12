@@ -1,38 +1,37 @@
 package com.stackroute.swisit.crawler.threadconsumer;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
 
+import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-//import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 
-import com.stackroute.swisit.crawler.domain.CrawlerResult;
 import com.stackroute.swisit.crawler.domain.SearcherResult;
 import com.stackroute.swisit.crawler.service.MasterScannerService;
 
-//import com.stackroute.swisit.documentparser.domain.CrawlerResult;
-//import com.stackroute.swisit.documentparser.service.MasterParserService;
-
 public class KafkaConsumerThread extends Thread {
+	
 	private String topicName;
-	//private String groupId;
+	private String brokerid;
 	private KafkaConsumer<String, SearcherResult> kafkaConsumer;
 	private MasterScannerService masterScannerService;
-	//private Environment environment;
 
-	public KafkaConsumerThread(String topicName, MasterScannerService masterScannerService ){
+	public KafkaConsumerThread(String topicName, MasterScannerService masterScannerService,String brokerid ){
 		this.topicName = topicName;
 		this.masterScannerService = masterScannerService;
+		this.brokerid = brokerid;
 	}
 
 	public void run() {
 		Properties configProperties = new Properties();
-		configProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
+		configProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,brokerid);
 		configProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 		configProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.stackroute.swisit.crawler.domain.SearcherResult");
 		configProperties.put("group.id", "group-1");
@@ -48,18 +47,13 @@ public class KafkaConsumerThread extends Thread {
 			ConsumerRecords<String, SearcherResult> records = kafkaConsumer.poll(10000);
 			for (ConsumerRecord<String, SearcherResult> record : records) {
 				SearcherResult searcherResult = new SearcherResult();
-				Set<SearcherResult> s= new HashSet<SearcherResult>();
-				
-				
-				searcherResult = record.value();
-				System.out.println(searcherResult.getLink()); 
+				searcherResult = record.value(); 
 				try {
 					masterScannerService.scanDocument(searcherResult);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 
-				//System.out.println(record.value()); 
 			}
 		}
 

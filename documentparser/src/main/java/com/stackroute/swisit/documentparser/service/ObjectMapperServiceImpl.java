@@ -21,7 +21,6 @@ public class ObjectMapperServiceImpl implements ObjectMapperService {
 
         ObjectMapper objectMapper=new ObjectMapper();
         File file= new File(filePath);
-        System.out.println(file.getName());
         List<LinkedHashMap<String,String>> list = null;
         try {
             if (filePath == null) {

@@ -1,14 +1,7 @@
-#spring:
-#  application:
-#    name: intentparser
-#  cloud:
-#    config:
-#      uri: http://localhost:8888
 spring:
-  data:
-    neo4j:
-      uri: http://localhost:7474
-      username: neo4j
-      password: root123
   application:
     name: intentparser
+  cloud:
+    config:
+      uri: http://localhost:8888
+
