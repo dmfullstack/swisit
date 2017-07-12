@@ -41,7 +41,7 @@ public class IntentParserApplication {
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext applicationContext =SpringApplication.run(IntentParserApplication.class, args);
         KakfaConsumer kakfaConsumer = applicationContext.getBean(KakfaConsumer.class);
-        kakfaConsumer.consumeMessage("tointentfinal7");
+        kakfaConsumer.consumeMessage();
     }
     /*-----------------Resolving Locale-----------------*/
     @Bean

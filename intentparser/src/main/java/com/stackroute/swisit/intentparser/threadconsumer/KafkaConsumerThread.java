@@ -16,20 +16,21 @@ import java.util.Set;
 public class KafkaConsumerThread extends Thread {
 	private String topicName;
 	private String groupId;
+	private String Brokerid;
 	private KafkaConsumer<String, CrawlerResult> kafkaConsumer;
 	private IntentParseAlgo intentParseAlgo;
 	private Environment environment;
 	//----------------------------------logger implementation----------------------------------
 
-	public KafkaConsumerThread(String topicName, IntentParseAlgo intentParseAlgo ){
-
+	public KafkaConsumerThread(String Brokerid,String topicName, IntentParseAlgo intentParseAlgo ){
+		this.Brokerid=Brokerid;
 		this.topicName = topicName;
 		this.intentParseAlgo = intentParseAlgo;
 		}
 
 	public void run() {
 		Properties configProperties = new Properties();
-		configProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.23.239.165:9092");
+		configProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,Brokerid);
 		configProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 		configProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.stackroute.swisit.intentparser.serialization.CrawlerDeserializer");
 		configProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "group-1");
