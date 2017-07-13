@@ -77,7 +77,6 @@ public class IntentParserServiceTest {
         contentSchema.setWord("how to code");
         contentSchema.setIntensity(2f);
         CrawlerResult crawlerResult = new CrawlerResult();
-        crawlerResult.setQuery("Decorator");
         crawlerResult.setLink("https://docs.angularjs.org/guide/component");
         ArrayList<ContentSchema> contentSchemaList= new ArrayList<ContentSchema>();
         contentSchemaList.add(contentSchema);

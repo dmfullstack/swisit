@@ -15,9 +15,6 @@ import javax.validation.constraints.NotNull;
 public class CrawlerResult {
 
     @NotEmpty
-    @JsonProperty("query")
-    private String query;
-    @NotEmpty
     @JsonProperty("link")
     private String link;
     @NotEmpty
@@ -40,8 +37,7 @@ public class CrawlerResult {
     public CrawlerResult() { }
 
     /*----------Parameterized Constructor of Crawler Result Class---------*/
-    public CrawlerResult(String query, String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof,String concept) {
-        this.query = query;
+    public CrawlerResult(String link, ArrayList<ContentSchema> terms, String title, String snippet,Date lastindexof,String concept) {
         this.link = link;
         this.terms = terms;
         this.title = title;
@@ -55,7 +51,6 @@ public class CrawlerResult {
     @Override
     public String toString() {
         return "CrawlerResult{" +
-                "query='" + query + '\'' +
                 ", link='" + link + '\'' +
                 ", terms=" + terms +
                 ", title='" + title + '\'' +
@@ -73,14 +68,6 @@ public class CrawlerResult {
 	public void setLastindexedof(Date lastindexedof) {
 		this.lastindexedof = lastindexedof;
 	}
-
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
-    }
 
     public String getLink() {
         return link;

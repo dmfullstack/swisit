@@ -55,6 +55,7 @@ public class MasterParserServiceImpl implements MasterParserService {
 	
 	public Iterable<DocumentParserResult> parseDocument(CrawlerResult crawlerResult) throws JsonProcessingException , ParseException{       
 		String topicProducer = environment.getProperty("topic-toproducer");
+		String brokerid = environment.getProperty("brokerid");
 		ArrayList<DocumentParserResult> documentParserResults = new ArrayList<DocumentParserResult>();
 		Document document=null;
 		document = Jsoup.parse(crawlerResult.getDocument());
@@ -94,7 +95,7 @@ public class MasterParserServiceImpl implements MasterParserService {
 		documentParserResult.setTerms(contentSchema);
 		documentParserResult.setSnippet(crawlerResult.getSnippet());
 		documentParserResult.setLastindexedof(crawlerResult.getLastindexedof());
-		publisher.publishMessage(topicProducer, documentParserResult);
+		publisher.publishMessage(brokerid, topicProducer, documentParserResult);
 		documentParserResults.add(documentParserResult);
 		return documentParserResults;
 	}

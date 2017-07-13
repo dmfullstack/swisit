@@ -11,5 +11,5 @@ import com.stackroute.swisit.documentparser.domain.DocumentParserResult;
 public interface Publisher {
 	
 	/*------------- Method to publish message via a messaging service--------------*/
-	public void publishMessage(String topicName,DocumentParserResult documentParserResult) throws JsonProcessingException;
+	public void publishMessage(String brokerid, String topicName,DocumentParserResult documentParserResult) throws JsonProcessingException;
 }

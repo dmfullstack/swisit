@@ -19,6 +19,7 @@ public class ConceptNetServiceImpl implements ConceptNetService {
     public HashMap<String,HashMap<String,Integer>> createDocumentModel(HashMap<String,List<String>> input){
 
         HashMap<String,HashMap<String,Integer>> resultMap = new HashMap<>();
+        /* Get the terms from Neo4j and added to termlist */
         List<Term> termsList = neo4jParserService.getTerms();
         try {
             if (input == null) {

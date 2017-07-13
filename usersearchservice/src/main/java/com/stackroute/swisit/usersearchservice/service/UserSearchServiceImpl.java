@@ -35,8 +35,6 @@ public class UserSearchServiceImpl implements UserSearchService {
     public List<String> fetchConcept() {
 
         List<String> conceptResult = userSearchServiceRepository.findConcepts();
-
-        //System.out.println(conceptResult.size());
         return conceptResult;
     }
 
@@ -46,7 +44,6 @@ public class UserSearchServiceImpl implements UserSearchService {
     @Override
     public List<String> fetchTerm() {
         List<String> termResults = userSearchServiceRepository.findTerms();
-       // System.out.println(termResults.size());
         return termResults;
     }
 
@@ -58,11 +55,8 @@ public class UserSearchServiceImpl implements UserSearchService {
         userInput.setDomain(userInputRef.getDomain());
         userInput.setTerm(userInputRef.getTerm());
         logger.debug(userInput.getConcept());
-       // System.out.println("hai" + userInput.getTerm());
         List<Map<String, Object>> intentResultIndicatorOfRelation = userSearchServiceRepository.getAllIndicatorRelation(userInput.getTerm());
-        //System.out.println(intentResultIndicatorOfRelation.size());
         List<Map<String, Object>> intentResultRelatesRelation = userSearchServiceRepository.getAllRelatesRelation(userInput.getConcept());
-        //.out.println("" + intentResultRelatesRelation.size());
 
         /*exception handling*/
         try {
@@ -73,22 +67,17 @@ public class UserSearchServiceImpl implements UserSearchService {
             e.printStackTrace();
         }
 
-			/*exception handling*/
+			/* To store the data in a arraylist to return url, confident score and description*/
+			for(Map<String,Object> indicatorOfResult : intentResultIndicatorOfRelation) {
+                for (Map<String,Object> relatesRelationResult : intentResultRelatesRelation) {
+                    if (indicatorOfResult.get("intentName").equals(relatesRelationResult.get("intent"))) {
 
-			for(Map<String,Object> result1 : intentResultIndicatorOfRelation) {
-                for (Map<String,Object> result2 : intentResultRelatesRelation) {
-                    if (result1.get("intentName").equals(result2.get("intent"))) {
-
-                        for (Map<String, Object> map1 : intentResultRelatesRelation) {
+                        for (Map<String, Object> map : intentResultRelatesRelation) {
                             UserSearchResult userSearchResult = new UserSearchResult();
-                            userSearchResult.setUrl("" + map1.get("url"));
-                            userSearchResult.setDescription("" + map1.get("description"));
-                            userSearchResult.setConfidenceScore((float) Double.parseDouble("" + map1.get("confidenceScore")));
+                            userSearchResult.setUrl("" + map.get("url"));
+                            userSearchResult.setDescription("" + map.get("description"));
+                            userSearchResult.setConfidenceScore((float) Double.parseDouble("" + map.get("confidenceScore")));
                             userSearchResults.add(userSearchResult);
-
-                            System.out.println(userSearchResults);
-
-
                         }
 
                     }

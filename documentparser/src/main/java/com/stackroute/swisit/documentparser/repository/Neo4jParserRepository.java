@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Repository
 public interface Neo4jParserRepository extends GraphRepository {
-
+	/* method used to get terms from neo4j database */
     @Query("Match (t:Term) Return t")
     public List<Term> getTerms();
 }

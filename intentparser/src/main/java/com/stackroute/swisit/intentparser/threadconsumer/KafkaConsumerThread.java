@@ -45,7 +45,6 @@ public class KafkaConsumerThread extends Thread {
 			for (ConsumerRecord<String, CrawlerResult> record : records) {
 				int count=0;
 				try {
-					System.out.println("count is" + count);
 					final_kafka.add(record.value());
 					intentParseAlgo.calculateConfidenceScore(record.value());
 					count++;

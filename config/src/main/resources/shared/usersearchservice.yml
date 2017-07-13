@@ -1,8 +1,8 @@
 spring:
- data:
-  neo4j:
-   uri: http://172.23.239.174:7474
-   username: neo4j
-   password: root123
+  data:
+    neo4j:
+      uri: http://172.23.239.174:7474
+      username: neo4j
+      password: root123
 server:
   port: 8090

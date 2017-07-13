@@ -31,10 +31,10 @@ public class KafkaPublisherImpl implements Publisher {
 	//String brokerid;
 
 	/*-------------------method to publish message via kafka-------------------*/
-	public void publishMessage(String topicName,DocumentParserResult message) throws JsonProcessingException{
+	public void publishMessage(String brokerid, String topicName,DocumentParserResult message) throws JsonProcessingException{
 		Properties configProperties = new Properties();
 		/* configure properties for kafka */
-		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.23.239.165:9092");
+		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerid);
 		configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.documentparser.serialization.CrawlerSerializer");
 		Producer<String, DocumentParserResult> producer = new KafkaProducer<String, DocumentParserResult>(configProperties);

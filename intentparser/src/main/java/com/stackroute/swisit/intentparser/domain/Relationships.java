@@ -14,7 +14,7 @@ public class Relationships {
     @NotEmpty
     @JsonProperty("intentName")
     String intentName;
-   @NotEmpty
+    @NotEmpty
     @JsonProperty("relName")
     String relName;
     @NotEmpty

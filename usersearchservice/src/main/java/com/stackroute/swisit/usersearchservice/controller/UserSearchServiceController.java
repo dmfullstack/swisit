@@ -71,7 +71,6 @@ public class UserSearchServiceController {
         /*------Locale which identify a specific language and geographic region, used for Internationalization-----*/
         Locale locale = LocaleContextHolder.getLocale();
         /*-------Resulted List from User Search Service-------*/
-        System.out.println("my concepr doamin is "+domain);
         List<String> conceptResults = userSearchService.fetchConcept();
 
 
@@ -83,7 +82,6 @@ public class UserSearchServiceController {
         /*------Locale which identify a specific language and geographic region, used for Internationalization-----*/
         Locale locale = LocaleContextHolder.getLocale();
         /*-------Resulted List from User Search Service-------*/
-        System.out.println("my term is");
         List<String> termResults = userSearchService.fetchTerm();
 
         return new ResponseEntity(termResults, HttpStatus.OK);

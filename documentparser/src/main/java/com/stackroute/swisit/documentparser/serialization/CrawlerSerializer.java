@@ -14,7 +14,7 @@ public class CrawlerSerializer implements Serializer<DocumentParserResult> {
     public void configure(Map<String, ?> configs, boolean isKey) {
 
     }
-
+    /* To serialize data from kafka topic */
     @Override
     public byte[] serialize(String topic, DocumentParserResult data) {
        byte[] byteArray=null;

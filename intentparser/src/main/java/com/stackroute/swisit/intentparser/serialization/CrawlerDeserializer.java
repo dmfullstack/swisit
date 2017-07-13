@@ -16,18 +16,19 @@ public class CrawlerDeserializer implements Deserializer<CrawlerResult>{
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) { }
 
+    /* To deserialize the values from kafka */
     @Override
     public CrawlerResult deserialize(String topic, byte[] data) {
         // TODO Auto-generated method stub
-        ObjectMapper o=new ObjectMapper();
-        CrawlerResult c=null;
+        ObjectMapper objectMapper=new ObjectMapper();
+        CrawlerResult crawlerResult=null;
         try{
-            c=o.readValue(data,CrawlerResult.class);
+            crawlerResult=objectMapper.readValue(data,CrawlerResult.class);
         }
         catch(Exception e){
             e.printStackTrace();
         }
-        return c;
+        return crawlerResult;
     }
 
     @Override
