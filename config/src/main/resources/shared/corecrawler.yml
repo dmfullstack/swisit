@@ -1,6 +1,6 @@
 
 brokerid: 172.23.239.165:9092
-topic-fromconsumer: testcontrol1
+topic-fromconsumer: testcontrol
 topic-toproducer: todocumentparser
 server:
   port: 8060

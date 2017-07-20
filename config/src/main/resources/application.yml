@@ -9,4 +9,6 @@ spring:
       server:
         native:
           search-locations: classpath:/shared
+  application:
+    name: configserver
       
