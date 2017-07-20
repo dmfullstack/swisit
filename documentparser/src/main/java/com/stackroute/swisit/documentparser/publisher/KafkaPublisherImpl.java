@@ -30,10 +30,11 @@ public class KafkaPublisherImpl implements Publisher {
 	//@Value("${broker-id}")
 	//String brokerid;
 
-	/*-------------------method to publish message via kafka-------------------*/
+	/*------------------- Method to publish message via kafka -------------------*/
 	public void publishMessage(String brokerid, String topicName,DocumentParserResult message) throws JsonProcessingException{
 		Properties configProperties = new Properties();
-		/* configure properties for kafka */
+
+		/*----- Configure properties for kafka ----*/
 		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerid);
 		configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
 		configProperties.put("value.serializer","com.stackroute.swisit.documentparser.serialization.CrawlerSerializer");

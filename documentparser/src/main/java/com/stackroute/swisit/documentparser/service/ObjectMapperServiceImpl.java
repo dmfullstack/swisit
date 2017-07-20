@@ -1,4 +1,5 @@
 package com.stackroute.swisit.documentparser.service;
+/*----------------- Importing Libraries ----------------*/
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.documentparser.exception.FilePathNotFoundException;
@@ -11,11 +12,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * Created by user on 2/7/17.
+ * Class implementing ObjectMapperService to read files as arraylist
  */
 @Service
 public class ObjectMapperServiceImpl implements ObjectMapperService {
 
+    /*
+    * Method definition to read file using object mapper
+    * as array list
+    * Argument- file path
+    * Return- List of linked hashmap
+    * */
     @Override
     public List<LinkedHashMap<String, String>> objectMapping(String filePath) {
 
@@ -32,7 +39,6 @@ public class ObjectMapperServiceImpl implements ObjectMapperService {
             e.printStackTrace();
         }
         for(LinkedHashMap<String,String> linked : list){
-           // System.out.println(linked.toString());
         }
 
         return list;

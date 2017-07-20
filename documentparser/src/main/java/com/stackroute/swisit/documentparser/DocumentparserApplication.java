@@ -17,8 +17,6 @@ public class DocumentparserApplication {
 	
 	public static void main(String[] args) throws JsonProcessingException, ParseException {
 		ConfigurableApplicationContext applicationContext=SpringApplication.run(DocumentparserApplication.class, args);
-		//KafkaSubscriberImpl subscriberImpl = applicationContext.getBean(KafkaSubscriberImpl.class);
-		//subscriberImpl.receiveMessage("tonewparser2");
 		KafkaConsumer kakfaConsumer = applicationContext.getBean(KafkaConsumer.class);
 		kakfaConsumer.consumeMessage();
 		

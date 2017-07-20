@@ -1,5 +1,6 @@
 package com.stackroute.swisit.documentparser.service;
 /*---------- Importing Libraries ---------*/
+
 import com.stackroute.swisit.documentparser.exception.DocumentNotScannedException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,14 +12,19 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Created by user on 30/6/17.
+ * Class that implements KeywordScannerService to scan the document and select texts of each tag
  */
 @Service
-public class                                                                                                                                     KeywordScannerServiceImpl implements KeywordScannerService {
+public class KeywordScannerServiceImpl implements KeywordScannerService {
 
     @Autowired
     ObjectMapperService objectMapperService;
 
+    /*
+    * Method definition to scan the document and select texts within the tag
+    * Argument- document from crawler
+    * Return- hashmap of tag and text of the tag
+    * */
     public HashMap<String, String> scanDocument(Document document){
 
         HashMap<String, String> resultMap = new HashMap<>();

@@ -1,5 +1,6 @@
 package com.stackroute.swisit.documentparser.serialization;
 
+/*----------------- Importing Libraries ----------------*/
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.documentparser.domain.DocumentParserResult;
 import org.apache.kafka.common.serialization.Serializer;
@@ -7,14 +8,16 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.util.Map;
 
 /**
- * Created by user on 5/7/17.
+ * Class to serialize document parser result to be published in Kafka
  */
 public class CrawlerSerializer implements Serializer<DocumentParserResult> {
+
+    /*-- Overriding configure method of serializer --*/
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
 
     }
-    /* To serialize data from kafka topic */
+    /*---- To serialize data from kafka topic ---*/
     @Override
     public byte[] serialize(String topic, DocumentParserResult data) {
        byte[] byteArray=null;
@@ -25,9 +28,9 @@ public class CrawlerSerializer implements Serializer<DocumentParserResult> {
             e.printStackTrace();
         }
         return byteArray;
-       // return new byte[0];
     }
 
+    /*-- Overriding close method of serializer --*/
     @Override
     public void close() {
 

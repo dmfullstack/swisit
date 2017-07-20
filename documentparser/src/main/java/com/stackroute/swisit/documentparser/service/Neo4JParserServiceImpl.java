@@ -1,4 +1,5 @@
 package com.stackroute.swisit.documentparser.service;
+/*----------------- Importing Libraries ----------------*/
 
 import com.stackroute.swisit.documentparser.domain.Term;
 import com.stackroute.swisit.documentparser.repository.Neo4jParserRepository;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Created by user on 30/6/17.
+ * Class implementing Neo4jParserService to get the terms from neo4j
  */
 @Service
 public class Neo4JParserServiceImpl implements Neo4jParserService {
@@ -16,6 +17,7 @@ public class Neo4JParserServiceImpl implements Neo4jParserService {
     @Autowired
     Neo4jParserRepository neo4jParserRepository;
 
+    /*-- Method definition to fetch terms from neo4j graph database --*/
     public List<Term> getTerms(){
         List<Term> termsList = neo4jParserRepository.getTerms();
         return termsList;

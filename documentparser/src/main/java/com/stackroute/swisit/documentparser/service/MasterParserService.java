@@ -1,4 +1,6 @@
 package com.stackroute.swisit.documentparser.service;
+/*----------------- Importing Libraries ----------------*/
+
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -8,9 +10,9 @@ import com.stackroute.swisit.documentparser.domain.CrawlerResult;
 import com.stackroute.swisit.documentparser.domain.DocumentParserResult;
 
 /**
- * Created by user on 30/6/17.
+ * Interface that routes to all service classes of document parser
  */
 public interface MasterParserService {
-
+    /*-- Method declaration to consume input from messaging service and produce the final output --*/
     public Iterable<DocumentParserResult> parseDocument(CrawlerResult crawlerResult) throws JsonProcessingException, ParseException;
 }

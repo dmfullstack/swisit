@@ -6,9 +6,9 @@ import org.jsoup.nodes.Document;
 import java.util.HashMap;
 
 /**
- * Created by user on 30/6/17.
+ * Interface to scan document
  */
 public interface KeywordScannerService {
-
+    /*---- Method declaration to scan document ---*/
     public HashMap<String, String> scanDocument(Document document);
 }

@@ -21,10 +21,8 @@ public class CrawlerDeserializer implements Deserializer<CrawlerResult>{
 		ObjectMapper objectMapper=new ObjectMapper();
 		CrawlerResult crawlerResult=null;
 		try{
-			//logger.info(arg1.toString());
 			crawlerResult=objectMapper.readValue(arg1,CrawlerResult.class);
-			}
-		catch(Exception e){
+			} catch(Exception e){
 			logger.info("Cannot Deserializer"+e);
 		}
 		return crawlerResult;

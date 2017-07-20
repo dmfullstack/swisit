@@ -1,5 +1,6 @@
 package com.stackroute.swisit.documentparser.service;
 
+/*----------------- Importing Libraries ----------------*/
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
@@ -12,7 +13,8 @@ import com.stackroute.swisit.documentparser.domain.ContentSchema;
 
 
 /**
- * Created by user on 30/6/17.
+ * Class to implement IntensityAlgoService that defines a method to calculate the intensity of each
+ * term of neo4j by using the frequency of the term occurrence and count for each tag
  */
 @Service
 public class IntensityAlgoServiceImpl implements IntensityAlgoService {
@@ -22,6 +24,11 @@ public class IntensityAlgoServiceImpl implements IntensityAlgoService {
     @Autowired
     ObjectMapperService objectMapperService;
 
+    /*
+    * Method to calculate the intensity of each term of neo4j
+    * Arguments- hashmap of hashmap
+    * Returns- ArrayList of contentSchema consisting of term and intensity
+    * */
     public ArrayList<ContentSchema> calculateIntensity(HashMap<String, HashMap<String, Integer>> parsedDocumentMap) {
             ArrayList<ContentSchema> contentSchemas = new ArrayList<>();
             List<LinkedHashMap<String, String>> list = objectMapperService.objectMapping("./src/main/resources/common/termintensity.json");

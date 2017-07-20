@@ -1,11 +1,13 @@
 package com.stackroute.swisit.documentparser.service;
 
+/*----------------- Importing Libraries ----------------*/
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by user on 30/6/17.
+ * Interface that declares method to give the result of document parser
  */
 public interface ConceptNetService {
+    /*--- Method that creates the final document model ---*/
     public HashMap<String,HashMap<String,Integer>> createDocumentModel(HashMap<String,List<String>> input);
 }

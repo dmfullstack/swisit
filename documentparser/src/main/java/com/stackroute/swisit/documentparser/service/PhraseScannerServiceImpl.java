@@ -1,4 +1,5 @@
 package com.stackroute.swisit.documentparser.service;
+/*----------------- Importing Libraries ----------------*/
 
 import com.stackroute.swisit.documentparser.exception.DocumentNotScannedException;
 import org.jsoup.nodes.Document;
@@ -9,13 +10,18 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * Created by user on 30/6/17.
+ * Class that implements PhraseScannerService to split the document text into phrases using n-gram algorithm
  */
 @Service
 public class PhraseScannerServiceImpl implements PhraseScannerService{
 
     private ObjectMapperService objectMapperService;
 
+    /*
+    * Method definition to select the texts of each tag
+    * Argument- Document
+    * Return- hashmap of tag and list of tokenized string
+    * */
     public HashMap<String,List<String>> scanDocument(Document document){
 
         HashMap<String,List<String>> resultMap = new HashMap<>();
@@ -45,6 +51,7 @@ public class PhraseScannerServiceImpl implements PhraseScannerService{
         return resultMap;
     }
 
+    /*-- Method to produce n-grams of tokenized words of document --*/
     public List<String> ngrams(int n, String str) {
         List<String> ngrams = new ArrayList<String>();
         String[] words = str.split("[$&+,:;=?@#|'<>.^*()%!-]");
@@ -53,6 +60,7 @@ public class PhraseScannerServiceImpl implements PhraseScannerService{
         return ngrams;
     }
 
+    /*-- Method to concat the strings tokenized before producing n-grams --*/
     public String concat(String[] words, int start, int end) {
         StringBuilder sb = new StringBuilder();
         for (int i = start; i < end; i++)

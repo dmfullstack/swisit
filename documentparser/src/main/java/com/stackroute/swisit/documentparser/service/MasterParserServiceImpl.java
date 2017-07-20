@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Created by user on 30/6/17.
+ * Class implementing MasterParserService to produce the final output of document parser to messaging service
  */
 @Service
 @PropertySource("classpath:application.yml")
@@ -52,7 +52,13 @@ public class MasterParserServiceImpl implements MasterParserService {
 	
 	@Autowired
 	private Environment environment;
-	
+
+	/*
+	* Method that receives the crawler result and redirects to every service of document parser
+	* to produce the final output with a content schema that contains the word and its intensity
+	* Argument- Crawler result
+	* Return- iterable of document parser result
+	* */
 	public Iterable<DocumentParserResult> parseDocument(CrawlerResult crawlerResult) throws JsonProcessingException , ParseException{       
 		String topicProducer = environment.getProperty("topic-toproducer");
 		String brokerid = environment.getProperty("brokerid");
@@ -85,6 +91,10 @@ public class MasterParserServiceImpl implements MasterParserService {
 				}
 			}*/
 		DocumentModel documentModel = new DocumentModel(conceptNetResult);
+		/*
+		*Saving the document model into mongo so that it is not required to create
+		*the document model each time request comes for the same domain and concept
+		* */
 		mongoRepository.save(documentModel);
 		
 		ArrayList<ContentSchema> contentSchema = intensityAlgoService.calculateIntensity(conceptNetResult);
@@ -95,6 +105,7 @@ public class MasterParserServiceImpl implements MasterParserService {
 		documentParserResult.setTerms(contentSchema);
 		documentParserResult.setSnippet(crawlerResult.getSnippet());
 		documentParserResult.setLastindexedof(crawlerResult.getLastindexedof());
+		/*--- Publishing document parser output to messaging service ---*/
 		publisher.publishMessage(brokerid, topicProducer, documentParserResult);
 		documentParserResults.add(documentParserResult);
 		return documentParserResults;

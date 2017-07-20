@@ -15,6 +15,9 @@ import javax.validation.constraints.NotNull;
 /*--------Crawler Result Domain Class which is Input for Intent Parser Service--------*/
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DocumentParserResult {
+
+        /*-------------Private variable of domain class------------*/
+
         @NotEmpty
         @JsonProperty("concept")
         private String concept;
