@@ -33,7 +33,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 /*-------------Spring Boot Application Main Class--------------*/
 
-@EnableEurekaClient
+@EnableDiscoveryClient
 @SpringBootApplication
 @EnableNeo4jRepositories(basePackages = "com.stackroute.swisit.intentparser.repository")
 public class IntentParserApplication {

@@ -1,5 +1,5 @@
 server:
- port: 8888
+  port: 8878
  
 spring:
   profiles:
@@ -11,4 +11,3 @@ spring:
           search-locations: classpath:/shared
   application:
     name: configserver
-      

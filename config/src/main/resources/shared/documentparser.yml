@@ -17,4 +17,11 @@ server:
 brokerid: 172.23.239.165:9092
 topic-fromconsumer: todocumentparser
 topic-toproducer: tointentparser
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.23.239.153:8761/eureka/
+  instance:
+    prefer-ip-address: true  
       

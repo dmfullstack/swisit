@@ -3,4 +3,4 @@ spring:
      name: eurekaserver
   cloud:
     config:
-      uri: http://localhost:8878
+      uri: http://172.23.239.157:8878

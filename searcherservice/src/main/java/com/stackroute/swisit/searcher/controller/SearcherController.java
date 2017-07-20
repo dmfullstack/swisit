@@ -9,10 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -96,7 +98,8 @@ public class SearcherController {
 	/*------------------------Posting the data to mongo DB--------------------------*/
 	@ApiOperation(value = "Posting the Domain and Concept")
 	@RequestMapping(value="", method=RequestMethod.POST)
-    public ResponseEntity saveSearcherJob(@RequestBody SearcherJob produceSearcherJob) throws SearcherServiceException, Exception {
+    @CrossOrigin
+	public ResponseEntity saveSearcherJob(@RequestBody SearcherJob produceSearcherJob) throws SearcherServiceException, Exception {
 		Locale locale = LocaleContextHolder.getLocale();
 		/*----Used for producing dummy messages -----*/
         intialproducer.publishMessage(initialtopic, produceSearcherJob);

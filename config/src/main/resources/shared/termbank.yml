@@ -8,4 +8,10 @@ spring:
    password: root123
 server:
   port: 8090
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.23.239.153:8761/eureka/
+  instance:
+    prefer-ip-address: true 
    
