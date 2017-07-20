@@ -5,4 +5,4 @@ spring:
       username: neo4j
       password: root123
 server:
-  port: 8090
+  port: 8091

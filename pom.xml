@@ -57,6 +57,7 @@
 		<module>intentparser</module>
 		<module>usersearchservice</module>
 		<module>documentparser</module>
+		<module>termbank</module>
 	</modules>
 
 </project>
