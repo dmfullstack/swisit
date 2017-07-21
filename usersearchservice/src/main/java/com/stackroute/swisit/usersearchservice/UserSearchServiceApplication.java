@@ -4,8 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.neo4j.Neo4jRepositoriesAutoConfiguration;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,17 +19,16 @@ import java.util.Locale;
 
 
 /*-------------Spring Boot Application Main Class--------------*/
-
-
+//@EnableDiscoveryClient
+//@EnableEurekaClient
 @SpringBootConfiguration
 @EnableAutoConfiguration
-@EnableDiscoveryClient
 @ComponentScan(basePackages = "com.stackroute.swisit.usersearchservice.*")
 @EnableNeo4jRepositories(basePackages = "com.stackroute.swisit.usersearchservice.repository")
 public class UserSearchServiceApplication extends Neo4jRepositoriesAutoConfiguration {
     public static void main(String[] args) {
 
-        SpringApplication.run(UserSearchServiceApplication.class, args);
+        ApplicationContext ctx = SpringApplication.run(UserSearchServiceApplication.class, args);
     }
 
     /*-----------------Resolving Locale-----------------*/

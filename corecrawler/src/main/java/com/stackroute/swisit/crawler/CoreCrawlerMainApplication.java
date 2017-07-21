@@ -10,6 +10,7 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -30,6 +31,7 @@ import com.stackroute.swisit.crawler.threadconsumer.KafkaConsumer;
 
 /*-------------Spring Boot Application Main Class--------------*/
 @SpringBootApplication
+@EnableAutoConfiguration
 @EnableDiscoveryClient
 public class CoreCrawlerMainApplication extends WebMvcConfigurerAdapter{
 	

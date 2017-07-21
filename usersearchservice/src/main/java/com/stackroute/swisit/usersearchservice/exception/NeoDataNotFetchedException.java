@@ -6,5 +6,4 @@ public class NeoDataNotFetchedException extends Exception{
 	{
 	super(message);	
 	}
-
 }

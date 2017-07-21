@@ -175,6 +175,7 @@ public class TermBankServiceImpl implements TermBankService {
 		{
 			for(String termName:inputRef.getSynonyms())
 			{
+				i=0;
 				for(String intentName:inputRef.getIntent())
 				{
 					if(inputRef.getRelation()[i].equals("indicatorOf"))

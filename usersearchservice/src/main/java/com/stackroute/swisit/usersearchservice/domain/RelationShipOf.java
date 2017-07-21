@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 public class RelationShipOf {
 
     /*-------Relationship Class Properties------*/
-
     @NotEmpty
     @JsonProperty("termname")
     private String termname;

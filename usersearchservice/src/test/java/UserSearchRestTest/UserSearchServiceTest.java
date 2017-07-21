@@ -1,8 +1,11 @@
 package UserSearchRestTest;
-
+/*-----------Importing Libraries-----------*/
 import com.stackroute.swisit.usersearchservice.assembler.HeteoasLinkAssembler;
 import com.stackroute.swisit.usersearchservice.controller.UserSearchServiceController;
-import com.stackroute.swisit.usersearchservice.domain.*;
+import com.stackroute.swisit.usersearchservice.domain.Concept;
+import com.stackroute.swisit.usersearchservice.domain.Term;
+import com.stackroute.swisit.usersearchservice.domain.UserInput;
+import com.stackroute.swisit.usersearchservice.domain.UserSearchResult;
 import com.stackroute.swisit.usersearchservice.repository.UserSearchServiceRepository;
 import com.stackroute.swisit.usersearchservice.service.UserSearchService;
 import org.junit.Assert;
@@ -19,18 +22,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+/*-----------Test Class for UserSearchService Class-----------*/
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = UserSearchServiceController.class)
 @WebMvcTest(controllers= UserSearchServiceController.class)
-public class UserSearchRestTest {
+public class UserSearchServiceTest {
+
+    /*--------------MockBeans and Properties of UserSearchService Class---------------*/
     @Autowired
     private MockMvc mockMvc;
-
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -52,22 +56,8 @@ public class UserSearchRestTest {
 
     @InjectMocks
     private UserSearchServiceController userSearchServiceController;
-//
-//    @Before
-//    public void setUp() {
-//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-//
-//    }
-//
-//    @Test
-//    public void getUserSearch() throws Exception
-//    {
-//
-//       // String expectedstring="{"+"\"message\":\"Data received successfully\""+"}";
-//        mockMvc.perform(post("v1/api/swisit/usersearch"))
-//                .andExpect(status().isOk());
-//    }
 
+    /*------------Test Method to Test getter and setter methods of UserSearchResult Class-------------*/
     @Test
     public  void fetchNeoData() throws Exception
     {
@@ -79,44 +69,28 @@ public class UserSearchRestTest {
         assertEquals("null",userSearchResult.getDescription());
         assertEquals(9f,userSearchResult.getConfidenceScore(),9);
     }
-    @Test
-    public void equalGraphsWhichMatchTerms(){
 
+    /*------------Test Method to Test getter and setter methods of Concept Class -------------*/
+    @Test
+    public void fetchConcept() throws Exception
+    {
+        Concept concept = new Concept();
+        concept.setName("Singleton");
+        userSearchServiceRepository.save(concept);
+        //Assert.assertNotNull(userSearchServiceRepository.findOne(concept.getName()));
+        assertEquals("Singleton",concept.getName());
+    }
+
+    /*------------Test Method to Test getter and setter methods of Terms Class -------------*/
+    @Test
+    public void fetchTerm() throws Exception
+    {
         Term term = new Term();
         term.setName("tutorials");
-        //term.setNodeid("24");
         userSearchServiceRepository.save(term);
         List<String> termList = userSearchServiceRepository.findTerms();
+        //Assert.assertNotNull(userSearchServiceRepository.findOne(term.getName()));
         Assert.assertEquals("tutorials", term.getName());
-       // Assert.assertEquals("24", term.getNodeid());
-    }
-
-
-    @Test
-    public void equalGraphsWhichMatchIntent() {
-
-        Intent intent= new Intent();
-        intent.setName("basics");
-        intent.setNodeid("2");
-        List<Intent> intent1= userSearchServiceRepository.findIntents();
-        Assert.assertEquals("basics", intent.getName());
-        Assert.assertEquals("2", intent.getNodeid());
-    }
-
-    @Test
-    public void equalGraphsWithRelatesRelation()
-    {
-        UserInput userInput = new UserInput();
-        userInput.setConcept("Thread");
-        UserSearchResult userSearchResult = new UserSearchResult();
-        userSearchResult.setUrl("http://localhost:8090/javaworld/jw-05-2002/jw-0503-java101.html");
-        userSearchResult.setDescription("null");
-        userSearchResult.setConfidenceScore(9f);
-        List<Map<String,Object>> conceptDocumentRelation = userSearchServiceRepository.getAllRelatesRelation("Thread");
-        assertEquals("http://localhost:8090/javaworld/jw-05-2002/jw-0503-java101.html",userSearchResult.getUrl());
-        assertEquals("null",userSearchResult.getDescription());
-        assertEquals(9f,userSearchResult.getConfidenceScore(),9);
 
     }
-
 }

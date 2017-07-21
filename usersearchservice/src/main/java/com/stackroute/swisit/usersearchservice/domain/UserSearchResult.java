@@ -7,7 +7,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
 
-/*--------User Input Domain Class which is Input for User Search Service--------*/
+/*--------User Search Result Domain Class which is Input for User Search Service--------*/
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserSearchResult  extends ResourceSupport{
 
