@@ -30,25 +30,53 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		 
-		 <!--############ ConfigServer ###########--> 
-   		<dependency>
+		<!-- ################Hateos Dependency############# -->
+		<!-- <dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>0.19.0.RELEASE</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+ -->
+		<!--############################### ConfigServer ######################################### -->
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
-		<!-- #############EurekaServer################## -->
+		<!-- ############################# EurekaServer ########################################### -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
 
 		<!--############################# Neo4j Dependency ####################################### -->
-		<!-- neo4j dependencices -->
-		<dependency>
+		 <dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-neo4j</artifactId>
 		</dependency>
-
+ 
+ 		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-ogm-bolt-driver</artifactId>
+		    <version>2.1.1</version>
+</dependency>
+		<!-- <dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-neo4j</artifactId>
+		<version>1.4.0.RELEASE</version>
+	</dependency> -->
+		<!--#############################Swagger Documentation for REST API########################################## -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
@@ -155,17 +183,17 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!--API Gateway Dependency -->
+		<!--############################## API Gateway Dependency ###################################### -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-zuul</artifactId>
 		</dependency>
-		<!--Config Server dependency -->
+		<!--############################## Config Server dependency #################################### -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
-		<!--Eureka Client discovery dependency -->
+		<!--############################## Eureka Client discovery dependency ########################## -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
@@ -174,8 +202,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
+		
+		  <dependency>
+            <groupId>org.springframework.hateoas</groupId>
+            <artifactId>spring-hateoas</artifactId>
+            <version>0.23.0.RELEASE</version>
+        </dependency> 
+		
 	</dependencies>
-	<!--Dependency management for Eureka discovery -->
+	<!--############################ Dependency management for Eureka discovery 
+		################## -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

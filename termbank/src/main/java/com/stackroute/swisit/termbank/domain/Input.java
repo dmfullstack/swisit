@@ -1,10 +1,16 @@
 package com.stackroute.swisit.termbank.domain;
 
+import org.springframework.hateoas.ResourceSupport;
+
+/*-------Importing Libraries--------*/
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/*---------Input Domain Class--------*/
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Input {
+public class Input extends ResourceSupport{
+	
+    /*--------Input  Properties-------*/
 	@JsonProperty("synonyms")
 	String[] synonyms;
 	
@@ -23,6 +29,8 @@ public class Input {
 	@JsonProperty("relation")
 	String[] relation;
 	
+	
+    /*------------Setter and Getter methods for Properties-----------*/
 	public String[] getIntent() {
 		return intent;
 	}

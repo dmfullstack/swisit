@@ -3,7 +3,7 @@ spring:
     name: termbank
   cloud:
     config:
-      uri: http://172.23.239.157:8878
+      uri: http://localhost:8888
  
    
    

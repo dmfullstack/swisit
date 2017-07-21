@@ -1,19 +1,17 @@
 package com.stackroute.swisit.termbank.service;
 
+/*-------Importing Libraries------*/
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.swisit.termbank.domain.Adjectives;
 import com.stackroute.swisit.termbank.domain.Input;
@@ -27,9 +25,11 @@ import com.stackroute.swisit.termbank.repository.TermRepository;
 @Service
 public class TermBankServiceImpl implements TermBankService {
 	
+    /*------- Mapping the url value from config server-------*/
 	@Value("${apiurl}")
 	String apiurl;
 
+    /*-------Autowired Repositories and Bean classes------*/
 	@Autowired
 	ResponsiveBean responsiveBean;
 
@@ -42,24 +42,22 @@ public class TermBankServiceImpl implements TermBankService {
 	@Autowired
 	TermToIntentRelation words;
 	
+    /*--------TermBankServiceImpl Properties-------*/
 	String[] adjSynList;
 	String[] adjAntList;
-
 	String[] nounSynList;
 	String[] nounAntList;
-
-	ObjectMapper objectMapper = new ObjectMapper();
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	Nouns noun =new Nouns();
 	Adjectives adjective = new Adjectives();
 	Term term = new Term();
 	
-	/* To get the terms from neo4j database */
+	/*---------------------- To get the terms from neo4j database -----------------*/
 	@Override
 	public List<TermToIntentRelation> getTerms() {
 		
-		List<TermToIntentRelation> l= new ArrayList<TermToIntentRelation>();
+		List<TermToIntentRelation> termlist= new ArrayList<TermToIntentRelation>();
 		List<HashMap<String, String>> listIndicator =neo4jRepository.fetchIndicatorOf();
 		for(Map<String,String> map : listIndicator){
 			TermToIntentRelation words = new TermToIntentRelation();
@@ -68,11 +66,11 @@ public class TermBankServiceImpl implements TermBankService {
 			words.setTermName(map.get("TermName"));
 			words.setRelName(map.get("Relation"));
 			words.setWeight(Integer.parseInt(map.get("Weight")));
-			l.add(words);
+			termlist.add(words);
 		}
-		return l;
+		return termlist;
 	}
-	/* To get words from the Api */
+	/*---------------------- To get words from the Api ------------------------*/
 	@Override
 	public List<ResponsiveBean> getWords(String terms) {
 		RestTemplate restTemplate = new RestTemplate();
@@ -82,8 +80,8 @@ public class TermBankServiceImpl implements TermBankService {
 		String finalurl = apiurl + terms + "/json";
 		/* Get the data from the Api and save as responsiveBean object */
 		responsiveBean = restTemplate.getForObject(finalurl,ResponsiveBean.class);
-		List<ResponsiveBean> l= new ArrayList<ResponsiveBean>();
-		l.add(responsiveBean);
+		List<ResponsiveBean> wordlist= new ArrayList<ResponsiveBean>();
+		wordlist.add(responsiveBean);
 		if(responsiveBean.getNounBean()!=null)
 		{
 			if(responsiveBean.getNounBean().getSyn()!=null)
@@ -151,7 +149,7 @@ public class TermBankServiceImpl implements TermBankService {
 			logger.debug("inside adjective");
 		}
 
-		return l;
+		return wordlist;
 	}
 
 	/* To insert term with intent into Neo4j with respective weight and relation */
@@ -175,7 +173,6 @@ public class TermBankServiceImpl implements TermBankService {
 		{
 			for(String termName:inputRef.getSynonyms())
 			{
-				i=0;
 				for(String intentName:inputRef.getIntent())
 				{
 					if(inputRef.getRelation()[i].equals("indicatorOf"))

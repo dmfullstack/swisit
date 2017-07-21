@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -17,11 +16,11 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 
 /*-------------Spring Boot Application Main Class--------------*/
-@EnableDiscoveryClient
+@EnableEurekaClient
 @SpringBootApplication
 public class TermBankApplication {
 	// private static final Logger logger = LoggerFactory.getLogger(this.getClass());
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args)  {
 
 		ApplicationContext ctx = SpringApplication.run(TermBankApplication.class, args);
 

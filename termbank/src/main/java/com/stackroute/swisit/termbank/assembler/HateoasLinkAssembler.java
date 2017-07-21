@@ -2,14 +2,14 @@
  * will finally be removed from the Final product******/
 
 package com.stackroute.swisit.termbank.assembler;
-import java.util.List;
 
-import com.stackroute.swisit.termbank.domain.ResponsiveBean;
-import com.stackroute.swisit.termbank.domain.TermToIntentRelation;
+/*------Importing Liberaries------*/
+import java.util.List;
+import com.stackroute.swisit.termbank.domain.Input;
+
 
 /*------Interface Class for Assembling Links-----*/
 public interface HateoasLinkAssembler{
-	public List<TermToIntentRelation> getTerms();
-	List<ResponsiveBean> getWords(List<ResponsiveBean> wordsList);
-    
+	public List getWords(Input input);
+	public List getTerms(List input);
 }
