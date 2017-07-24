@@ -22,16 +22,27 @@ public class UserSearchResult  extends ResourceSupport{
     @NotNull
     @JsonProperty("confidenceScore")
     private float confidenceScore;
+    public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	@JsonProperty("title")
+    private String title;
 
     /*-------Default Constructor of User Search Result Class------*/
     public UserSearchResult() { }
 
     /*--------Parameterized Constructor of User Search Result Class---------*/
 
-    public UserSearchResult(String url, String description, float confidenceScore) {
+    public UserSearchResult(String url, String description, float confidenceScore,String title) {
         this.url = url;
         this.description = description;
         this.confidenceScore = confidenceScore;
+        this.title=title;
     }
 
     /*----------Overriding toString method to print UserSearchResult----------*/

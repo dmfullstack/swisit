@@ -3,6 +3,7 @@ package com.stackroute.swisit.usersearchservice.service;
 import com.stackroute.swisit.usersearchservice.domain.*;
 
 import java.util.List;
+import java.util.Set;
 
 /*-------User Search Service Interface Class--------*/
 public interface UserSearchService {

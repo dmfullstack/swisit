@@ -7,6 +7,8 @@ import com.stackroute.swisit.usersearchservice.domain.UserSearchResult;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Set;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /*-------Implementation to HateoasLinkAssembler interface------*/

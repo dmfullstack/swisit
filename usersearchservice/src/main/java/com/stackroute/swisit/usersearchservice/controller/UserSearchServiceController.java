@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /*----------------------Rest API Controller Class------------------------*/
 @RestController
-@CrossOrigin(origins="http://localhost:4200")
+//@CrossOrigin
 @RequestMapping(value = "v1/api/swisit/usersearch")
 public class UserSearchServiceController {
     /*----------Autowired Instances of Classes----------*/
@@ -42,13 +43,18 @@ public class UserSearchServiceController {
     }
     )
 /*----------- REST Controller To Show Data From Neo4j Database------------*/
-
+    
+    @CrossOrigin
     @RequestMapping(value="", method = RequestMethod.POST)
     public ResponseEntity getUserSearch(@RequestBody UserInput userInput) {
         /*------Locale which identify a specific language and geographic region, used for Internationalization-----*/
         Locale locale = LocaleContextHolder.getLocale();
         /*-------Resulted List from User Search Service-------*/
         List<UserSearchResult> userSearchResults = userSearchService.fetchNeoData(userInput);
+        for(UserSearchResult s:userSearchResults){
+        	System.out.println(s.getConfidenceScore());
+        	System.out.println(s.getUrl());
+        }
         /*-------Hateoas Link Assembling to Response-------*/
         List<UserSearchResult> userSearchResultList=heteoasLinkAssembler.fetchNeoData(userSearchResults);
        /*------Try Catch block for Handling Exceptions-----*/
@@ -64,8 +70,9 @@ public class UserSearchServiceController {
             return new ResponseEntity(userSearchResults, HttpStatus.OK);
         }
 
-    @RequestMapping(value="/getConcepts", method = RequestMethod.GET)
-    public ResponseEntity getConcept() {
+    @CrossOrigin
+    @RequestMapping(value="/getConcepts", method = RequestMethod.POST)
+    public ResponseEntity getConcept(@RequestBody String s) {
         /*------Locale which identify a specific language and geographic region, used for Internationalization-----*/
         Locale locale = LocaleContextHolder.getLocale();
         /*-------Resulted List from User Search Service-------*/
@@ -73,7 +80,8 @@ public class UserSearchServiceController {
 
         return new ResponseEntity(conceptResults, HttpStatus.OK);
     }
-
+    
+    @CrossOrigin
     @RequestMapping(value="/getTerms", method = RequestMethod.GET)
     public ResponseEntity getTerms() {
         /*------Locale which identify a specific language and geographic region, used for Internationalization-----*/

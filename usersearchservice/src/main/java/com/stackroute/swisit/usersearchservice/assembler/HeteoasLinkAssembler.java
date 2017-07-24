@@ -7,10 +7,11 @@ package com.stackroute.swisit.usersearchservice.assembler;
 import com.stackroute.swisit.usersearchservice.domain.UserSearchResult;
 
 import java.util.List;
+import java.util.Set;
 
 /*------Interface Class for Assembling Links-----*/
 public interface HeteoasLinkAssembler{
 
     /*------Calculate Confidence Score Method for Response-----*/
-    public  List<UserSearchResult> fetchNeoData(List<UserSearchResult> results);
+    public  List<UserSearchResult> fetchNeoData(List<UserSearchResult> userSearchResults);
 }

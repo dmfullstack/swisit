@@ -34,7 +34,7 @@ public interface UserSearchServiceRepository extends GraphRepository {
 
 
     /*----------Query to get intentOf Relation between Concept and Document----------*/
-    @Query("Match (c:Concept  {name: {conceptName}})<-[r:Relates]-(d:Document) return c.name AS conceptName,d.url AS url,type(r) AS relName,r.intent AS intent,r.confidenceScore AS confidenceScore ORDER BY r.confidenceScore DESC")
-    List<Map<String,Object>> getAllRelatesRelation(@Param("conceptName") String conceptName);
+    @Query("Match (c:Concept  {name: {conceptName}})<-[r:Relates{intent:{intentName}}]-(d:Document) return c.name AS conceptName,d.url AS url,type(r) AS relName,r.intent AS intent,r.description AS description,d.title AS title,r.confidenceScore AS confidenceScore ORDER BY r.confidenceScore DESC")
+    List<Map<String,Object>> getAllRelatesRelation(@Param("conceptName") String conceptName,@Param("intentName") String intentName);
 
 }
