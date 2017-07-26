@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -51,9 +52,9 @@ public class UserSearchServiceController {
         Locale locale = LocaleContextHolder.getLocale();
         /*-------Resulted List from User Search Service-------*/
         List<UserSearchResult> userSearchResults = userSearchService.fetchNeoData(userInput);
-        for(UserSearchResult s:userSearchResults){
-        	System.out.println(s.getConfidenceScore());
-        	System.out.println(s.getUrl());
+        for(UserSearchResult userSearchResult:userSearchResults){
+        	System.out.println(userSearchResult.getConfidenceScore());
+        	System.out.println(userSearchResult.getUrl());
         }
         /*-------Hateoas Link Assembling to Response-------*/
         List<UserSearchResult> userSearchResultList=heteoasLinkAssembler.fetchNeoData(userSearchResults);
@@ -87,7 +88,8 @@ public class UserSearchServiceController {
         /*------Locale which identify a specific language and geographic region, used for Internationalization-----*/
         Locale locale = LocaleContextHolder.getLocale();
         /*-------Resulted List from User Search Service-------*/
-        List<String> termResults = userSearchService.fetchTerm();
+        List<String> termResults = new ArrayList<String>();
+        termResults = userSearchService.fetchTerm();
 
         return new ResponseEntity(termResults, HttpStatus.OK);
     }

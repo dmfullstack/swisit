@@ -67,7 +67,7 @@ public class Neo4jParserRepositoryTest {
     public void getTerms() {
         Term term = new Term();
         term.setName("tutorials");
-        term.setNodeid("24");
+        term.setNodeid("24");https://www.youtube.com/watwathttpshttps://www.youtube.com/watch?v=AjDWc-vl5OYhttps://www.youtube.com/watch?v=AjDWc-vl5OYch?v=AjDWc-vl5OY
         neo4jParserRepository.save(term);
         List<Term> termList = neo4jParserRepository.getTerms();
         Assert.assertEquals("tutorials", term.getName());
