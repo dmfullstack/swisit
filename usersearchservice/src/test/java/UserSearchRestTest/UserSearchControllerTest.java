@@ -80,14 +80,6 @@ public class UserSearchControllerTest {
                 .andExpect(status().is4xxClientError());
     }
 
-    /*-----------test method to test getConcepts Path-----------*/
-    @Test
-    public void getConcept() throws Exception
-    {
-
-        mockMvc.perform(get("/v1/api/swisit/usersearch/getConcepts"))
-                .andExpect(status().isOk());
-    }
 
     /*-----------test method to test getTerms Path------------*/
     @Test
